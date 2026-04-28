@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="21" height="15" viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g0" x1="10.5" y1="0" x2="10.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+    <linearGradient id="g1" x1="10.5" y1="15" x2="10.5" y2="4.592426E-16" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2A8815" />
+      <stop offset="1" stop-color="#35A51D" />
+    </linearGradient>
+    <linearGradient id="g2" x1="16.53795" y1="1.3965" x2="16.53795" y2="4.6703" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#EF8A34" />
+      <stop offset="1" stop-color="#EC7E21" />
+    </linearGradient>
+    <linearGradient id="g3" x1="19.5" y1="6" x2="19.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F48D36" />
+      <stop offset="1" stop-color="#EC7E21" />
+    </linearGradient>
+    <linearGradient id="g4" x1="16.5" y1="6" x2="16.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#262626" />
+      <stop offset="1" stop-color="#0D0D0D" />
+    </linearGradient>
+    <linearGradient id="g5" x1="13.5" y1="6" x2="13.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#EC322B" />
+      <stop offset="1" stop-color="#DB261F" />
+    </linearGradient>
+  </defs>
+  <path d="M0,0h21v15h-21z" fill-rule="evenodd" fill="url(#g0)" />
+  <path d="M0,0h21v15h-21z" fill-rule="evenodd" fill="url(#g1)" />
+  <path d="M16.1957,3.624C16.1957,3.624 15.7926,3.7769 15.3622,3.624C15.0197,3.5022 14.6753,3.0904 14.3923,2.9474C14.2282,2.8644 14.5327,2.4691 14.2079,2.5758C13.8832,2.6825 13.3528,2.1868 13.3528,2.1868C13.3528,2.1868 12.8049,1.5189 13.612,1.5189C14.4191,1.5189 16.1216,2.0988 16.1216,2.0988C16.1216,2.0988 16.1853,1.7993 16.3242,1.6613C16.463,1.5233 16.5659,1.3965 16.7934,1.4309C17.0209,1.4653 17.1466,1.7858 17.1466,1.7858L16.7934,1.9206L16.7934,2.1868C16.7934,2.1868 19.1547,1.4626 19.7129,1.5189C20.271,1.5752 19.8218,2.1876 19.4849,2.5758C19.3545,2.726 18.929,3.0319 18.6702,2.7866C18.4115,2.5413 18.5075,3.0518 18.2393,3.2166C17.802,3.4854 17.6378,3.7317 17.4875,3.8034C17.3371,3.8751 17.0083,3.8034 17.0083,3.8034L17.1044,4.0499C17.1044,4.0499 17.1313,4.3462 17.0083,4.4644C16.8853,4.5825 16.7998,4.6658 16.5,4.6304C16.2002,4.595 16.0587,4.6703 15.959,4.3405C15.8594,4.0108 16.1957,3.624 16.1957,3.624ZM16.4427,3.2824L16.4427,4.0539L16.7819,3.7703L16.4427,3.2824Z" fill-rule="evenodd" fill="url(#g2)" />
+  <path d="M18,6h3v9h-3z" fill-rule="evenodd" fill="url(#g3)" />
+  <path d="M15,6h3v9h-3z" fill-rule="evenodd" fill="url(#g4)" />
+  <path d="M12,6h3v9h-3z" fill-rule="evenodd" fill="url(#g5)" />
+</svg>
+

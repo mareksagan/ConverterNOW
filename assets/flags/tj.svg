@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="21" height="15" viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g0" x1="10.5" y1="0" x2="10.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+    <linearGradient id="g1" x1="10.5" y1="0" x2="10.5" y2="5" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#D9101C" />
+      <stop offset="1" stop-color="#CA0814" />
+    </linearGradient>
+    <linearGradient id="g2" x1="10.5" y1="10" x2="10.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0F7811" />
+      <stop offset="1" stop-color="#0A650C" />
+    </linearGradient>
+    <linearGradient id="g3" x1="10.5" y1="5" x2="10.5" y2="10" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+  </defs>
+  <path d="M0,0h21v15h-21z" fill-rule="evenodd" fill="url(#g0)" />
+  <path d="M0,0h21v5h-21z" fill-rule="evenodd" fill="url(#g1)" />
+  <path d="M0,10h21v5h-21z" fill-rule="evenodd" fill="url(#g2)" />
+  <path d="M0,5h21v5h-21z" fill-rule="evenodd" fill="url(#g3)" />
+  <path d="M10.066,8C10.024,7.7825 10,7.5904 10,7.5C10,7.2239 10.2239,7 10.5,7C10.7761,7 11,7.2239 11,7.5C11,7.5904 10.976,7.7825 10.934,8L11.5046,8C11.7782,8 12,8.2319 12,8.5C12,8.7761 11.7842,9 11.5046,9L9.4954,9C9.2218,9 9,8.7681 9,8.5C9,8.2239 9.2158,8 9.4954,8L10.066,8L10.066,8ZM9.5,7C9.2239,7 9,6.7761 9,6.5C9,6.2239 9.2239,6 9.5,6C9.7761,6 10,6.2239 10,6.5C10,6.7761 9.7761,7 9.5,7ZM11.5,7C11.2239,7 11,6.7761 11,6.5C11,6.2239 11.2239,6 11.5,6C11.7761,6 12,6.2239 12,6.5C12,6.7761 11.7761,7 11.5,7ZM13.5,8C13.2239,8 13,7.7761 13,7.5C13,7.2239 13.2239,7 13.5,7C13.7761,7 14,7.2239 14,7.5C14,7.7761 13.7761,8 13.5,8ZM7.5,8C7.2239,8 7,7.7761 7,7.5C7,7.2239 7.2239,7 7.5,7C7.7761,7 8,7.2239 8,7.5C8,7.7761 7.7761,8 7.5,8Z" fill-rule="evenodd" fill="#FAD14E" />
+</svg>
+

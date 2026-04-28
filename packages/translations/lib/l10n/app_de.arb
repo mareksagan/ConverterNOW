@@ -1,58 +1,161 @@
 {
   "@@locale": "de",
-
-  "appName": "Converter NOW",
-  "reorder": "Anordnen",
-  "myOrdering": "Meine Anordnung",
-  "about": "Über die App",
-  "lastCurrenciesUpdate": "Letzte Aktualisierung: ",
-  "today": "Heute",
-  "enableDarkTheme": "Dunkles Thema aktivieren",
-  "settings": "Einstellungen",
-  "menu": "Menü",
-  "donation": "Unterstüze die App mit einer Spende.",
-  "buyMeACoffee": "Kaufe dem Entwickler einen Kaffee.",
-  "donationDialog": "Hallo, wie Du vielleicht weißt, ist diese App frei und open-source. Das bedeutet, dass die App kostenlos verwendet und der Quellcode kopiert/bearbeitet werden darf. Der Entwickler wird dafür nicht entlohnt. Wenn Du aber an dieses Projekt glaubst und gerne neue Features sehen möchtest, kaufe dem Entwickler einen Kaffee.",
-  "drawerLogo": "Logo anzeigen",
-  "rateApp": "App bewerten",
-  "repoGithub": "Öffne das Repo auf GitHub.",
-  "contributeTranslating": "Unterstütze uns bei der Übersetzung der App.",
-  "search": "Suche",
-  "clearAll": "Leere alles",
-  "calculator": "Rechner",
-  "significantFigures": "Signifikante Stellen",
-  "removeTrailingZeros": "Entferne nachgestellte Nullen.",
-  "longPressAdvice": "Langes Drücken zum Verschieben.",
-  "back": "Zurück",
-  "save": "Speichern",
-  "invalidCharacters": "Fehler, unzulässige Zeichen.",
-  "theme": "Thema",
-  "dark": "Dunkel",
-  "light": "Hell",
-  "system": "System",
-  "pureBlackTheme": "schwarzes AMOLED-Thema",
-  "@pureBlackTheme": {
-    "description": "Revise this translation"
-  },
-  "propertySelectionOnStartup": "Property selection on startup",
-  "@propertySelectionOnStartup": {
+  "@appearance": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "propertySelectionOnStartupSubtitle": "Show the property selection page on startup on small screen devices",
-  "@propertySelectionOnStartupSubtitle": {
+  "@backupAndRestore": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "copy": "Kopieren",
-  "paste": "Paste",
+  "@britishThermalUnit": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@cancel": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@centiliters": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@clearSettings": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@confirmationClear": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@conversions": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@deciliters": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@density": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@exportSettings": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@exportSuccess": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@findOutMore": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@gigaPascal": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@gramsPerCubicCentimeter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@gramsPerDeciliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@gramsPerLiter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@gramsPerMilliliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@hiddenUnits": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@hideUnits": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@importError": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@importSettings": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@importSuccess": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@kiloPascal": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@kilobit": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@kilogramsPerCubicMeter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@kilogramsPerLiter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@kilojoules": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@ksi": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@megaPascal": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@microgramsPerDeciliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@microgramsPerLiter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@microgramsPerMilliliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@microliters": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@milligramsPerCubicCentimeter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@milligramsPerCubicMeter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@milligramsPerDeciliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@milligramsPerLiter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@milligramsPerMilliliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@minutesPerMile": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@ok": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
   "@paste": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "more": "Mehr",
-  "language": "Sprache",
-  "reorderProperties": "Reihenfolge der Kategorien ändern",
-  "reorderUnits": "Reihenfolge innerhalb der Kategorien ändern",
-  "chooseProperty": "Eigenschaft wählen",
-  "reorderProperty": "{property} anordnen",
+  "@pickColor": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@poundForceInch": {
+    "description": "Not yet translated. Once done, remove this comment."
+  },
+  "@poundsPerCubicFeet": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@poundsPerCubicInches": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@problemImportFile": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@propertySelectionOnStartup": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@propertySelectionOnStartupSubtitle": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@pureBlackTheme": {
+    "description": "Revise this translation"
+  },
+  "@reason": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@relatedSettings": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
   "@reorderProperty": {
     "placeholders": {
       "property": {
@@ -61,53 +164,36 @@
       }
     }
   },
-  "otherPlatforms": "Converter NOW für andere Plattformen",
-  "sourceCode": "Quellcode",
-  "undoClearAllMessage": "Alles geleert. Rückgängig machen?",
-  "undo": "Rückgängig machen",
-  "routeError1": "Diese Seite existiert nicht.",
-  "routeError2": "Zurück zur ersten Seite gehen",
-  "ok": "Ok",
-  "@ok": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "revokeInternetAccess": "Revoke internet access",
   "@revokeInternetAccess": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "revokeInternetExplanation": "This app uses the internet to update currency exchange rates once a day upon opening. This download only requires a few kilobytes. However, if you don't need this feature, you can prevent the app from accessing the internet by enabling this option.",
   "@revokeInternetExplanation": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "useDeviceColor": "Use device color",
-  "@useDeviceColor": {
+  "@selectAll": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "pickColor": "Pick a color",
-  "@pickColor": {
+  "@speedOfLight": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "themeColor": "Theme color",
+  "@teaspoonsMetric": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@teaspoonsUs": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
   "@themeColor": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "appearance": "Appearance",
-  "@appearance": {
+  "@unselectAll": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "conversions": "Conversions",
-  "@conversions": {
+  "@usQuarts": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "findOutMore": "Find out more",
-  "@findOutMore": {
+  "@useDeviceColor": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "hideUnits": "Hide units",
-  "@hideUnits": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "visibleUnits": "{property}, visible units",
   "@visibleUnits": {
     "description": "Not yet translated. Once done, remove this comment",
     "placeholders": {
@@ -117,494 +203,528 @@
       }
     }
   },
-  "hiddenUnits": "Hidden units",
-  "@hiddenUnits": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "selectAll": "Select all",
-  "@selectAll": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "unselectAll": "Unselect all",
-  "@unselectAll": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "backupAndRestore": "Backup & Restore",
-  "@backupAndRestore": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "exportSettings": "Export settings",
-  "@exportSettings": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "importSettings": "Import settings",
-  "@importSettings": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "clearSettings": "Clear all settings",
-  "@clearSettings": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "exportSuccess": "Settings exported successfully",
-  "@exportSuccess": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "importSuccess": "Settings imported successfully",
-  "@importSuccess": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "problemImportFile": "There was a problem importing the file",
-  "@problemImportFile": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "relatedSettings": "Related settings",
-  "@relatedSettings": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "reason": "Reason",
-  "@reason": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "importError": "Import Error",
-  "@importError": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "confirmationClear": "Are you sure you want to clear all settings? This action cannot be undone.",
-  "@confirmationClear": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "cancel": "Cancel",
-  "@cancel": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "length": "Länge",
-  "area": "Fläche",
-  "volume": "Volumen",
-  "time": "Zeit",
-  "temperature": "Temperatur",
-  "speed": "Geschwindigkeit",
-  "siPrefixes": "SI-Präfix",
-  "mass": "Masse",
-  "pressure": "Druck",
-  "energy": "Energie",
-  "angles": "Winkel",
-  "currencies": "Währungen",
-  "shoeSize": "Schuhgröße",
-  "digitalData": "Digitale Daten",
-  "power": "Leistung",
-  "density": "Density",
-  "@density": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "torque": "Drehmoment",
-  "force": "Kraft",
-  "fuelConsumption": "Spritverbrauch",
-  "numeralSystems": "Zahlensysteme",
-
-  "meters": "Meter",
-  "centimeters": "Zentimeter",
-  "inches": "Zoll",
-  "feet": "Fuß",
-  "nauticalMiles": "Nautische Meilen (Seemeile)",
-  "yards": "Yard",
-  "miles": "Meilen",
-  "millimeters": "Millimeter",
-  "micrometers": "Mikrometer",
-  "nanometers": "Nanometer",
-  "angstroms": "Ångström",
-  "picometers": "Pikometer",
-  "kilometers": "Kilometer",
-  "astronomicalUnits": "Astronomische Einheiten",
-  "lightYears": "Lichtjahre",
-  "parsec": "Parsec",
-  "mils": "Milli-Zoll (Thou)",
-  "feetUsSurvey": "Fuß (US survey)",
-
-  "squareMeters": "Quadratmeter",
-  "squareCentimeters": "Quadratzentimeter",
-  "squareInches": "Quadratzoll",
-  "squareFeet": "Quadratfuß",
-  "squareMiles": "Quadratmeilen",
-  "squareYard": "Quadratyard",
-  "squareMillimeters": "Quadratmillimeter",
-  "squareKilometers": "Quadratkilometer",
-  "hectares": "Hektar",
-  "acres": "Acre",
-  "are": "Ar / Are",
-  "squareFeetUsSurvey": "Quadratfuß (US survey)",
-
-  "gramsPerCubicCentimeter": "Grams per Cubic Centimeter",
-  "@gramsPerCubicCentimeter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "gramsPerLiter": "Grams per Liter",
-  "@gramsPerLiter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "gramsPerMilliliter": "Grams per Milliliter",
-  "@gramsPerMilliliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "gramsPerDeciliter": "Grams per Deciliter",
-  "@gramsPerDeciliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "kilogramsPerLiter": "Kilograms per Liter",
-  "@kilogramsPerLiter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "kilogramsPerCubicMeter": "Kilograms per Cubic Meter",
-  "@kilogramsPerCubicMeter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "milligramsPerLiter": "Milligrams per Liter",
-  "@milligramsPerLiter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "milligramsPerDeciliter": "Milligrams per Deciliter",
-  "@milligramsPerDeciliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "milligramsPerMilliliter": "Milligrams per Milliliter",
-  "@milligramsPerMilliliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "milligramsPerCubicMeter": "Milligrams per Cubic Meter",
-  "@milligramsPerCubicMeter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "milligramsPerCubicCentimeter": "Milligrams per Cubic Centimeter",
-  "@milligramsPerCubicCentimeter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "microgramsPerLiter": "Micrograms per Liter",
-  "@microgramsPerLiter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "microgramsPerDeciliter": "Micrograms per Deciliter",
-  "@microgramsPerDeciliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "microgramsPerMilliliter": "Micrograms per Milliliter",
-  "@microgramsPerMilliliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "poundsPerCubicInches": "Pounds per Cubic Inches",
-  "@poundsPerCubicInches": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "poundsPerCubicFeet": "Pounds per Cubic Feet",
-  "@poundsPerCubicFeet": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "cubicMeters": "Kubikmeter",
-  "liters": "Liter",
-  "imperialGallons": "Gallonen (Imperial)",
-  "usGallons": "Gallonen US",
-  "imperialPints": "Pints (GB und Irland)",
-  "usPints": "Pints US",
-  "milliliters": "Milliliter",
-  "tablespoonUs": "Teelöffel US",
-  "tablespoonAustralian": "Teelöffel Australien",
-  "cups": "Cups US",
-  "cubicCentimeters": "Kubikzentimeter",
-  "cubicFeet": "Kubikfuß",
-  "cubicInches": "Kubikzoll",
-  "cubicMillimeters": "Kubikmillimeter",
-  "imperialFluidOunces": "Flüssigunzen (Imperial)",
-  "usFluidOunces": "US-Flüssigunzen",
-  "imperialGill": "Gill (Imperial)",
-  "usGill": "US-Gill",
-  "usQuarts": "US Quarts",
-  "@usQuarts": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "microliters": "Microliters",
-  "@microliters": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "deciliters": "Deciliters",
-  "@deciliters": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "centiliters": "Centiliters",
-  "@centiliters": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "teaspoonsUs": "Teaspoons US",
-  "@teaspoonsUs": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "teaspoonsMetric": "Metric teaspoons",
-  "@teaspoonsMetric": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "seconds": "Sekunden",
-  "deciseconds": "Dezisekunden",
-  "centiseconds": "Zentisekunden",
-  "milliseconds": "Millisekunden",
-  "microseconds": "Mikrosekunden",
-  "nanoseconds": "Nanosekunden",
-  "minutes": "Minuten",
-  "hours": "Stunden",
-  "days": "Tage",
-  "weeks": "Wochen",
-  "years": "Jahre (365)",
-  "lustrum": "Jahrfünft",
-  "decades": "Jahrzehnte",
-  "centuries": "Jahrhunderte",
-  "millennium": "Jahrtausende",
-
-  "fahrenheit": "Fahrenheit",
-  "celsius": "Grad Celsius",
-  "kelvin": "Kelvin",
-  "reamur": "Grad Réaumur",
-  "romer": "Grad Rømer",
-  "delisle": "Grad Delisle",
-  "rankine": "Grad Rankine",
-
-  "metersSecond": "Meter pro Sekunde",
-  "kilometersHour": "Kilometer pro Stunde",
-  "milesHour": "Meilen pro Stunde",
-  "knots": "Knoten",
-  "feetSecond": "Fuß pro Sekunde",
-  "minutesPerKilometer": "Minuten pro Kilometer",
-  "minutesPerMile": "Minutes per mile",
-  "@minutesPerMile": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "speedOfLight": "Speed of light",
-  "@speedOfLight": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "grams": "Gramm",
-  "ettograms": "Hektogramm",
-  "kilograms": "Kilogramm",
-  "pounds": "Pfund (imperial)",
-  "ounces": "Unzen (imperial)",
-  "quintals": "Zentner / Quintal (100 kg)",
-  "tonnes": "Tonnen",
-  "milligrams": "Milligramm",
-  "uma": "Atomare Masseneinheiten",
-  "carats": "Metrisches Karat",
-  "centigrams": "Zentigramm",
-  "pennyweights": "Pennyweights",
-  "troyOunces": "Feinunze",
-  "stones": "Stone",
-
-  "pascal": "Pascal",
-  "atmosphere": "Physikalische Atmosphäre",
-  "bar": "Bar",
-  "millibar": "Millibar",
-  "psi": "Pfund pro Quadratzoll",
-  "torr": "Millimeter-Quecksilbersäule (Torr)",
-  "hectoPascal": "Hektopascal",
-  "inchesOfMercury": "Zoll Quecksilber",
-  "kiloPascal": "Kilopascal",
-  "@kiloPascal": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "ksi": "Kilopounds per square inch",
-  "@ksi": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "megaPascal": "Megapascal",
-  "@megaPascal": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "gigaPascal": "Gigapascal",
-  "@gigaPascal": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "joule": "Joule",
-  "calories": "Kalorien",
-  "kilowattHour": "Kilowattstunden",
-  "electronvolt": "Elektronenvolt",
-  "footPound": "Foot-Pound",
-  "kilocalories": "Kilokalorien",
-  "kilojoules": "Kilojoules",
-  "@kilojoules": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "watthour": "Watt hour",
   "@watthour": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "britishThermalUnit": "British thermal unit",
-  "@britishThermalUnit": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "degree": "Grad",
-  "minutesDegree": "Minuten",
-  "secondsDegree": "Sekunden",
-  "radiansDegree": "Radiant",
-
-  "usd": "US-Dollar",
-  "eur": "Euro",
-  "gbp": "Britisches Pfund",
-  "inr": "Indische Rupie",
-  "cny": "Renminbi Yuan",
-  "jpy": "Japanischer Yen",
-  "chf": "Schweizer Franken",
-  "sek": "Schwedische Krone",
-  "rub": "Russischer Rubel",
-  "cad": "Kanadischer Dollar",
-  "krw": "Südkoreanischer Won",
-  "brl": "Brasilianischer Real",
-  "hkd": "Hongkong-Dollar",
+  "about": "Über die App",
+  "acres": "Acre",
+  "angles": "Winkel",
+  "angstroms": "Ångström",
+  "appName": "Converter NOW",
+  "appearance": "Appearance",
+  "are": "Ar / Are",
+  "area": "Fläche",
+  "astronomicalUnits": "Astronomische Einheiten",
+  "atmosphere": "Physikalische Atmosphäre",
+  "atto": "Atto-",
   "aud": "Australischer Dollar",
-  "nzd": "Neuseeland-Dollar",
-  "mxn": "Mexikanischer Peso",
-  "sgd": "Singapur-Dollar",
-  "nok": "Norwegische Krone",
-  "trY": "Türkische Lira",
-  "zar": "Südafrikanischer Rand",
-  "dkk": "Dänische Krone",
-  "pln": "Polnischer Złoty",
-  "thb": "Thailändischer Baht",
-  "myr": "Malaysischer Ringgit",
-  "huf": "Ungarischer Forint",
+  "back": "Zurück",
+  "backupAndRestore": "Backup & Restore",
+  "bar": "Bar",
+  "base": "Basis",
+  "binary": "Binär",
+  "bit": "Bit",
+  "britishThermalUnit": "British thermal unit",
+  "brl": "Brasilianischer Real",
+  "buyMeACoffee": "Kaufe dem Entwickler einen Kaffee.",
+  "byte": "Byte",
+  "cad": "Kanadischer Dollar",
+  "calculator": "Rechner",
+  "calories": "Kalorien",
+  "cancel": "Cancel",
+  "carats": "Metrisches Karat",
+  "celsius": "Grad Celsius",
+  "centi": "Zenti-",
+  "centigrams": "Zentigramm",
+  "centiliters": "Centiliters",
+  "centimeters": "Zentimeter",
+  "centiseconds": "Zentisekunden",
+  "centuries": "Jahrhunderte",
+  "chf": "Schweizer Franken",
+  "chooseProperty": "Eigenschaft wählen",
+  "clearAll": "Leere alles",
+  "clearSettings": "Clear all settings",
+  "cny": "Renminbi Yuan",
+  "confirmationClear": "Are you sure you want to clear all settings? This action cannot be undone.",
+  "contributeTranslating": "Unterstütze uns bei der Übersetzung der App.",
+  "conversions": "Conversions",
+  "copy": "Kopieren",
+  "cubicCentimeters": "Kubikzentimeter",
+  "cubicFeet": "Kubikfuß",
+  "cubicInches": "Kubikzoll",
+  "cubicMeters": "Kubikmeter",
+  "cubicMillimeters": "Kubikmillimeter",
+  "cups": "Cups US",
+  "currencies": "Währungen",
   "czk": "Tschechische Krone",
-  "ils": "Israelischer Neuer Schekel",
-  "idr": "Indonesische Rupiah",
-  "php": "Philippinischer Peso",
-  "ron": "Rumänischer Leu",
-  "isk": "Isländische Krone",
-  "twd": "Neuer Taiwan-Dollar",
-  "mad": "Marokkanischer Dirham",
-
+  "dark": "Dunkel",
+  "days": "Tage",
+  "deca": "Deka-",
+  "decades": "Jahrzehnte",
+  "deci": "Dezi-",
+  "deciliters": "Deciliters",
+  "decimal": "Dezimal",
+  "deciseconds": "Dezisekunden",
+  "degree": "Grad",
+  "delisle": "Grad Delisle",
+  "density": "Density",
+  "digitalData": "Digitale Daten",
+  "dkk": "Dänische Krone",
+  "donation": "Unterstüze die App mit einer Spende.",
+  "donationDialog": "Hallo, wie Du vielleicht weißt, ist diese App frei und open-source. Das bedeutet, dass die App kostenlos verwendet und der Quellcode kopiert/bearbeitet werden darf. Der Entwickler wird dafür nicht entlohnt. Wenn Du aber an dieses Projekt glaubst und gerne neue Features sehen möchtest, kaufe dem Entwickler einen Kaffee.",
+  "drawerLogo": "Logo anzeigen",
+  "dyne": "Dyn",
+  "dyneMeter": "Dynmeter",
+  "electronvolt": "Elektronenvolt",
+  "enableDarkTheme": "Dunkles Thema aktivieren",
+  "energy": "Energie",
+  "ettograms": "Hektogramm",
   "euChina": "EU & China",
+  "eur": "Euro",
+  "europeanHorsePower": "Europäische Pferdestärken",
+  "exa": "Exa-",
+  "exabit": "Exabit",
+  "exabyte": "Exabyte",
+  "exbibit": "Exbibit",
+  "exbibyte": "Exbibyte",
+  "exportSettings": "Export settings",
+  "exportSuccess": "Settings exported successfully",
+  "fahrenheit": "Fahrenheit",
+  "feet": "Fuß",
+  "feetSecond": "Fuß pro Sekunde",
+  "feetUsSurvey": "Fuß (US survey)",
+  "femto": "Femto-",
+  "findOutMore": "Find out more",
+  "footPound": "Foot-Pound",
+  "force": "Kraft",
+  "fuelConsumption": "Spritverbrauch",
+  "gbp": "Britisches Pfund",
+  "gibibit": "Gibibit",
+  "gibibyte": "Gibibyte",
+  "giga": "Giga-",
+  "gigaPascal": "Gigapascal",
+  "gigabit": "Gigabit",
+  "gigabyte": "Gigabyte",
+  "gigawatt": "Gigawatt",
+  "grams": "Gramm",
+  "gramsPerCubicCentimeter": "Grams per Cubic Centimeter",
+  "gramsPerDeciliter": "Grams per Deciliter",
+  "gramsPerLiter": "Grams per Liter",
+  "gramsPerMilliliter": "Grams per Milliliter",
+  "hectares": "Hektar",
+  "hecto": "Hekto-",
+  "hectoPascal": "Hektopascal",
+  "hexadecimal": "Hexadezimal",
+  "hiddenUnits": "Hidden units",
+  "hideUnits": "Hide units",
+  "hkd": "Hongkong-Dollar",
+  "hours": "Stunden",
+  "huf": "Ungarischer Forint",
+  "idr": "Indonesische Rupiah",
+  "ils": "Israelischer Neuer Schekel",
+  "imperialFluidOunces": "Flüssigunzen (Imperial)",
+  "imperialGallons": "Gallonen (Imperial)",
+  "imperialGill": "Gill (Imperial)",
+  "imperialHorsePower": "Imperiale Pferdestärken",
+  "imperialPints": "Pints (GB und Irland)",
+  "importError": "Import Error",
+  "importSettings": "Import settings",
+  "importSuccess": "Settings imported successfully",
+  "inches": "Zoll",
+  "inchesOfMercury": "Zoll Quecksilber",
+  "inr": "Indische Rupie",
+  "invalidCharacters": "Fehler, unzulässige Zeichen.",
+  "isk": "Isländische Krone",
+  "japan": "Japan",
+  "joule": "Joule",
+  "jpy": "Japanischer Yen",
+  "kelvin": "Kelvin",
+  "kibibit": "Kibibit",
+  "kibibyte": "Kibibyte",
+  "kilo": "Kilo-",
+  "kiloPascal": "Kilopascal",
+  "kilobit": "Kilobit",
+  "kilobyte": "Kilobyte",
+  "kilocalories": "Kilokalorien",
+  "kilogramForce": "Kilopond",
+  "kilogramForceMeter": "Kilopondmeter",
+  "kilograms": "Kilogramm",
+  "kilogramsPerCubicMeter": "Kilograms per Cubic Meter",
+  "kilogramsPerLiter": "Kilograms per Liter",
+  "kilojoules": "Kilojoules",
+  "kilometers": "Kilometer",
+  "kilometersHour": "Kilometer pro Stunde",
+  "kilometersLiter": "Kilometer pro Liter",
+  "kilowatt": "Kilowatt",
+  "kilowattHour": "Kilowattstunden",
+  "knots": "Knoten",
+  "krw": "Südkoreanischer Won",
+  "ksi": "Kilopounds per square inch",
+  "language": "Sprache",
+  "lastCurrenciesUpdate": "Letzte Aktualisierung: ",
+  "length": "Länge",
+  "light": "Hell",
+  "lightYears": "Lichtjahre",
+  "liters": "Liter",
+  "liters100km": "Liter pro 100 km",
+  "longPressAdvice": "Langes Drücken zum Verschieben.",
+  "lustrum": "Jahrfünft",
+  "mad": "Marokkanischer Dirham",
+  "mass": "Masse",
+  "mebibit": "Mebibit",
+  "mebibyte": "Mebibyte",
+  "mega": "Mega-",
+  "megaPascal": "Megapascal",
+  "megabit": "Megabit",
+  "megabyte": "Megabyte",
+  "megawatt": "Megawatt",
+  "menu": "Menü",
+  "meters": "Meter",
+  "metersSecond": "Meter pro Sekunde",
+  "micro": "Mikro-",
+  "microgramsPerDeciliter": "Micrograms per Deciliter",
+  "microgramsPerLiter": "Micrograms per Liter",
+  "microgramsPerMilliliter": "Micrograms per Milliliter",
+  "microliters": "Microliters",
+  "micrometers": "Mikrometer",
+  "microseconds": "Mikrosekunden",
+  "miles": "Meilen",
+  "milesHour": "Meilen pro Stunde",
+  "milesImperialGallon": "Meilen pro Gallone (Imperial)",
+  "milesUsGallon": "Meilen pro US-Gallone",
+  "millennium": "Jahrtausende",
+  "milli": "Milli-",
+  "millibar": "Millibar",
+  "milligrams": "Milligramm",
+  "milligramsPerCubicCentimeter": "Milligrams per Cubic Centimeter",
+  "milligramsPerCubicMeter": "Milligrams per Cubic Meter",
+  "milligramsPerDeciliter": "Milligrams per Deciliter",
+  "milligramsPerLiter": "Milligrams per Liter",
+  "milligramsPerMilliliter": "Milligrams per Milliliter",
+  "milliliters": "Milliliter",
+  "millimeters": "Millimeter",
+  "milliseconds": "Millisekunden",
+  "milliwatt": "Milliwatt",
+  "mils": "Milli-Zoll (Thou)",
+  "minutes": "Minuten",
+  "minutesDegree": "Minuten",
+  "minutesPerKilometer": "Minuten pro Kilometer",
+  "minutesPerMile": "Minutes per mile",
+  "more": "Mehr",
+  "mxn": "Mexikanischer Peso",
+  "myOrdering": "Meine Anordnung",
+  "myr": "Malaysischer Ringgit",
+  "name_aed": "VAE-Dirham",
+  "name_afn": "Afghanischer Afghani",
+  "name_all": "Albanischer Lek",
+  "name_amd": "Armenischer Dram",
+  "name_ang": "Niederländische Antillen-Gulden",
+  "name_aoa": "Angolanischer Kwanza",
+  "name_ars": "Argentinischer Peso",
+  "name_aud": "Australischer Dollar",
+  "name_awg": "Aruba-Florin",
+  "name_azn": "Aserbaidschan-Manat",
+  "name_bam": "Bosnien und Herzegowina Konvertierbare Mark",
+  "name_bbd": "Barbados-Dollar",
+  "name_bdt": "Bangladesch-Taka",
+  "name_bgn": "Bulgarischer Lew",
+  "name_bhd": "Bahrain-Dinar",
+  "name_bif": "Burundi-Franc",
+  "name_bmd": "Bermuda-Dollar",
+  "name_bnd": "Brunei-Dollar",
+  "name_bob": "Bolivianischer Boliviano",
+  "name_brl": "Brasilianischer Real",
+  "name_bsd": "Bahama-Dollar",
+  "name_btc": "Bitcoin",
+  "name_btn": "Bhutan-Ngultrum",
+  "name_bwp": "Botswanischer Pula",
+  "name_byn": "Weißrussischer Rubel",
+  "name_bzd": "Belize-Dollar",
+  "name_cad": "Kanadischer Dollar",
+  "name_cdf": "Kongo-Franc",
+  "name_chf": "Schweizer Franken",
+  "name_clf": "Chilenische Unidades de Fomento",
+  "name_clp": "Chilenischer Peso",
+  "name_cnh": "Chinesischer Renminbi (Off-Shore)",
+  "name_cny": "Chinesischer Renminbi",
+  "name_cop": "Kolumbianischer Peso",
+  "name_crc": "Costa-Rica-Colón",
+  "name_cuc": "Kubanischer Peso convertible",
+  "name_cup": "Kubanischer Peso",
+  "name_cve": "Kap-Verde-Escudo",
+  "name_czk": "Tschechische Krone",
+  "name_djf": "Dschibuti-Franc",
+  "name_dkk": "Dänische Krone",
+  "name_dop": "Dominikanischer Peso",
+  "name_dzd": "Algerischer Dinar",
+  "name_egp": "Ägyptisches Pfund",
+  "name_ern": "Eritreischer Nakfa",
+  "name_etb": "Äthiopischer Birr",
+  "name_eur": "Euro",
+  "name_fjd": "Fidschi-Dollar",
+  "name_fkp": "Falkland-Pfund",
+  "name_fok": "Färöische Krone",
+  "name_gbp": "Pfund Sterling",
+  "name_gel": "Georgischer Lari",
+  "name_ggp": "Guernsey-Pfund",
+  "name_ghs": "Ghanaischer Cedi",
+  "name_gip": "Gibraltar-Pfund",
+  "name_gmd": "Gambia-Dalasi",
+  "name_gnf": "Guinea-Franc",
+  "name_gtq": "Guatemaltekischer Quetzal",
+  "name_gyd": "Guyana-Dollar",
+  "name_hkd": "Hongkong-Dollar",
+  "name_hnl": "Honduras-Lempira",
+  "name_hrk": "Kroatische Kuna",
+  "name_htg": "Haitianische Gourde",
+  "name_huf": "Ungarischer Forint",
+  "name_idr": "Indonesische Rupiah",
+  "name_ils": "Israelischer Neuer Schekel",
+  "name_imp": "Isle-of-Man-Pfund",
+  "name_inr": "Indische Rupie",
+  "name_iqd": "Irakischer Dinar",
+  "name_irr": "Iranischer Rial",
+  "name_isk": "Isländische Krone",
+  "name_jep": "Jersey-Pfund",
+  "name_jmd": "Jamaika-Dollar",
+  "name_jod": "Jordanischer Dinar",
+  "name_jpy": "Japanischer Yen",
+  "name_kes": "Kenia-Schilling",
+  "name_kgs": "Kirgisischer Som",
+  "name_khr": "Kambodschanischer Riel",
+  "name_kmf": "Komoren-Franc",
+  "name_kpw": "Nordkoreanischer Won",
+  "name_krw": "Südkoreanischer Won",
+  "name_kwd": "Kuwait-Dinar",
+  "name_kyd": "Kaiman-Dollar",
+  "name_kzt": "Kasachischer Tenge",
+  "name_lak": "Laotischer Kip",
+  "name_lbp": "Libanesisches Pfund",
+  "name_lkr": "Sri-Lanka-Rupie",
+  "name_lrd": "Liberianischer Dollar",
+  "name_lsl": "Lesothischer Loti",
+  "name_lyd": "Libyscher Dinar",
+  "name_mad": "Marokkanischer Dirham",
+  "name_mdl": "Moldauischer Leu",
+  "name_mga": "Madagassischer Ariary",
+  "name_mkd": "Mazedonischer Denar",
+  "name_mmk": "Myanmarischer Kyat",
+  "name_mnt": "Mongolischer Tögrög",
+  "name_mop": "Macao-Pataca",
+  "name_mro": "Mauretanischer Ouguiya (1973–2017)",
+  "name_mru": "Mauretanischer Ouguiya",
+  "name_mur": "Mauritius-Rupie",
+  "name_mvr": "Maledivische Rufiyaa",
+  "name_mwk": "Malawi-Kwacha",
+  "name_mxn": "Mexikanischer Peso",
+  "name_myr": "Malaysischer Ringgit",
+  "name_mzn": "Mosambikanischer Metical",
+  "name_nad": "Namibia-Dollar",
+  "name_ngn": "Nigerianischer Naira",
+  "name_nio": "Nicaraguanischer Córdoba Oro",
+  "name_nok": "Norwegische Krone",
+  "name_npr": "Nepalesische Rupie",
+  "name_nzd": "Neuseeland-Dollar",
+  "name_omr": "Omanischer Rial",
+  "name_pab": "Panamaischer Balboa",
+  "name_pen": "Peruanischer Sol",
+  "name_pgk": "Papua-Neuguineischer Kina",
+  "name_php": "Philippinischer Peso",
+  "name_pkr": "Pakistanische Rupie",
+  "name_pln": "Polnischer Złoty",
+  "name_pyg": "Paraguayischer Guaraní",
+  "name_qar": "Katar-Riyal",
+  "name_ron": "Rumänischer Leu",
+  "name_rsd": "Serbischer Dinar",
+  "name_rub": "Russischer Rubel",
+  "name_rwf": "Ruanda-Franc",
+  "name_sar": "Saudi-Riyal",
+  "name_sbd": "Salomonen-Dollar",
+  "name_scr": "Seychellen-Rupie",
+  "name_sdg": "Sudanesisches Pfund",
+  "name_sek": "Schwedische Krone",
+  "name_sgd": "Singapur-Dollar",
+  "name_shp": "St.-Helena-Pfund",
+  "name_sle": "Sierra-leonischer Leone",
+  "name_sll": "Sierra-leonischer Leone (vor 07/2022)",
+  "name_sos": "Somalia-Schilling",
+  "name_srd": "Suriname-Dollar",
+  "name_ssp": "Südsudanesisches Pfund",
+  "name_std": "São-toméischer Dobra (1977–2017)",
+  "name_stn": "São-toméischer Dobra",
+  "name_svc": "El-Salvador-Colón",
+  "name_syp": "Syrische Lira",
+  "name_szl": "Swazi Lilangeni",
+  "name_thb": "Thailändischer Baht",
+  "name_tjs": "Tadschikischer Somoni",
+  "name_tmt": "Turkmenistan-Manat",
+  "name_tnd": "Tunesischer Dinar",
+  "name_top": "Tongaischer Paʻanga",
+  "name_try": "Türkische Lira",
+  "name_ttd": "Trinidad-und-Tobago-Dollar",
+  "name_twd": "Neuer Taiwan-Dollar",
+  "name_tzs": "Tansania-Schilling",
+  "name_uah": "Ukrainische Hrywnja",
+  "name_ugx": "Uganda-Schilling",
+  "name_usd": "US-Dollar",
+  "name_uyu": "Uruguayischer Peso",
+  "name_uzs": "Usbekischer Soʻm",
+  "name_vef": "Venezolanischer Bolívar fuerte (alt)",
+  "name_ves": "Venezolanischer Bolívar soberano",
+  "name_vnd": "Vietnamesischer Đồng",
+  "name_vuv": "Vanuatu-Vatu",
+  "name_wst": "Samoanischer Tala",
+  "name_xaf": "CFA-Franc BEAC",
+  "name_xag": "Unze Silber",
+  "name_xau": "Unze Gold",
+  "name_xcd": "Ostkaribischer Dollar",
+  "name_xdr": "Sonderziehungsrecht",
+  "name_xof": "CFA-Franc BCEAO",
+  "name_xpd": "Unze Palladium",
+  "name_xpf": "CFP-Franc",
+  "name_xpt": "Unze Platin",
+  "name_yer": "Jemen-Rial",
+  "name_zar": "Südafrikanischer Rand",
+  "name_zmw": "Sambischer Kwacha",
+  "name_zwl": "Simbabwe-Dollar",
+  "nano": "Nano-",
+  "nanometers": "Nanometer",
+  "nanoseconds": "Nanosekunden",
+  "nauticalMiles": "Nautische Meilen (Seemeile)",
+  "newton": "Newton",
+  "newtonMeter": "Newtonmeter",
+  "nibble": "Nibble",
+  "nok": "Norwegische Krone",
+  "numeralSystems": "Zahlensysteme",
+  "nzd": "Neuseeland-Dollar",
+  "octal": "Oktal",
+  "ok": "Ok",
+  "otherPlatforms": "Converter NOW für andere Plattformen",
+  "ounces": "Unzen (imperial)",
+  "parsec": "Parsec",
+  "pascal": "Pascal",
+  "paste": "Paste",
+  "pebibit": "Pebibit",
+  "pebibyte": "Pebibyte",
+  "pennyweights": "Pennyweights",
+  "peta": "Peta-",
+  "petabit": "Petabit",
+  "petabyte": "Petabyte",
+  "php": "Philippinischer Peso",
+  "pickColor": "Pick a color",
+  "pico": "Piko-",
+  "picometers": "Pikometer",
+  "pln": "Polnischer Złoty",
+  "poundForce": "Kraftpfund",
+  "poundForceFeet": "Pound-Force-Feet",
+  "poundForceInch": "Pound-force inch",
+  "poundal": "Poundal",
+  "poundalMeter": "Poundalmeter",
+  "pounds": "Pfund (imperial)",
+  "poundsPerCubicFeet": "Pounds per Cubic Feet",
+  "poundsPerCubicInches": "Pounds per Cubic Inches",
+  "power": "Leistung",
+  "pressure": "Druck",
+  "problemImportFile": "There was a problem importing the file",
+  "propertySelectionOnStartup": "Property selection on startup",
+  "propertySelectionOnStartupSubtitle": "Show the property selection page on startup on small screen devices",
+  "psi": "Pfund pro Quadratzoll",
+  "pureBlackTheme": "schwarzes AMOLED-Thema",
+  "quintals": "Zentner / Quintal (100 kg)",
+  "radiansDegree": "Radiant",
+  "rankine": "Grad Rankine",
+  "rateApp": "App bewerten",
+  "reamur": "Grad Réaumur",
+  "reason": "Reason",
+  "relatedSettings": "Related settings",
+  "removeTrailingZeros": "Entferne nachgestellte Nullen.",
+  "reorder": "Anordnen",
+  "reorderProperties": "Reihenfolge der Kategorien ändern",
+  "reorderProperty": "{property} anordnen",
+  "reorderUnits": "Reihenfolge innerhalb der Kategorien ändern",
+  "repoGithub": "Öffne das Repo auf GitHub.",
+  "revokeInternetAccess": "Revoke internet access",
+  "revokeInternetExplanation": "This app uses the internet to update currency exchange rates once a day upon opening. This download only requires a few kilobytes. However, if you don't need this feature, you can prevent the app from accessing the internet by enabling this option.",
+  "romer": "Grad Rømer",
+  "ron": "Rumänischer Leu",
+  "routeError1": "Diese Seite existiert nicht.",
+  "routeError2": "Zurück zur ersten Seite gehen",
+  "rub": "Russischer Rubel",
+  "save": "Speichern",
+  "search": "Suche",
+  "seconds": "Sekunden",
+  "secondsDegree": "Sekunden",
+  "sek": "Schwedische Krone",
+  "selectAll": "Select all",
+  "settings": "Einstellungen",
+  "sgd": "Singapur-Dollar",
+  "shoeSize": "Schuhgröße",
+  "siPrefixes": "SI-Präfix",
+  "significantFigures": "Signifikante Stellen",
+  "sourceCode": "Quellcode",
+  "speed": "Geschwindigkeit",
+  "speedOfLight": "Speed of light",
+  "squareCentimeters": "Quadratzentimeter",
+  "squareFeet": "Quadratfuß",
+  "squareFeetUsSurvey": "Quadratfuß (US survey)",
+  "squareInches": "Quadratzoll",
+  "squareKilometers": "Quadratkilometer",
+  "squareMeters": "Quadratmeter",
+  "squareMiles": "Quadratmeilen",
+  "squareMillimeters": "Quadratmillimeter",
+  "squareYard": "Quadratyard",
+  "stones": "Stone",
+  "system": "System",
+  "tablespoonAustralian": "Teelöffel Australien",
+  "tablespoonUs": "Teelöffel US",
+  "teaspoonsMetric": "Metric teaspoons",
+  "teaspoonsUs": "Teaspoons US",
+  "tebibit": "Tebibit",
+  "tebibyte": "Tebibyte",
+  "temperature": "Temperatur",
+  "tera": "Tera-",
+  "terabit": "Terabit",
+  "terabyte": "Terabyte",
+  "thb": "Thailändischer Baht",
+  "theme": "Thema",
+  "themeColor": "Theme color",
+  "time": "Zeit",
+  "today": "Heute",
+  "tonnes": "Tonnen",
+  "torque": "Drehmoment",
+  "torr": "Millimeter-Quecksilbersäule (Torr)",
+  "trY": "Türkische Lira",
+  "troyOunces": "Feinunze",
+  "twd": "Neuer Taiwan-Dollar",
   "ukIndiaChild": "UK & Indien – Kind",
   "ukIndiaMan": "UK & Indien – Mann",
   "ukIndiaWoman": "UK & Indien – Frau",
+  "uma": "Atomare Masseneinheiten",
+  "undo": "Rückgängig machen",
+  "undoClearAllMessage": "Alles geleert. Rückgängig machen?",
+  "unselectAll": "Unselect all",
+  "usFluidOunces": "US-Flüssigunzen",
+  "usGallons": "Gallonen US",
+  "usGill": "US-Gill",
+  "usPints": "Pints US",
+  "usQuarts": "US Quarts",
   "usaCanadaChild": "USA & Kanada – Kind",
   "usaCanadaMan": "USA & Kanada – Mann",
   "usaCanadaWoman": "USA & Kanada – Frau",
-  "japan": "Japan",
-
+  "usd": "US-Dollar",
+  "useDeviceColor": "Use device color",
+  "visibleUnits": "{property}, visible units",
+  "volume": "Volumen",
   "watt": "Watt",
-  "milliwatt": "Milliwatt",
-  "kilowatt": "Kilowatt",
-  "megawatt": "Megawatt",
-  "gigawatt": "Gigawatt",
-  "europeanHorsePower": "Europäische Pferdestärken",
-  "imperialHorsePower": "Imperiale Pferdestärken",
-
-  "newton": "Newton",
-  "dyne": "Dyn",
-  "poundForce": "Kraftpfund",
-  "kilogramForce": "Kilopond",
-  "poundal": "Poundal",
-
-  "newtonMeter": "Newtonmeter",
-  "dyneMeter": "Dynmeter",
-  "poundForceFeet": "Pound-Force-Feet",
-  "kilogramForceMeter": "Kilopondmeter",
-  "poundalMeter": "Poundalmeter",
-  "poundForceInch": "Pound-force inch",
-  "@poundForceInch": {
-    "description": "Not yet translated. Once done, remove this comment."
-  },
-
-  "kilometersLiter": "Kilometer pro Liter",
-  "liters100km": "Liter pro 100 km",
-  "milesUsGallon": "Meilen pro US-Gallone",
-  "milesImperialGallon": "Meilen pro Gallone (Imperial)",
-
-  "decimal": "Dezimal",
-  "hexadecimal": "Hexadezimal",
-  "octal": "Oktal",
-  "binary": "Binär",
-
-  "bit": "Bit",
-  "nibble": "Nibble",
-  "kilobit": "Kilobit",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "megabit": "Megabit",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "gigabit": "Gigabit",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "terabit": "Terabit",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "petabit": "Petabit",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "exabit": "Exabit",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "kibibit": "Kibibit",
-  "mebibit": "Mebibit",
-  "gibibit": "Gibibit",
-  "tebibit": "Tebibit",
-  "pebibit": "Pebibit",
-  "exbibit": "Exbibit",
-  "byte": "Byte",
-  "kilobyte": "Kilobyte",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "megabyte": "Megabyte",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "gigabyte": "Gigabyte",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "terabyte": "Terabyte",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "petabyte": "Petabyte",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "exabyte": "Exabyte",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "kibibyte": "Kibibyte",
-  "mebibyte": "Mebibyte",
-  "gibibyte": "Gibibyte",
-  "tebibyte": "Tebibyte",
-  "pebibyte": "Pebibyte",
-  "exbibyte": "Exbibyte",
-
-  "base": "Basis",
-  "deca": "Deka-",
-  "hecto": "Hekto-",
-  "kilo": "Kilo-",
-  "mega": "Mega-",
-  "giga": "Giga-",
-  "tera": "Tera-",
-  "peta": "Peta-",
-  "exa": "Exa-",
-  "zetta": "Zetta-",
+  "watthour": "Watt hour",
+  "weeks": "Wochen",
+  "yards": "Yard",
+  "years": "Jahre (365)",
+  "yocto": "Yokto-",
   "yotta": "Yotta-",
-  "deci": "Dezi-",
-  "centi": "Zenti-",
-  "milli": "Milli-",
-  "micro": "Mikro-",
-  "nano": "Nano-",
-  "pico": "Piko-",
-  "femto": "Femto-",
-  "atto": "Atto-",
+  "zar": "Südafrikanischer Rand",
   "zepto": "Zepto-",
-  "yocto": "Yokto-"
+  "zetta": "Zetta-",
+  "name_xcg": "Caribbean Guilder",
+  "name_zig": "Zimbabwe Gold"
 }

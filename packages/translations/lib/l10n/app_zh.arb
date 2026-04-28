@@ -1,58 +1,173 @@
 {
   "@@locale": "zh",
-
-  "appName": "Converter NOW",
-  "reorder": "排序",
-  "myOrdering": "我的排序",
-  "about": "关于此程序",
-  "lastCurrenciesUpdate": "最终更新：",
-  "today": "今天",
-  "enableDarkTheme": "打开夜间模式",
-  "settings": "设置",
-  "menu": "菜单",
-  "donation": "捐赠",
-  "buyMeACoffee": "给开发者买一杯咖啡",
-  "donationDialog": "你好！有可能你知道，这个程序开源且免费。这意味着你可以免费使用此软件，复制和编辑源代码。而开发者得不到任何利益。如果你赞同此项目，或者想看到一些新功能，请考虑给我买一杯咖啡。",
-  "drawerLogo": "Drawer logo",
-  "rateApp": "评价此程序",
-  "repoGithub": "打开GitHub仓库",
-  "contributeTranslating": "参加此程序的翻译",
-  "search": "搜索",
-  "clearAll": "全部删除",
-  "calculator": "计算器",
-  "significantFigures": "有效数字",
-  "removeTrailingZeros": "删除末尾的0",
-  "longPressAdvice": "长按以移动",
-  "back": "返回",
-  "save": "保存",
-  "invalidCharacters": "错误，无效的文字",
-  "theme": "主题",
-  "dark": "深色",
-  "light": "浅色",
-  "system": "系统设置",
-  "pureBlackTheme": "AMOLED黑暗模式",
-  "@pureBlackTheme": {
-    "description": "Revise this translation"
-  },
-  "propertySelectionOnStartup": "Property selection on startup",
-  "@propertySelectionOnStartup": {
+  "@backupAndRestore": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "propertySelectionOnStartupSubtitle": "Show the property selection page on startup on small screen devices",
-  "@propertySelectionOnStartupSubtitle": {
+  "@britishThermalUnit": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "copy": "复制",
-  "paste": "Paste",
+  "@cancel": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@centiliters": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@clearSettings": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@confirmationClear": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@deciliters": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@density": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@exabit": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@exabyte": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@exportSettings": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@exportSuccess": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@gigaPascal": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@gigabit": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@gigabyte": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@gramsPerCubicCentimeter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@gramsPerDeciliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@gramsPerLiter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@gramsPerMilliliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@hiddenUnits": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@hideUnits": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@importError": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@importSettings": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@importSuccess": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@kiloPascal": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@kilobit": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@kilobyte": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@kilogramsPerCubicMeter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@kilogramsPerLiter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@kilojoules": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@ksi": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@megaPascal": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@megabit": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@megabyte": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@microgramsPerDeciliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@microgramsPerLiter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@microgramsPerMilliliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@microliters": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@milligramsPerCubicCentimeter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@milligramsPerCubicMeter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@milligramsPerDeciliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@milligramsPerLiter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@milligramsPerMilliliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@minutesPerMile": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
   "@paste": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "more": "更多",
-  "language": "语言",
-  "reorderProperties": "排序组",
-  "reorderUnits": "排序项目",
-  "chooseProperty": "请选择组",
-  "reorderProperty": "排序{property}",
+  "@petabit": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@petabyte": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@poundForceInch": {
+    "description": "Not yet translated. Once done, remove this comment."
+  },
+  "@poundsPerCubicFeet": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@poundsPerCubicInches": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@problemImportFile": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@propertySelectionOnStartup": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@propertySelectionOnStartupSubtitle": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@pureBlackTheme": {
+    "description": "Revise this translation"
+  },
+  "@reason": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@relatedSettings": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
   "@reorderProperty": {
     "placeholders": {
       "property": {
@@ -61,26 +176,30 @@
       }
     }
   },
-  "otherPlatforms": "在其他平台上使用此程序",
-  "sourceCode": "源代码",
-  "undoClearAllMessage": "已全部清除。 你想撤消它吗？",
-  "undo": "撤消",
-  "routeError1": "不存在此页面",
-  "routeError2": "返回上一级",
-  "ok": "OK",
-  "revokeInternetAccess": "禁用网络连接",
-  "revokeInternetExplanation": "该应用在每次启动时通过网络更新汇率。所需下载的数据只有几 kiB。不过，您若不需此功能，启用该选项可阻止该应用连接互联网。",
-  "useDeviceColor": "使用系统设置的强调色",
-  "pickColor": "选择颜色",
-  "themeColor": "主题色",
-  "appearance": "外观",
-  "conversions": "转换",
-  "findOutMore": "更多",
-  "hideUnits": "Hide units",
-  "@hideUnits": {
+  "@selectAll": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "visibleUnits": "{property}, visible units",
+  "@speedOfLight": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@teaspoonsMetric": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@teaspoonsUs": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@terabit": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@terabyte": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@unselectAll": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@usQuarts": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
   "@visibleUnits": {
     "description": "Not yet translated. Once done, remove this comment",
     "placeholders": {
@@ -90,494 +209,528 @@
       }
     }
   },
-  "hiddenUnits": "Hidden units",
-  "@hiddenUnits": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "selectAll": "Select all",
-  "@selectAll": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "unselectAll": "Unselect all",
-  "@unselectAll": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "backupAndRestore": "Backup & Restore",
-  "@backupAndRestore": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "exportSettings": "Export settings",
-  "@exportSettings": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "importSettings": "Import settings",
-  "@importSettings": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "clearSettings": "Clear all settings",
-  "@clearSettings": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "exportSuccess": "Settings exported successfully",
-  "@exportSuccess": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "importSuccess": "Settings imported successfully",
-  "@importSuccess": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "problemImportFile": "There was a problem importing the file",
-  "@problemImportFile": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "relatedSettings": "Related settings",
-  "@relatedSettings": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "reason": "Reason",
-  "@reason": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "importError": "Import Error",
-  "@importError": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "confirmationClear": "Are you sure you want to clear all settings? This action cannot be undone.",
-  "@confirmationClear": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "cancel": "Cancel",
-  "@cancel": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "length": "长度",
-  "area": "面积",
-  "volume": "体积",
-  "time": "时间",
-  "temperature": "温度",
-  "speed": "速度",
-  "siPrefixes": "国际单位前缀",
-  "mass": "质量",
-  "pressure": "压强",
-  "energy": "能量",
-  "angles": "角度",
-  "currencies": "货币",
-  "shoeSize": "鞋子尺寸",
-  "digitalData": "电子数据",
-  "power": "功率",
-  "density": "Density",
-  "@density": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "torque": "力矩",
-  "force": "力",
-  "fuelConsumption": "燃费",
-  "numeralSystems": "数制",
-
-  "meters": "米",
-  "centimeters": "厘米",
-  "inches": "英寸",
-  "feet": "英尺",
-  "nauticalMiles": "海里",
-  "yards": "码数",
-  "miles": "英里",
-  "millimeters": "毫米",
-  "micrometers": "微米",
-  "nanometers": "纳米",
-  "angstroms": "埃米",
-  "picometers": "皮米",
-  "kilometers": "公里",
-  "astronomicalUnits": "天文单位",
-  "lightYears": "光年",
-  "parsec": "秒差距",
-  "mils": "Mils",
-  "feetUsSurvey": "英尺(美国)",
-
-  "squareMeters": "平方米",
-  "squareCentimeters": "平方厘米",
-  "squareInches": "平方英寸",
-  "squareFeet": "平方英尺",
-  "squareMiles": "平方英里",
-  "squareYard": "平方码",
-  "squareMillimeters": "平方毫米",
-  "squareKilometers": "平方公里",
-  "hectares": "公顷",
-  "acres": "英亩",
-  "are": "公亩",
-  "squareFeetUsSurvey": "平方英尺(美国)",
-
-  "gramsPerCubicCentimeter": "Grams per Cubic Centimeter",
-  "@gramsPerCubicCentimeter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "gramsPerLiter": "Grams per Liter",
-  "@gramsPerLiter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "gramsPerMilliliter": "Grams per Milliliter",
-  "@gramsPerMilliliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "gramsPerDeciliter": "Grams per Deciliter",
-  "@gramsPerDeciliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "kilogramsPerLiter": "Kilograms per Liter",
-  "@kilogramsPerLiter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "kilogramsPerCubicMeter": "Kilograms per Cubic Meter",
-  "@kilogramsPerCubicMeter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "milligramsPerLiter": "Milligrams per Liter",
-  "@milligramsPerLiter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "milligramsPerDeciliter": "Milligrams per Deciliter",
-  "@milligramsPerDeciliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "milligramsPerMilliliter": "Milligrams per Milliliter",
-  "@milligramsPerMilliliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "milligramsPerCubicMeter": "Milligrams per Cubic Meter",
-  "@milligramsPerCubicMeter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "milligramsPerCubicCentimeter": "Milligrams per Cubic Centimeter",
-  "@milligramsPerCubicCentimeter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "microgramsPerLiter": "Micrograms per Liter",
-  "@microgramsPerLiter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "microgramsPerDeciliter": "Micrograms per Deciliter",
-  "@microgramsPerDeciliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "microgramsPerMilliliter": "Micrograms per Milliliter",
-  "@microgramsPerMilliliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "poundsPerCubicInches": "Pounds per Cubic Inches",
-  "@poundsPerCubicInches": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "poundsPerCubicFeet": "Pounds per Cubic Feet",
-  "@poundsPerCubicFeet": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "cubicMeters": "立方米",
-  "liters": "公升",
-  "imperialGallons": "英制加仑",
-  "usGallons": "美制加仑",
-  "imperialPints": "英制品脱",
-  "usPints": "美制品脱",
-  "milliliters": "毫升",
-  "tablespoonUs": "一汤匙(美国)",
-  "tablespoonAustralian": "一汤匙(澳洲)",
-  "cups": "杯",
-  "cubicCentimeters": "立方厘米",
-  "cubicFeet": "立方英尺",
-  "cubicInches": "立方英寸",
-  "cubicMillimeters": "立方毫米",
-  "imperialFluidOunces": "英液盎司",
-  "usFluidOunces": "美液盎司",
-  "imperialGill": "英制及耳",
-  "usGill": "美制及耳",
-  "usQuarts": "US Quarts",
-  "@usQuarts": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "microliters": "Microliters",
-  "@microliters": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "deciliters": "Deciliters",
-  "@deciliters": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "centiliters": "Centiliters",
-  "@centiliters": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "teaspoonsUs": "Teaspoons US",
-  "@teaspoonsUs": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "teaspoonsMetric": "Metric teaspoons",
-  "@teaspoonsMetric": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "seconds": "秒",
-  "deciseconds": "分秒",
-  "centiseconds": "厘秒",
-  "milliseconds": "毫秒",
-  "microseconds": "微秒",
-  "nanoseconds": "纳秒",
-  "minutes": "分",
-  "hours": "小时",
-  "days": "日",
-  "weeks": "周",
-  "years": "年 (365)",
-  "lustrum": "五年纪",
-  "decades": "十年纪",
-  "centuries": "世纪",
-  "millennium": "千年纪",
-
-  "fahrenheit": "华氏度",
-  "celsius": "摄氏度",
-  "kelvin": "开尔文",
-  "reamur": "列氏度",
-  "romer": "罗氏温标",
-  "delisle": "德利尔温标",
-  "rankine": "兰金温标",
-
-  "metersSecond": "米/秒",
-  "kilometersHour": "公里/小时",
-  "milesHour": "英里/小时",
-  "knots": "节(海里/小时)",
-  "feetSecond": "英尺/秒",
-  "minutesPerKilometer": "公里/分",
-  "minutesPerMile": "Minutes per mile",
-  "@minutesPerMile": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "speedOfLight": "Speed of light",
-  "@speedOfLight": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "grams": "克",
-  "ettograms": "百克",
-  "kilograms": "千克",
-  "pounds": "磅",
-  "ounces": "盎司",
-  "quintals": "公担",
-  "tonnes": "吨",
-  "milligrams": "毫克",
-  "uma": "原子质量单位",
-  "carats": "克拉",
-  "centigrams": "厘克",
-  "pennyweights": "英钱",
-  "troyOunces": "金衡盎司",
-  "stones": "英石",
-
-  "pascal": "帕斯卡",
-  "atmosphere": "标准大气压",
-  "bar": "巴",
-  "millibar": "毫巴",
-  "psi": "磅/平方英寸",
-  "torr": "托",
-  "hectoPascal": "百帕",
-  "inchesOfMercury": "英寸汞柱",
-  "kiloPascal": "Kilopascal",
-  "@kiloPascal": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "ksi": "Kilopounds per square inch",
-  "@ksi": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "megaPascal": "Megapascal",
-  "@megaPascal": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "gigaPascal": "Gigapascal",
-  "@gigaPascal": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "joule": "焦耳",
-  "calories": "卡",
-  "kilowattHour": "千瓦时",
-  "electronvolt": "电子伏特",
-  "footPound": "英尺磅",
-  "kilocalories": "大卡",
-  "kilojoules": "Kilojoules",
-  "@kilojoules": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "watthour": "Watt hour",
   "@watthour": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "britishThermalUnit": "British thermal unit",
-  "@britishThermalUnit": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "degree": "度",
-  "minutesDegree": "分",
-  "secondsDegree": "秒",
-  "radiansDegree": "弧度",
-
-  "usd": "美元",
-  "eur": "欧元",
-  "gbp": "英镑",
-  "inr": "印度卢比",
-  "cny": "人民币",
-  "jpy": "日元",
-  "chf": "瑞士法郎",
-  "sek": "瑞典克朗",
-  "rub": "俄罗斯卢布",
-  "cad": "加元",
-  "krw": "韩元",
-  "brl": "巴西雷亚尔",
-  "hkd": "港元",
+  "about": "关于此程序",
+  "acres": "英亩",
+  "angles": "角度",
+  "angstroms": "埃米",
+  "appName": "Converter NOW",
+  "appearance": "外观",
+  "are": "公亩",
+  "area": "面积",
+  "astronomicalUnits": "天文单位",
+  "atmosphere": "标准大气压",
+  "atto": "阿托-",
   "aud": "澳元",
-  "nzd": "新西兰元",
-  "mxn": "墨西哥比索",
-  "sgd": "新加坡元",
-  "nok": "挪威克朗",
-  "trY": "土耳其里拉",
-  "zar": "南非兰特",
-  "dkk": "丹麦克朗",
-  "pln": "波兰兹罗提",
-  "thb": "泰铢",
-  "myr": "马来西亚林吉特",
-  "huf": "匈牙利福林",
+  "back": "返回",
+  "backupAndRestore": "Backup & Restore",
+  "bar": "巴",
+  "base": "基数",
+  "binary": "二进制",
+  "bit": "比特",
+  "britishThermalUnit": "British thermal unit",
+  "brl": "巴西雷亚尔",
+  "buyMeACoffee": "给开发者买一杯咖啡",
+  "byte": "字节",
+  "cad": "加元",
+  "calculator": "计算器",
+  "calories": "卡",
+  "cancel": "Cancel",
+  "carats": "克拉",
+  "celsius": "摄氏度",
+  "centi": "厘-",
+  "centigrams": "厘克",
+  "centiliters": "Centiliters",
+  "centimeters": "厘米",
+  "centiseconds": "厘秒",
+  "centuries": "世纪",
+  "chf": "瑞士法郎",
+  "chooseProperty": "请选择组",
+  "clearAll": "全部删除",
+  "clearSettings": "Clear all settings",
+  "cny": "人民币",
+  "confirmationClear": "Are you sure you want to clear all settings? This action cannot be undone.",
+  "contributeTranslating": "参加此程序的翻译",
+  "conversions": "转换",
+  "copy": "复制",
+  "cubicCentimeters": "立方厘米",
+  "cubicFeet": "立方英尺",
+  "cubicInches": "立方英寸",
+  "cubicMeters": "立方米",
+  "cubicMillimeters": "立方毫米",
+  "cups": "杯",
+  "currencies": "货币",
   "czk": "捷克克朗",
-  "ils": "以色列新锡克尔",
-  "idr": "印尼卢比",
-  "php": "菲律宾比索",
-  "ron": "罗马尼亚列伊",
-  "isk": "冰岛克朗",
-  "twd": "新台币",
-  "mad": "摩洛哥道拉姆",
-
+  "dark": "深色",
+  "days": "日",
+  "deca": "十-",
+  "decades": "十年纪",
+  "deci": "分-",
+  "deciliters": "Deciliters",
+  "decimal": "十进制",
+  "deciseconds": "分秒",
+  "degree": "度",
+  "delisle": "德利尔温标",
+  "density": "Density",
+  "digitalData": "电子数据",
+  "dkk": "丹麦克朗",
+  "donation": "捐赠",
+  "donationDialog": "你好！有可能你知道，这个程序开源且免费。这意味着你可以免费使用此软件，复制和编辑源代码。而开发者得不到任何利益。如果你赞同此项目，或者想看到一些新功能，请考虑给我买一杯咖啡。",
+  "drawerLogo": "Drawer logo",
+  "dyne": "达因",
+  "dyneMeter": "达因计",
+  "electronvolt": "电子伏特",
+  "enableDarkTheme": "打开夜间模式",
+  "energy": "能量",
+  "ettograms": "百克",
   "euChina": "欧盟 & 中国",
+  "eur": "欧元",
+  "europeanHorsePower": "公制马力",
+  "exa": "艾-",
+  "exabit": "艾比特",
+  "exabyte": "艾字节",
+  "exbibit": "艾比特（二进）",
+  "exbibyte": "艾字节（二进）",
+  "exportSettings": "Export settings",
+  "exportSuccess": "Settings exported successfully",
+  "fahrenheit": "华氏度",
+  "feet": "英尺",
+  "feetSecond": "英尺/秒",
+  "feetUsSurvey": "英尺(美国)",
+  "femto": "飞-",
+  "findOutMore": "更多",
+  "footPound": "英尺磅",
+  "force": "力",
+  "fuelConsumption": "燃费",
+  "gbp": "英镑",
+  "gibibit": "吉比特（二进）",
+  "gibibyte": "吉字节（二进）",
+  "giga": "吉-",
+  "gigaPascal": "Gigapascal",
+  "gigabit": "吉比特",
+  "gigabyte": "吉字节",
+  "gigawatt": "千兆瓦",
+  "grams": "克",
+  "gramsPerCubicCentimeter": "Grams per Cubic Centimeter",
+  "gramsPerDeciliter": "Grams per Deciliter",
+  "gramsPerLiter": "Grams per Liter",
+  "gramsPerMilliliter": "Grams per Milliliter",
+  "hectares": "公顷",
+  "hecto": "百-",
+  "hectoPascal": "百帕",
+  "hexadecimal": "十六进制",
+  "hiddenUnits": "Hidden units",
+  "hideUnits": "Hide units",
+  "hkd": "港元",
+  "hours": "小时",
+  "huf": "匈牙利福林",
+  "idr": "印尼卢比",
+  "ils": "以色列新锡克尔",
+  "imperialFluidOunces": "英液盎司",
+  "imperialGallons": "英制加仑",
+  "imperialGill": "英制及耳",
+  "imperialHorsePower": "英制马力",
+  "imperialPints": "英制品脱",
+  "importError": "Import Error",
+  "importSettings": "Import settings",
+  "importSuccess": "Settings imported successfully",
+  "inches": "英寸",
+  "inchesOfMercury": "英寸汞柱",
+  "inr": "印度卢比",
+  "invalidCharacters": "错误，无效的文字",
+  "isk": "冰岛克朗",
+  "japan": "日本",
+  "joule": "焦耳",
+  "jpy": "日元",
+  "kelvin": "开尔文",
+  "kibibit": "千比特（二进）",
+  "kibibyte": "千字节（二进）",
+  "kilo": "千-",
+  "kiloPascal": "Kilopascal",
+  "kilobit": "千比特",
+  "kilobyte": "千字节",
+  "kilocalories": "大卡",
+  "kilogramForce": "千克力",
+  "kilogramForceMeter": "千克力米",
+  "kilograms": "千克",
+  "kilogramsPerCubicMeter": "Kilograms per Cubic Meter",
+  "kilogramsPerLiter": "Kilograms per Liter",
+  "kilojoules": "Kilojoules",
+  "kilometers": "公里",
+  "kilometersHour": "公里/小时",
+  "kilometersLiter": "公里/升",
+  "kilowatt": "千瓦",
+  "kilowattHour": "千瓦时",
+  "knots": "节(海里/小时)",
+  "krw": "韩元",
+  "ksi": "Kilopounds per square inch",
+  "language": "语言",
+  "lastCurrenciesUpdate": "最终更新：",
+  "length": "长度",
+  "light": "浅色",
+  "lightYears": "光年",
+  "liters": "公升",
+  "liters100km": "百公里/升",
+  "longPressAdvice": "长按以移动",
+  "lustrum": "五年纪",
+  "mad": "摩洛哥道拉姆",
+  "mass": "质量",
+  "mebibit": "兆比特（二进）",
+  "mebibyte": "兆字节（二进）",
+  "mega": "兆-",
+  "megaPascal": "Megapascal",
+  "megabit": "兆比特",
+  "megabyte": "兆字节",
+  "megawatt": "兆瓦",
+  "menu": "菜单",
+  "meters": "米",
+  "metersSecond": "米/秒",
+  "micro": "微-",
+  "microgramsPerDeciliter": "Micrograms per Deciliter",
+  "microgramsPerLiter": "Micrograms per Liter",
+  "microgramsPerMilliliter": "Micrograms per Milliliter",
+  "microliters": "Microliters",
+  "micrometers": "微米",
+  "microseconds": "微秒",
+  "miles": "英里",
+  "milesHour": "英里/小时",
+  "milesImperialGallon": "英里/英制加仑",
+  "milesUsGallon": "英里/美制加仑",
+  "millennium": "千年纪",
+  "milli": "毫-",
+  "millibar": "毫巴",
+  "milligrams": "毫克",
+  "milligramsPerCubicCentimeter": "Milligrams per Cubic Centimeter",
+  "milligramsPerCubicMeter": "Milligrams per Cubic Meter",
+  "milligramsPerDeciliter": "Milligrams per Deciliter",
+  "milligramsPerLiter": "Milligrams per Liter",
+  "milligramsPerMilliliter": "Milligrams per Milliliter",
+  "milliliters": "毫升",
+  "millimeters": "毫米",
+  "milliseconds": "毫秒",
+  "milliwatt": "毫瓦",
+  "mils": "Mils",
+  "minutes": "分",
+  "minutesDegree": "分",
+  "minutesPerKilometer": "公里/分",
+  "minutesPerMile": "Minutes per mile",
+  "more": "更多",
+  "mxn": "墨西哥比索",
+  "myOrdering": "我的排序",
+  "myr": "马来西亚林吉特",
+  "name_aed": "阿联酋迪拉姆",
+  "name_afn": "阿尼",
+  "name_all": "列克",
+  "name_amd": "亚美尼亚德拉姆",
+  "name_ang": "荷属安的列斯盾",
+  "name_aoa": "宽扎",
+  "name_ars": "阿根廷比索",
+  "name_aud": "澳元",
+  "name_awg": "阿鲁巴弗洛林",
+  "name_azn": "阿塞拜疆马纳特",
+  "name_bam": "可兑换马克",
+  "name_bbd": "巴巴多斯元",
+  "name_bdt": "塔卡",
+  "name_bgn": "保加利亚列瓦",
+  "name_bhd": "巴林第纳尔",
+  "name_bif": "布隆迪法郎",
+  "name_bmd": "百慕大元",
+  "name_bnd": "文莱元",
+  "name_bob": "玻利维亚诺",
+  "name_brl": "玻利维亚资金",
+  "name_bsd": "巴哈马元",
+  "name_btc": "比特币",
+  "name_btn": "努扎姆",
+  "name_bwp": "普拉",
+  "name_byn": "白俄罗斯卢布",
+  "name_bzd": "伯利兹元",
+  "name_cad": "加元",
+  "name_cdf": "刚果法郎",
+  "name_chf": "瑞士法郎",
+  "name_clf": "智利资金",
+  "name_clp": "智利比索",
+  "name_cnh": "离岸人民币",
+  "name_cny": "人民币",
+  "name_cop": "哥伦比亚比索",
+  "name_crc": "哥斯达黎加科朗",
+  "name_cuc": "古巴可兑换比索",
+  "name_cup": "古巴比索",
+  "name_cve": "佛得角埃斯库多",
+  "name_czk": "捷克克朗",
+  "name_djf": "吉布提法郎",
+  "name_dkk": "丹麦克朗",
+  "name_dop": "多米尼加比索",
+  "name_dzd": "阿尔及利亚第纳尔",
+  "name_egp": "埃及镑",
+  "name_ern": "纳法克",
+  "name_etb": "埃塞俄比亚比尔",
+  "name_eur": "欧元",
+  "name_fjd": "斐济元",
+  "name_fkp": "福克兰群岛镑",
+  "name_fok": "法罗群岛克朗",
+  "name_gbp": "英镑",
+  "name_gel": "拉里",
+  "name_ggp": "根西镑",
+  "name_ghs": "加纳赛地",
+  "name_gip": "直布罗陀镑",
+  "name_gmd": "达拉西",
+  "name_gnf": "几内亚法郎",
+  "name_gtq": "格查尔",
+  "name_gyd": "圭亚那元",
+  "name_hkd": "港元",
+  "name_hnl": "伦皮拉",
+  "name_hrk": "库纳",
+  "name_htg": "古德",
+  "name_huf": "福林",
+  "name_idr": "印度尼西亚卢比",
+  "name_ils": "新谢克尔",
+  "name_imp": "马恩岛镑",
+  "name_inr": "印度卢比",
+  "name_iqd": "伊拉克第纳尔",
+  "name_irr": "伊朗里亚尔",
+  "name_isk": "冰岛克朗",
+  "name_jep": "泽西镑",
+  "name_jmd": "牙买加元",
+  "name_jod": "约旦第纳尔",
+  "name_jpy": "日元",
+  "name_kes": "肯尼亚先令",
+  "name_kgs": "吉尔吉斯斯坦索姆",
+  "name_khr": "瑞尔",
+  "name_kmf": "科摩罗法郎",
+  "name_kpw": "朝鲜圆",
+  "name_krw": "韩元",
+  "name_kwd": "科威特第纳尔",
+  "name_kyd": "开曼群岛元",
+  "name_kzt": "腾格",
+  "name_lak": "基普",
+  "name_lbp": "黎巴嫩镑",
+  "name_lkr": "斯里兰卡卢比",
+  "name_lrd": "利比里亚元",
+  "name_lsl": "鲁梯",
+  "name_lyd": "利比亚第纳尔",
+  "name_mad": "摩洛哥迪拉姆",
+  "name_mdl": "摩尔多瓦尼乌",
+  "name_mga": "阿里亚里",
+  "name_mkd": "马其顿第纳尔",
+  "name_mmk": "缅甸元",
+  "name_mnt": "图格里克",
+  "name_mop": "澳门元",
+  "name_mro": "乌吉亚",
+  "name_mru": "毛里塔尼亚乌吉亚",
+  "name_mur": "毛里求斯卢比",
+  "name_mvr": "马尔代夫拉菲亚",
+  "name_mwk": "克瓦查",
+  "name_mxn": "墨西哥比索",
+  "name_myr": "马来西亚林吉特",
+  "name_mzn": "莫桑比克梅蒂卡尔",
+  "name_nad": "纳米比亚元",
+  "name_ngn": "尼日利亚奈拉",
+  "name_nio": "尼加拉瓜新科多巴",
+  "name_nok": "挪威克朗",
+  "name_npr": "尼泊尔卢比",
+  "name_nzd": "新西兰元",
+  "name_omr": "阿曼里亚尔",
+  "name_pab": "巴拿马巴波亚",
+  "name_pen": "秘鲁新索尔",
+  "name_pgk": "基那",
+  "name_php": "菲律宾比索",
+  "name_pkr": "巴基斯坦卢比",
+  "name_pln": "兹罗提",
+  "name_pyg": "瓜拉尼",
+  "name_qar": "卡塔尔里亚尔",
+  "name_ron": "罗马尼亚列伊",
+  "name_rsd": "塞尔维亚第纳尔",
+  "name_rub": "俄罗斯卢布",
+  "name_rwf": "卢旺达法郎",
+  "name_sar": "沙特里亚尔",
+  "name_sbd": "所罗门群岛元",
+  "name_scr": "塞舌尔卢比",
+  "name_sdg": "苏丹镑",
+  "name_sek": "瑞典克朗",
+  "name_sgd": "新加坡元",
+  "name_shp": "圣赫勒拿镑",
+  "name_sle": "新利昂",
+  "name_sll": "利昂",
+  "name_sos": "索马里先令",
+  "name_srd": "苏里南元",
+  "name_ssp": "南苏丹镑",
+  "name_std": "圣多美和普林西比多布拉（旧币）",
+  "name_stn": "圣多美和普林西比多布拉",
+  "name_svc": "萨尔瓦多科朗",
+  "name_syp": "叙利亚镑",
+  "name_szl": "里兰基尼",
+  "name_thb": "泰铢",
+  "name_tjs": "索摩尼",
+  "name_tmt": "土库曼斯坦新马纳特",
+  "name_tnd": "突尼斯第纳尔",
+  "name_top": "潘加",
+  "name_try": "土耳其里拉",
+  "name_ttd": "特立达与多巴哥元",
+  "name_twd": "新台币元",
+  "name_tzs": "坦桑尼亚先令",
+  "name_uah": "格里夫尼亚",
+  "name_ugx": "乌干达先令",
+  "name_usd": "美元",
+  "name_uyu": "乌拉圭比索",
+  "name_uzs": "乌兹别克斯坦萨",
+  "name_vef": "强势玻利瓦尔",
+  "name_ves": "主权玻利瓦尔",
+  "name_vnd": "越南盾",
+  "name_vuv": "瓦图",
+  "name_wst": "塔拉",
+  "name_xaf": "中非法郎",
+  "name_xag": "盎司银",
+  "name_xau": "盎司金",
+  "name_xcd": "东加勒比元",
+  "name_xdr": "特别提款权",
+  "name_xof": "西非法郎",
+  "name_xpd": "盎司钯",
+  "name_xpf": "太平洋法郎",
+  "name_xpt": "盎司铂",
+  "name_yer": "也门里亚尔",
+  "name_zar": "兰特",
+  "name_zmw": "赞比亚克瓦查",
+  "name_zwl": "津巴布韦元",
+  "nano": "纳-",
+  "nanometers": "纳米",
+  "nanoseconds": "纳秒",
+  "nauticalMiles": "海里",
+  "newton": "牛顿",
+  "newtonMeter": "牛顿米",
+  "nibble": "半字节",
+  "nok": "挪威克朗",
+  "numeralSystems": "数制",
+  "nzd": "新西兰元",
+  "octal": "八进制",
+  "ok": "OK",
+  "otherPlatforms": "在其他平台上使用此程序",
+  "ounces": "盎司",
+  "parsec": "秒差距",
+  "pascal": "帕斯卡",
+  "paste": "Paste",
+  "pebibit": "拍比特（二进）",
+  "pebibyte": "拍字节（二进）",
+  "pennyweights": "英钱",
+  "peta": "拍-",
+  "petabit": "拍比特",
+  "petabyte": "拍字节",
+  "php": "菲律宾比索",
+  "pickColor": "选择颜色",
+  "pico": "皮-",
+  "picometers": "皮米",
+  "pln": "波兰兹罗提",
+  "poundForce": "磅力",
+  "poundForceFeet": "磅力英尺",
+  "poundForceInch": "Pound-force inch",
+  "poundal": "磅达",
+  "poundalMeter": "磅达米",
+  "pounds": "磅",
+  "poundsPerCubicFeet": "Pounds per Cubic Feet",
+  "poundsPerCubicInches": "Pounds per Cubic Inches",
+  "power": "功率",
+  "pressure": "压强",
+  "problemImportFile": "There was a problem importing the file",
+  "propertySelectionOnStartup": "Property selection on startup",
+  "propertySelectionOnStartupSubtitle": "Show the property selection page on startup on small screen devices",
+  "psi": "磅/平方英寸",
+  "pureBlackTheme": "AMOLED黑暗模式",
+  "quintals": "公担",
+  "radiansDegree": "弧度",
+  "rankine": "兰金温标",
+  "rateApp": "评价此程序",
+  "reamur": "列氏度",
+  "reason": "Reason",
+  "relatedSettings": "Related settings",
+  "removeTrailingZeros": "删除末尾的0",
+  "reorder": "排序",
+  "reorderProperties": "排序组",
+  "reorderProperty": "排序{property}",
+  "reorderUnits": "排序项目",
+  "repoGithub": "打开GitHub仓库",
+  "revokeInternetAccess": "禁用网络连接",
+  "revokeInternetExplanation": "该应用在每次启动时通过网络更新汇率。所需下载的数据只有几 kiB。不过，您若不需此功能，启用该选项可阻止该应用连接互联网。",
+  "romer": "罗氏温标",
+  "ron": "罗马尼亚列伊",
+  "routeError1": "不存在此页面",
+  "routeError2": "返回上一级",
+  "rub": "俄罗斯卢布",
+  "save": "保存",
+  "search": "搜索",
+  "seconds": "秒",
+  "secondsDegree": "秒",
+  "sek": "瑞典克朗",
+  "selectAll": "Select all",
+  "settings": "设置",
+  "sgd": "新加坡元",
+  "shoeSize": "鞋子尺寸",
+  "siPrefixes": "国际单位前缀",
+  "significantFigures": "有效数字",
+  "sourceCode": "源代码",
+  "speed": "速度",
+  "speedOfLight": "Speed of light",
+  "squareCentimeters": "平方厘米",
+  "squareFeet": "平方英尺",
+  "squareFeetUsSurvey": "平方英尺(美国)",
+  "squareInches": "平方英寸",
+  "squareKilometers": "平方公里",
+  "squareMeters": "平方米",
+  "squareMiles": "平方英里",
+  "squareMillimeters": "平方毫米",
+  "squareYard": "平方码",
+  "stones": "英石",
+  "system": "系统设置",
+  "tablespoonAustralian": "一汤匙(澳洲)",
+  "tablespoonUs": "一汤匙(美国)",
+  "teaspoonsMetric": "Metric teaspoons",
+  "teaspoonsUs": "Teaspoons US",
+  "tebibit": "太比特（二进）",
+  "tebibyte": "太字节（二进）",
+  "temperature": "温度",
+  "tera": "太-",
+  "terabit": "太比特",
+  "terabyte": "太字节",
+  "thb": "泰铢",
+  "theme": "主题",
+  "themeColor": "主题色",
+  "time": "时间",
+  "today": "今天",
+  "tonnes": "吨",
+  "torque": "力矩",
+  "torr": "托",
+  "trY": "土耳其里拉",
+  "troyOunces": "金衡盎司",
+  "twd": "新台币",
   "ukIndiaChild": "英国 & 印度 - 小孩",
   "ukIndiaMan": "英国 & 印度 - 男性",
   "ukIndiaWoman": "英国 & 印度 - 女性",
+  "uma": "原子质量单位",
+  "undo": "撤消",
+  "undoClearAllMessage": "已全部清除。 你想撤消它吗？",
+  "unselectAll": "Unselect all",
+  "usFluidOunces": "美液盎司",
+  "usGallons": "美制加仑",
+  "usGill": "美制及耳",
+  "usPints": "美制品脱",
+  "usQuarts": "US Quarts",
   "usaCanadaChild": "美国 & 加拿大 - 小孩",
   "usaCanadaMan": "美国 & 加拿大 - 男性",
   "usaCanadaWoman": "美国 & 加拿大 - 女性",
-  "japan": "日本",
-
+  "usd": "美元",
+  "useDeviceColor": "使用系统设置的强调色",
+  "visibleUnits": "{property}, visible units",
+  "volume": "体积",
   "watt": "瓦特",
-  "milliwatt": "毫瓦",
-  "kilowatt": "千瓦",
-  "megawatt": "兆瓦",
-  "gigawatt": "千兆瓦",
-  "europeanHorsePower": "公制马力",
-  "imperialHorsePower": "英制马力",
-
-  "newton": "牛顿",
-  "dyne": "达因",
-  "poundForce": "磅力",
-  "kilogramForce": "千克力",
-  "poundal": "磅达",
-
-  "newtonMeter": "牛顿米",
-  "dyneMeter": "达因计",
-  "poundForceFeet": "磅力英尺",
-  "kilogramForceMeter": "千克力米",
-  "poundalMeter": "磅达米",
-  "poundForceInch": "Pound-force inch",
-  "@poundForceInch": {
-    "description": "Not yet translated. Once done, remove this comment."
-  },
-
-  "kilometersLiter": "公里/升",
-  "liters100km": "百公里/升",
-  "milesUsGallon": "英里/美制加仑",
-  "milesImperialGallon": "英里/英制加仑",
-
-  "decimal": "十进制",
-  "hexadecimal": "十六进制",
-  "octal": "八进制",
-  "binary": "二进制",
-
-  "bit": "比特",
-  "nibble": "半字节",
-  "kilobit": "千比特",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "megabit": "兆比特",
-  "@megabit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "gigabit": "吉比特",
-  "@gigabit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "terabit": "太比特",
-  "@terabit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "petabit": "拍比特",
-  "@petabit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "exabit": "艾比特",
-  "@exabit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "kibibit": "千比特（二进）",
-  "mebibit": "兆比特（二进）",
-  "gibibit": "吉比特（二进）",
-  "tebibit": "太比特（二进）",
-  "pebibit": "拍比特（二进）",
-  "exbibit": "艾比特（二进）",
-  "byte": "字节",
-  "kilobyte": "千字节",
-  "@kilobyte": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "megabyte": "兆字节",
-  "@megabyte": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "gigabyte": "吉字节",
-  "@gigabyte": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "terabyte": "太字节",
-  "@terabyte": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "petabyte": "拍字节",
-  "@petabyte": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "exabyte": "艾字节",
-  "@exabyte": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "kibibyte": "千字节（二进）",
-  "mebibyte": "兆字节（二进）",
-  "gibibyte": "吉字节（二进）",
-  "tebibyte": "太字节（二进）",
-  "pebibyte": "拍字节（二进）",
-  "exbibyte": "艾字节（二进）",
-
-  "base": "基数",
-  "deca": "十-",
-  "hecto": "百-",
-  "kilo": "千-",
-  "mega": "兆-",
-  "giga": "吉-",
-  "tera": "太-",
-  "peta": "拍-",
-  "exa": "艾-",
-  "zetta": "泽-",
+  "watthour": "Watt hour",
+  "weeks": "周",
+  "yards": "码数",
+  "years": "年 (365)",
+  "yocto": "幺科托-",
   "yotta": "尧-",
-  "deci": "分-",
-  "centi": "厘-",
-  "milli": "毫-",
-  "micro": "微-",
-  "nano": "纳-",
-  "pico": "皮-",
-  "femto": "飞-",
-  "atto": "阿托-",
+  "zar": "南非兰特",
   "zepto": "仄普托-",
-  "yocto": "幺科托-"
+  "zetta": "泽-",
+  "name_xcg": "Caribbean Guilder",
+  "name_zig": "Zimbabwe Gold"
 }

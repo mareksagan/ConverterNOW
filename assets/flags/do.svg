@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="21" height="15" viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g0" x1="10.5" y1="0" x2="10.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+    <linearGradient id="g1" x1="4.5" y1="0" x2="4.5" y2="6" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#083D7A" />
+      <stop offset="1" stop-color="#032F61" />
+    </linearGradient>
+    <linearGradient id="g2" x1="16.5" y1="9" x2="16.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#083D7A" />
+      <stop offset="1" stop-color="#032F61" />
+    </linearGradient>
+    <linearGradient id="g3" x1="4.5" y1="9" x2="4.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#DF1E35" />
+      <stop offset="1" stop-color="#CC162C" />
+    </linearGradient>
+    <linearGradient id="g4" x1="16.5" y1="0" x2="16.5" y2="6" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#DF1E35" />
+      <stop offset="1" stop-color="#CC162C" />
+    </linearGradient>
+    <linearGradient id="g5" x1="10.5" y1="0" x2="10.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+  </defs>
+  <path d="M0,0h21v15h-21z" fill-rule="evenodd" fill="url(#g0)" />
+  <path d="M0,0h9v6h-9z" fill-rule="evenodd" fill="url(#g1)" />
+  <path d="M12,9h9v6h-9z" fill-rule="evenodd" fill="url(#g2)" />
+  <path d="M0,9h9v6h-9z" fill-rule="evenodd" fill="url(#g3)" />
+  <path d="M12,0h9v6h-9z" fill-rule="evenodd" fill="url(#g4)" />
+  <path d="M9,6L0,6L0,9L9,9L9,15L12,15L12,9L21,9L21,6L12,6L12,0L9,0L9,6Z" fill-rule="evenodd" fill="url(#g5)" />
+  <path d="M9.4393,6.4393C8.8536,7.0251 8.8536,7.9749 9.4393,8.5607C10.0251,9.1464 10.9749,9.1464 11.5607,8.5607L11.5607,8.5607C12.1464,7.9749 12.1464,7.0251 11.5607,6.4393" fill-rule="evenodd" fill="#C93127" />
+  <path d="M10.5,7.5m-1,0a1,1 0,1 1,2 0a1,1 0,1 1,-2 0" fill-rule="evenodd" fill="#042F60" />
+  <path d="M11.5607,8.5607C10.9749,9.1464 10.0251,9.1464 9.4393,8.5607C8.8536,7.9749 8.8536,7.0251 9.4393,6.4393L9.7929,6.7929C9.4024,7.1834 9.4024,7.8166 9.7929,8.2071C10.1834,8.5976 10.8166,8.5976 11.2071,8.2071C11.5976,7.8166 11.5976,7.1834 11.2071,6.7929L11.5607,6.4393C12.1464,7.0251 12.1464,7.9749 11.5607,8.5607ZM11.5607,8.5607C10.9749,9.1464 10.0251,9.1464 9.4393,8.5607C8.8536,7.9749 8.8536,7.0251 9.4393,6.4393L9.7929,6.7929C9.4024,7.1834 9.4024,7.8166 9.7929,8.2071C10.1834,8.5976 10.8166,8.5976 11.2071,8.2071C11.5976,7.8166 11.5976,7.1834 11.2071,6.7929L11.5607,6.4393C12.1464,7.0251 12.1464,7.9749 11.5607,8.5607Z" fill="#0F6D1A" />
+</svg>
+

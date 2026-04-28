@@ -1,58 +1,173 @@
 {
   "@@locale": "el",
-
-  "appName": "Converter NOW",
-  "reorder": "Αναδιάταξη",
-  "myOrdering": "Η διάταξή μου",
-  "about": "Σχετικά",
-  "lastCurrenciesUpdate": "Τελευταία ενημέρωση: ",
-  "today": "σήμερα",
-  "enableDarkTheme": "Ενεργοποίηση σκοτεινού θέματος",
-  "settings": "Ρυθμίσεις",
-  "menu": "Μενού",
-  "donation": "Κάντε μια δωρεά",
-  "buyMeACoffee": "Αγόρασέ μου έναν καφέ",
-  "donationDialog": "Γεια σου! Όπως ίσως γνωρίζεις, αυτή η εφαρμογή είναι δωρεάν και ανοιχτού κώδικα. Αυτό σημαίνει ότι μπορείς να τη χρησιμοποιήσεις δωρεάν και να αντιγράψεις ή να επεξεργαστείς τον κώδικα. Ο προγραμματιστής δεν θα κερδίσει τίποτα από αυτό. Αλλά αν πιστεύεις επίσης σε αυτό το έργο και θα ήθελες να δεις νέες λειτουργίες, σε παρακαλώ σκέψου το ενδεχόμενο να μου αγοράσεις έναν καφέ.",
-  "drawerLogo": "Λογότυπο του μενού",
-  "rateApp": "Αξιολόγησε την εφαρμογή",
-  "repoGithub": "Άνοιξε το αποθετήριο στο GitHub",
-  "contributeTranslating": "Συνεισφέρετε μεταφράζοντας την εφαρμογή",
-  "search": "Αναζήτηση",
-  "clearAll": "Καθαρισμός όλων",
-  "calculator": "Υπολογιστής",
-  "significantFigures": "Δεκαδικά ψηφία",
-  "removeTrailingZeros": "Αφαίρεση μη σημαντικών μηδενικών",
-  "longPressAdvice": "Πατήστε παρατεταμένα για να μετακινήσετε στοιχεία",
-  "back": "Πίσω",
-  "save": "Αποθήκευση",
-  "invalidCharacters": "Σφάλμα, μη έγκυροι χαρακτήρες",
-  "theme": "Θέμα",
-  "dark": "Σκοτεινό",
-  "light": "Φωτεινό",
-  "system": "Προεπιλογή συστήματος",
-  "pureBlackTheme": "AMOLED σκοτεινό θέμα",
-  "@pureBlackTheme": {
-    "description": "Revise this translation"
-  },
-  "propertySelectionOnStartup": "Property selection on startup",
-  "@propertySelectionOnStartup": {
+  "@backupAndRestore": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "propertySelectionOnStartupSubtitle": "Show the property selection page on startup on small screen devices",
-  "@propertySelectionOnStartupSubtitle": {
+  "@britishThermalUnit": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "copy": "Αντιγραφή",
-  "paste": "Paste",
+  "@cancel": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@centiliters": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@clearSettings": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@confirmationClear": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@deciliters": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@density": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@exabit": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@exabyte": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@exportSettings": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@exportSuccess": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@gigaPascal": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@gigabit": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@gigabyte": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@gramsPerCubicCentimeter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@gramsPerDeciliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@gramsPerLiter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@gramsPerMilliliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@hiddenUnits": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@hideUnits": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@importError": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@importSettings": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@importSuccess": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@kiloPascal": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@kilobit": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@kilobyte": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@kilogramsPerCubicMeter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@kilogramsPerLiter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@kilojoules": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@ksi": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@megaPascal": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@megabit": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@megabyte": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@microgramsPerDeciliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@microgramsPerLiter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@microgramsPerMilliliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@microliters": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@milligramsPerCubicCentimeter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@milligramsPerCubicMeter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@milligramsPerDeciliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@milligramsPerLiter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@milligramsPerMilliliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@minutesPerMile": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
   "@paste": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "more": "Περισσότερα",
-  "language": "Γλώσσα",
-  "reorderProperties": "Αναδιάταξη ιδιοτήτων",
-  "reorderUnits": "Αναδιάταξη μονάδων",
-  "chooseProperty": "Επίλεξε μια ιδιότητα",
-  "reorderProperty": "Αναδιάταξη {property}",
+  "@petabit": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@petabyte": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@poundForceInch": {
+    "description": "Not yet translated. Once done, remove this comment."
+  },
+  "@poundsPerCubicFeet": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@poundsPerCubicInches": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@problemImportFile": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@propertySelectionOnStartup": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@propertySelectionOnStartupSubtitle": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@pureBlackTheme": {
+    "description": "Revise this translation"
+  },
+  "@reason": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@relatedSettings": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
   "@reorderProperty": {
     "placeholders": {
       "property": {
@@ -61,26 +176,30 @@
       }
     }
   },
-  "otherPlatforms": "Converter NOW for other platforms",
-  "sourceCode": "Πηγαίος κώδικας",
-  "undoClearAllMessage": "Καθαρίστηκαν όλα. Θέλεις να το αναιρέσεις;",
-  "undo": "Αναίρεση",
-  "routeError1": "Αυτή η σελίδα δεν υπάρχει",
-  "routeError2": "Επιστροφή στην πρώτη σελίδα",
-  "ok": "Ok",
-  "revokeInternetAccess": "Αναίρεση πρόσβασης στο διαδίκτυο",
-  "revokeInternetExplanation": "Αυτή η εφαρμογή χρησιμοποιεί το διαδίκτυο για να ενημερώνει τις τιμές συναλλάγματος μία φορά την ημέρα κατά την εκκίνηση. Αυτή η λήψη απαιτεί μόνο μερικά kilobytes. Ωστόσο, αν δεν χρειάζεστε αυτή τη δυνατότητα, μπορείτε να αποτρέψετε την εφαρμογή από το να έχει πρόσβαση στο διαδίκτυο ενεργοποιώντας αυτή την επιλογή.",
-  "useDeviceColor": "Χρήση χρώματος συσκευής",
-  "pickColor": "Διάλεξε ένα χρώμα",
-  "themeColor": "Χρώμα θέματος",
-  "appearance": "Εμφάνιση",
-  "conversions": "Μετατροπές",
-  "findOutMore": "Μάθε περισσότερα",
-  "hideUnits": "Hide units",
-  "@hideUnits": {
+  "@selectAll": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "visibleUnits": "{property}, visible units",
+  "@speedOfLight": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@teaspoonsMetric": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@teaspoonsUs": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@terabit": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@terabyte": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@unselectAll": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@usQuarts": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
   "@visibleUnits": {
     "description": "Not yet translated. Once done, remove this comment",
     "placeholders": {
@@ -90,494 +209,528 @@
       }
     }
   },
-  "hiddenUnits": "Hidden units",
-  "@hiddenUnits": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "selectAll": "Select all",
-  "@selectAll": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "unselectAll": "Unselect all",
-  "@unselectAll": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "backupAndRestore": "Backup & Restore",
-  "@backupAndRestore": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "exportSettings": "Export settings",
-  "@exportSettings": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "importSettings": "Import settings",
-  "@importSettings": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "clearSettings": "Clear all settings",
-  "@clearSettings": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "exportSuccess": "Settings exported successfully",
-  "@exportSuccess": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "importSuccess": "Settings imported successfully",
-  "@importSuccess": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "problemImportFile": "There was a problem importing the file",
-  "@problemImportFile": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "relatedSettings": "Related settings",
-  "@relatedSettings": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "reason": "Reason",
-  "@reason": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "importError": "Import Error",
-  "@importError": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "confirmationClear": "Are you sure you want to clear all settings? This action cannot be undone.",
-  "@confirmationClear": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "cancel": "Cancel",
-  "@cancel": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "length": "Μήκος",
-  "area": "Εμβαδόν",
-  "volume": "Όγκος",
-  "time": "Χρόνος",
-  "temperature": "Θερμοκρασία",
-  "speed": "Ταχύτητα",
-  "siPrefixes": "Πρόθεμα SI",
-  "mass": "Μάζα",
-  "pressure": "Πίεση",
-  "energy": "Ενέργεια",
-  "angles": "Γωνίες",
-  "currencies": "Νομίσματα",
-  "shoeSize": "Μέγεθος παπουτσιού",
-  "digitalData": "Ψηφιακά δεδομένα",
-  "power": "Ισχύς",
-  "density": "Density",
-  "@density": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "torque": "Ροπή",
-  "force": "Δύναμη",
-  "fuelConsumption": "Κατανάλωση καυσίμου",
-  "numeralSystems": "Αριθμητικά συστήματα",
-
-  "meters": "Μέτρα",
-  "centimeters": "Εκατοστά",
-  "inches": "Ίντσες",
-  "feet": "Πόδια",
-  "nauticalMiles": "Ναυτικά μίλια",
-  "yards": "Γιάρδες",
-  "miles": "Μίλια",
-  "millimeters": "Χιλιοστά",
-  "micrometers": "Μικρόμετρα",
-  "nanometers": "Νανόμετρα",
-  "angstroms": "Άνγκστρεμ",
-  "picometers": "Πικόμετρα",
-  "kilometers": "Χιλιόμετρα",
-  "astronomicalUnits": "Αστρονομικές Μονάδες",
-  "lightYears": "Έτη φωτός",
-  "parsec": "Πάρσεκ",
-  "mils": "Μιλς",
-  "feetUsSurvey": "Πόδια (τοπογραφικά ΗΠΑ)",
-
-  "squareMeters": "Τετραγωνικά Μέτρα",
-  "squareCentimeters": "Τετραγωνικά Εκατοστά",
-  "squareInches": "Τετραγωνικές Ίντσες",
-  "squareFeet": "Τετραγωνικά Πόδια",
-  "squareMiles": "Τετραγωνικά Μίλια",
-  "squareYard": "Τετραγωνική Γιάρδα",
-  "squareMillimeters": "Τετραγωνικά Χιλιοστά",
-  "squareKilometers": "Τετραγωνικά Χιλιόμετρα",
-  "hectares": "Εκτάρια",
-  "acres": "Acres",
-  "are": "Άρι",
-  "squareFeetUsSurvey": "Τετραγωνικά Πόδια (τοπογραφικά ΗΠΑ)",
-
-  "gramsPerCubicCentimeter": "Grams per Cubic Centimeter",
-  "@gramsPerCubicCentimeter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "gramsPerLiter": "Grams per Liter",
-  "@gramsPerLiter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "gramsPerMilliliter": "Grams per Milliliter",
-  "@gramsPerMilliliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "gramsPerDeciliter": "Grams per Deciliter",
-  "@gramsPerDeciliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "kilogramsPerLiter": "Kilograms per Liter",
-  "@kilogramsPerLiter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "kilogramsPerCubicMeter": "Kilograms per Cubic Meter",
-  "@kilogramsPerCubicMeter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "milligramsPerLiter": "Milligrams per Liter",
-  "@milligramsPerLiter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "milligramsPerDeciliter": "Milligrams per Deciliter",
-  "@milligramsPerDeciliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "milligramsPerMilliliter": "Milligrams per Milliliter",
-  "@milligramsPerMilliliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "milligramsPerCubicMeter": "Milligrams per Cubic Meter",
-  "@milligramsPerCubicMeter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "milligramsPerCubicCentimeter": "Milligrams per Cubic Centimeter",
-  "@milligramsPerCubicCentimeter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "microgramsPerLiter": "Micrograms per Liter",
-  "@microgramsPerLiter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "microgramsPerDeciliter": "Micrograms per Deciliter",
-  "@microgramsPerDeciliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "microgramsPerMilliliter": "Micrograms per Milliliter",
-  "@microgramsPerMilliliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "poundsPerCubicInches": "Pounds per Cubic Inches",
-  "@poundsPerCubicInches": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "poundsPerCubicFeet": "Pounds per Cubic Feet",
-  "@poundsPerCubicFeet": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "cubicMeters": "Κυβικά Μέτρα",
-  "liters": "Λίτρα",
-  "imperialGallons": "Imperial gallons",
-  "usGallons": "US Gallons",
-  "imperialPints": "Imperial Pints",
-  "usPints": "US Pints",
-  "milliliters": "Χιλιοστόλιτρα",
-  "tablespoonUs": "Κουταλιές της σούπας US",
-  "tablespoonAustralian": "Αυστραλιανές κουταλιές τραπεζής",
-  "cups": "Φλιτζάνια",
-  "cubicCentimeters": "Κυβικά Εκατοστά",
-  "cubicFeet": "Κυβικά Πόδια",
-  "cubicInches": "Κυβικές Ίντσες",
-  "cubicMillimeters": "Κυβικά Χιλιοστά",
-  "imperialFluidOunces": "Imperial Oυγγιά Yγρών",
-  "usFluidOunces": "US Oυγγιά Yγρών",
-  "imperialGill": "Imperial Gill",
-  "usGill": "US Gill",
-  "usQuarts": "US Quarts",
-  "@usQuarts": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "microliters": "Microliters",
-  "@microliters": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "deciliters": "Deciliters",
-  "@deciliters": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "centiliters": "Centiliters",
-  "@centiliters": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "teaspoonsUs": "Teaspoons US",
-  "@teaspoonsUs": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "teaspoonsMetric": "Metric teaspoons",
-  "@teaspoonsMetric": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "seconds": "Δευτερόλεπτα",
-  "deciseconds": "Δεκατοστά του δευτερολέπτου",
-  "centiseconds": "Εκατοστά του δευτερολέπτου",
-  "milliseconds": "Χιλιοστά του δευτερολέπτου",
-  "microseconds": "Μικροδευτερόλεπτα",
-  "nanoseconds": "Νανοδευτερόλεπτα",
-  "minutes": "Λεπτά",
-  "hours": "Ώρες",
-  "days": "Μέρες",
-  "weeks": "Εβδομάδες",
-  "years": "Χρόνια (365)",
-  "lustrum": "Λούστρον",
-  "decades": "Δεκαετίες",
-  "centuries": "Αιώνες",
-  "millennium": "Χιλιετία",
-
-  "fahrenheit": "Φαρενάιτ",
-  "celsius": "Κελσίου (Centigrade)",
-  "kelvin": "Κέλβιν",
-  "reamur": "Reamur",
-  "romer": "Rømer",
-  "delisle": "Delisle",
-  "rankine": "Rankine",
-
-  "metersSecond": "Μέτρα ανά Δευτερόλεπτο",
-  "kilometersHour": "Χιλιόμετρα ανά Ώρα",
-  "milesHour": "Μίλια ανά Ώρα",
-  "knots": "Κόμβοι",
-  "feetSecond": "Πόδια ανά Δευτερόλεπτο",
-  "minutesPerKilometer": "Λεπτά ανά Χιλιόμετρο",
-  "minutesPerMile": "Minutes per mile",
-  "@minutesPerMile": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "speedOfLight": "Speed of light",
-  "@speedOfLight": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "grams": "Γραμμάρια",
-  "ettograms": "Ettograms",
-  "kilograms": "Κιλά",
-  "pounds": "Λίβρες",
-  "ounces": "Ουγκιές",
-  "quintals": "Κουιντάλια",
-  "tonnes": "Τόνοι",
-  "milligrams": "Χιλιοστόγραμμα",
-  "uma": "Ενιαία ατομική μονάδα μάζας",
-  "carats": "Καράτια",
-  "centigrams": "Εκατοστόγραμμα",
-  "pennyweights": "Pennyweights",
-  "troyOunces": "Troy ounces",
-  "stones": "Λίθοι",
-
-  "pascal": "Πασκάλ",
-  "atmosphere": "Ατμόσφαιρα",
-  "bar": "Μπάρ",
-  "millibar": "Μιλιμπάρ",
-  "psi": "Λίβρες ανά τετραγωνική ίντσα",
-  "torr": "Torricelli",
-  "hectoPascal": "Hectopascal",
-  "inchesOfMercury": "Ίντσες υδραργύρου",
-  "kiloPascal": "Kilopascal",
-  "@kiloPascal": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "ksi": "Kilopounds per square inch",
-  "@ksi": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "megaPascal": "Megapascal",
-  "@megaPascal": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "gigaPascal": "Gigapascal",
-  "@gigaPascal": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "joule": "Τζάουλ",
-  "calories": "Θερμίδες",
-  "kilowattHour": "Κιλοβατώρα",
-  "electronvolt": "Ηλεκτρονιοβόλτ",
-  "footPound": "Ποδόλιβρα",
-  "kilocalories": "Κιλοθερμίδες",
-  "kilojoules": "Kilojoules",
-  "@kilojoules": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "watthour": "Watt hour",
   "@watthour": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "britishThermalUnit": "British thermal unit",
-  "@britishThermalUnit": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "degree": "Βαθμός",
-  "minutesDegree": "Λεπτά",
-  "secondsDegree": "Δευτερόλεπτα",
-  "radiansDegree": "Ακτίνια",
-
-  "usd": "Δολάριο ΗΠΑ",
-  "eur": "Ευρώ",
-  "gbp": "Βρετανική Λίρα",
-  "inr": "Ινδική Ρουπία",
-  "cny": "Κινεζικό Γιουάν",
-  "jpy": "Ιαπωνικό Γιεν",
-  "chf": "Ελβετικό Φράγκο",
-  "sek": "Σουηδική Κορόνα",
-  "rub": "Ρωσικό Ρούβλι",
-  "cad": "Καναδικό Δολάριο",
-  "krw": "Νότιο Κορεατικό Γουόν",
-  "brl": "Βραζιλιάνικο Ρεάλ",
-  "hkd": "Δολάριο Χονγκ Κονγκ",
+  "about": "Σχετικά",
+  "acres": "Acres",
+  "angles": "Γωνίες",
+  "angstroms": "Άνγκστρεμ",
+  "appName": "Converter NOW",
+  "appearance": "Εμφάνιση",
+  "are": "Άρι",
+  "area": "Εμβαδόν",
+  "astronomicalUnits": "Αστρονομικές Μονάδες",
+  "atmosphere": "Ατμόσφαιρα",
+  "atto": "Άτο-",
   "aud": "Αυστραλιανό Δολάριο",
-  "nzd": "Νεοζηλανδικό Δολάριο",
-  "mxn": "Μεξικάνικο Πέσο",
-  "sgd": "Δολάριο Σιγκαπούρης",
-  "nok": "Νορβηγική Κορόνα",
-  "trY": "Τουρκική Λίρα",
-  "zar": "Νότιο Αφρικανικό Ραντ",
-  "dkk": "Δανέζικη Κορόνα",
-  "pln": "Πολωνικό Ζλότι",
-  "thb": "Ταϊλανδέζικο Μπάτ",
-  "myr": "Μαλαισιανό Ρινγκίτ",
-  "huf": "Ουγγρικό Φορίντ",
+  "back": "Πίσω",
+  "backupAndRestore": "Backup & Restore",
+  "bar": "Μπάρ",
+  "base": "Βάση",
+  "binary": "Δυαδικός",
+  "bit": "Μπιτ",
+  "britishThermalUnit": "British thermal unit",
+  "brl": "Βραζιλιάνικο Ρεάλ",
+  "buyMeACoffee": "Αγόρασέ μου έναν καφέ",
+  "byte": "Μπάιτ",
+  "cad": "Καναδικό Δολάριο",
+  "calculator": "Υπολογιστής",
+  "calories": "Θερμίδες",
+  "cancel": "Cancel",
+  "carats": "Καράτια",
+  "celsius": "Κελσίου (Centigrade)",
+  "centi": "Εκατοστό-",
+  "centigrams": "Εκατοστόγραμμα",
+  "centiliters": "Centiliters",
+  "centimeters": "Εκατοστά",
+  "centiseconds": "Εκατοστά του δευτερολέπτου",
+  "centuries": "Αιώνες",
+  "chf": "Ελβετικό Φράγκο",
+  "chooseProperty": "Επίλεξε μια ιδιότητα",
+  "clearAll": "Καθαρισμός όλων",
+  "clearSettings": "Clear all settings",
+  "cny": "Κινεζικό Γιουάν",
+  "confirmationClear": "Are you sure you want to clear all settings? This action cannot be undone.",
+  "contributeTranslating": "Συνεισφέρετε μεταφράζοντας την εφαρμογή",
+  "conversions": "Μετατροπές",
+  "copy": "Αντιγραφή",
+  "cubicCentimeters": "Κυβικά Εκατοστά",
+  "cubicFeet": "Κυβικά Πόδια",
+  "cubicInches": "Κυβικές Ίντσες",
+  "cubicMeters": "Κυβικά Μέτρα",
+  "cubicMillimeters": "Κυβικά Χιλιοστά",
+  "cups": "Φλιτζάνια",
+  "currencies": "Νομίσματα",
   "czk": "Τσέχικη Κορόνα",
-  "ils": "Ισραηλινό Σέκελ",
-  "idr": "Ινδονησιακή Ρουπία",
-  "php": "Φιλιππινέζικο Πέσο",
-  "ron": "Ρουμανικό Λέι",
-  "isk": "Ισλανδική Κρόνα",
-  "twd": "Νέο Δολάριο Ταϊβάν",
-  "mad": "Μαροκινό Ντιρχάμ",
-
+  "dark": "Σκοτεινό",
+  "days": "Μέρες",
+  "deca": "Δέκα-",
+  "decades": "Δεκαετίες",
+  "deci": "Δέκατο-",
+  "deciliters": "Deciliters",
+  "decimal": "Δεκαδικός",
+  "deciseconds": "Δεκατοστά του δευτερολέπτου",
+  "degree": "Βαθμός",
+  "delisle": "Delisle",
+  "density": "Density",
+  "digitalData": "Ψηφιακά δεδομένα",
+  "dkk": "Δανέζικη Κορόνα",
+  "donation": "Κάντε μια δωρεά",
+  "donationDialog": "Γεια σου! Όπως ίσως γνωρίζεις, αυτή η εφαρμογή είναι δωρεάν και ανοιχτού κώδικα. Αυτό σημαίνει ότι μπορείς να τη χρησιμοποιήσεις δωρεάν και να αντιγράψεις ή να επεξεργαστείς τον κώδικα. Ο προγραμματιστής δεν θα κερδίσει τίποτα από αυτό. Αλλά αν πιστεύεις επίσης σε αυτό το έργο και θα ήθελες να δεις νέες λειτουργίες, σε παρακαλώ σκέψου το ενδεχόμενο να μου αγοράσεις έναν καφέ.",
+  "drawerLogo": "Λογότυπο του μενού",
+  "dyne": "Dyne",
+  "dyneMeter": "Δύνα μέτρο",
+  "electronvolt": "Ηλεκτρονιοβόλτ",
+  "enableDarkTheme": "Ενεργοποίηση σκοτεινού θέματος",
+  "energy": "Ενέργεια",
+  "ettograms": "Ettograms",
   "euChina": "ΕΕ & Κίνα",
+  "eur": "Ευρώ",
+  "europeanHorsePower": "Ευρωπαϊκή ιπποδύναμη",
+  "exa": "Έξα-",
+  "exabit": "Έξαμπίτ",
+  "exabyte": "Εξαμπάιτ",
+  "exbibit": "Εξμπιμπίτ",
+  "exbibyte": "Εξμπιμπάιτ",
+  "exportSettings": "Export settings",
+  "exportSuccess": "Settings exported successfully",
+  "fahrenheit": "Φαρενάιτ",
+  "feet": "Πόδια",
+  "feetSecond": "Πόδια ανά Δευτερόλεπτο",
+  "feetUsSurvey": "Πόδια (τοπογραφικά ΗΠΑ)",
+  "femto": "Φέμτο-",
+  "findOutMore": "Μάθε περισσότερα",
+  "footPound": "Ποδόλιβρα",
+  "force": "Δύναμη",
+  "fuelConsumption": "Κατανάλωση καυσίμου",
+  "gbp": "Βρετανική Λίρα",
+  "gibibit": "Γκιμπιμπίτ",
+  "gibibyte": "Γκιμπιμπάιτ",
+  "giga": "Γίγα-",
+  "gigaPascal": "Gigapascal",
+  "gigabit": "Γιγαμπίτ",
+  "gigabyte": "Γκιγκαμπάιτ",
+  "gigawatt": "Γιγαβάτ",
+  "grams": "Γραμμάρια",
+  "gramsPerCubicCentimeter": "Grams per Cubic Centimeter",
+  "gramsPerDeciliter": "Grams per Deciliter",
+  "gramsPerLiter": "Grams per Liter",
+  "gramsPerMilliliter": "Grams per Milliliter",
+  "hectares": "Εκτάρια",
+  "hecto": "Εκτό-",
+  "hectoPascal": "Hectopascal",
+  "hexadecimal": "Εξαδικός",
+  "hiddenUnits": "Hidden units",
+  "hideUnits": "Hide units",
+  "hkd": "Δολάριο Χονγκ Κονγκ",
+  "hours": "Ώρες",
+  "huf": "Ουγγρικό Φορίντ",
+  "idr": "Ινδονησιακή Ρουπία",
+  "ils": "Ισραηλινό Σέκελ",
+  "imperialFluidOunces": "Imperial Oυγγιά Yγρών",
+  "imperialGallons": "Imperial gallons",
+  "imperialGill": "Imperial Gill",
+  "imperialHorsePower": "Αυτοκρατορική ιπποδύναμη",
+  "imperialPints": "Imperial Pints",
+  "importError": "Import Error",
+  "importSettings": "Import settings",
+  "importSuccess": "Settings imported successfully",
+  "inches": "Ίντσες",
+  "inchesOfMercury": "Ίντσες υδραργύρου",
+  "inr": "Ινδική Ρουπία",
+  "invalidCharacters": "Σφάλμα, μη έγκυροι χαρακτήρες",
+  "isk": "Ισλανδική Κρόνα",
+  "japan": "Ιαπωνία",
+  "joule": "Τζάουλ",
+  "jpy": "Ιαπωνικό Γιεν",
+  "kelvin": "Κέλβιν",
+  "kibibit": "Κιμπιμπίτ",
+  "kibibyte": "Κιμπιμπάιτ",
+  "kilo": "Κιλο-",
+  "kiloPascal": "Kilopascal",
+  "kilobit": "Κιλομπίτ",
+  "kilobyte": "Κιλομπάιτ",
+  "kilocalories": "Κιλοθερμίδες",
+  "kilogramForce": "Κιλόγραμμα-δύναμη",
+  "kilogramForceMeter": "Κιλόγραμμα-δύναμη μέτρο",
+  "kilograms": "Κιλά",
+  "kilogramsPerCubicMeter": "Kilograms per Cubic Meter",
+  "kilogramsPerLiter": "Kilograms per Liter",
+  "kilojoules": "Kilojoules",
+  "kilometers": "Χιλιόμετρα",
+  "kilometersHour": "Χιλιόμετρα ανά Ώρα",
+  "kilometersLiter": "Χιλιόμετρα ανά λίτρο",
+  "kilowatt": "Κιλοβάτ",
+  "kilowattHour": "Κιλοβατώρα",
+  "knots": "Κόμβοι",
+  "krw": "Νότιο Κορεατικό Γουόν",
+  "ksi": "Kilopounds per square inch",
+  "language": "Γλώσσα",
+  "lastCurrenciesUpdate": "Τελευταία ενημέρωση: ",
+  "length": "Μήκος",
+  "light": "Φωτεινό",
+  "lightYears": "Έτη φωτός",
+  "liters": "Λίτρα",
+  "liters100km": "Λίτρα ανά 100 χιλιόμετρα",
+  "longPressAdvice": "Πατήστε παρατεταμένα για να μετακινήσετε στοιχεία",
+  "lustrum": "Λούστρον",
+  "mad": "Μαροκινό Ντιρχάμ",
+  "mass": "Μάζα",
+  "mebibit": "Μεμπιμπίτ",
+  "mebibyte": "Μεμπιμπάιτ",
+  "mega": "Μέγα-",
+  "megaPascal": "Megapascal",
+  "megabit": "Μεγαμπίτ",
+  "megabyte": "Μεγκαμπάιτ",
+  "megawatt": "Μεγαβάτ",
+  "menu": "Μενού",
+  "meters": "Μέτρα",
+  "metersSecond": "Μέτρα ανά Δευτερόλεπτο",
+  "micro": "Μίκρο-",
+  "microgramsPerDeciliter": "Micrograms per Deciliter",
+  "microgramsPerLiter": "Micrograms per Liter",
+  "microgramsPerMilliliter": "Micrograms per Milliliter",
+  "microliters": "Microliters",
+  "micrometers": "Μικρόμετρα",
+  "microseconds": "Μικροδευτερόλεπτα",
+  "miles": "Μίλια",
+  "milesHour": "Μίλια ανά Ώρα",
+  "milesImperialGallon": "Μίλια ανά Αυτοκρατορικό Γαλόνι",
+  "milesUsGallon": "Μίλια ανά Γαλόνι ΗΠΑ",
+  "millennium": "Χιλιετία",
+  "milli": "Χιλιοστό-",
+  "millibar": "Μιλιμπάρ",
+  "milligrams": "Χιλιοστόγραμμα",
+  "milligramsPerCubicCentimeter": "Milligrams per Cubic Centimeter",
+  "milligramsPerCubicMeter": "Milligrams per Cubic Meter",
+  "milligramsPerDeciliter": "Milligrams per Deciliter",
+  "milligramsPerLiter": "Milligrams per Liter",
+  "milligramsPerMilliliter": "Milligrams per Milliliter",
+  "milliliters": "Χιλιοστόλιτρα",
+  "millimeters": "Χιλιοστά",
+  "milliseconds": "Χιλιοστά του δευτερολέπτου",
+  "milliwatt": "Μιλιβάτ",
+  "mils": "Μιλς",
+  "minutes": "Λεπτά",
+  "minutesDegree": "Λεπτά",
+  "minutesPerKilometer": "Λεπτά ανά Χιλιόμετρο",
+  "minutesPerMile": "Minutes per mile",
+  "more": "Περισσότερα",
+  "mxn": "Μεξικάνικο Πέσο",
+  "myOrdering": "Η διάταξή μου",
+  "myr": "Μαλαισιανό Ρινγκίτ",
+  "name_aed": "Ντιρχάμ ΗΑΕ",
+  "name_afn": "Αφγάνι Αφγανιστάν",
+  "name_all": "Λεκ Αλβανίας",
+  "name_amd": "Ντραμ Αρμενίας",
+  "name_ang": "Γκίλντα Ολλανδικών Αντιλλών",
+  "name_aoa": "Κβάνζα Ανγκόλας",
+  "name_ars": "Πέσο Αργεντινής",
+  "name_aud": "Δολάριο Αυστραλίας",
+  "name_awg": "Φλορίνι Αρούμπας",
+  "name_azn": "Μανάτ Αζερμπαϊτζάν",
+  "name_bam": "Μετατρέψιμο Μάρκο Βοσνίας και Ερζεγοβίνης",
+  "name_bbd": "Δολάριο Μπαρμπάντος",
+  "name_bdt": "Τάκα Μπανγκλαντές",
+  "name_bgn": "Λεβ Βουλγαρίας",
+  "name_bhd": "Δηνάριο Μπαχρέιν",
+  "name_bif": "Φράγκο Μπουρούντι",
+  "name_bmd": "Δολάριο Βερμούδων",
+  "name_bnd": "Δολάριο Μπρουνέι",
+  "name_bob": "Μπολιβιάνο Βολιβίας",
+  "name_brl": "Ρεάλ Βραζιλίας",
+  "name_bsd": "Δολάριο Μπαχάμες",
+  "name_btc": "Bitcoin",
+  "name_btn": "Νγκούλτρουμ Μπουτάν",
+  "name_bwp": "Πούλα Μποτσουάνας",
+  "name_byn": "Ρούβλι Λευκορωσίας",
+  "name_bzd": "Δολάριο Μπελίζ",
+  "name_cad": "Δολάριο Καναδά",
+  "name_cdf": "Φράγκο Κονγκό",
+  "name_chf": "Φράγκο Ελβετίας",
+  "name_clf": "Ουνιδάδες ντε Φομέντο Χιλής",
+  "name_clp": "Πέσο Χιλής",
+  "name_cnh": "Πενμίνμπι Κίνας (Παράκτιο)",
+  "name_cny": "Ρενμίνμπι Κίνας",
+  "name_cop": "Πέσο Κολομβίας",
+  "name_crc": "Κολόν Κόστα Ρίκα",
+  "name_cuc": "Μετατρέψιμο Πέσο Κούβας",
+  "name_cup": "Πέσο Κούβας",
+  "name_cve": "Εσκούδο Πράσινου Ακρωτηρίου",
+  "name_czk": "Κορόνα Τσεχίας",
+  "name_djf": "Φράγκο Τζιμπουτί",
+  "name_dkk": "Κορόνα Δανίας",
+  "name_dop": "Πέσο Δομινικανής Δημοκρατίας",
+  "name_dzd": "Δηνάριο Αλγερίας",
+  "name_egp": "Λίρα Αιγύπτου",
+  "name_ern": "Νάκφα Ερυθραίας",
+  "name_etb": "Μπιρ Αιθιοπίας",
+  "name_eur": "Ευρώ",
+  "name_fjd": "Δολάριο Φίτζι",
+  "name_fkp": "Λίρα Νήσων Φόκλαντ",
+  "name_fok": "Κορόνα Φαρόε",
+  "name_gbp": "Λίρα Αγγλίας",
+  "name_gel": "Λάρι Γεωργίας",
+  "name_ggp": "Λίρα Γκέρνσεϊ",
+  "name_ghs": "Σέντι Γκάνας",
+  "name_gip": "Λίρα Γιβραλτάρ",
+  "name_gmd": "Νταλάσι Γκάμπιας",
+  "name_gnf": "Φράγκο Γουινέας",
+  "name_gtq": "Κετζάλ Γουατεμάλας",
+  "name_gyd": "Δολάριο Γουιάνας",
+  "name_hkd": "Δολάριο Χονγκ Κονγκ",
+  "name_hnl": "Λεμπίρα Ονδούρας",
+  "name_hrk": "Κούνα Κροατίας",
+  "name_htg": "Γκούρντε Αϊτής",
+  "name_huf": "Φιορίνι Ουγγαρίας",
+  "name_idr": "Ρουπία Ινδονησίας",
+  "name_ils": "Νέο Σεκέλ Ισραήλ",
+  "name_imp": "Λίρα Μανξ",
+  "name_inr": "Ρουπία Ινδίας",
+  "name_iqd": "Δηνάριο Ιράκ",
+  "name_irr": "Ριάλ Ιράν",
+  "name_isk": "Κορόνα Ισλανδίας",
+  "name_jep": "Λίρα Τζέρσι",
+  "name_jmd": "Δολάριο Τζαμάικα",
+  "name_jod": "Δηνάριο Ιορδανίας",
+  "name_jpy": "Γιέν Ιαπωνίας",
+  "name_kes": "Σελίνι Κένυας",
+  "name_kgs": "Σομ Κιργιζίας",
+  "name_khr": "Ριέλ Καμπότζης",
+  "name_kmf": "Φράγκο Κομορών",
+  "name_kpw": "Γουόν Βόρειας Κορέας",
+  "name_krw": "Γουόν Νότιας Κορέας",
+  "name_kwd": "Δηνάριο Κουβέιτ",
+  "name_kyd": "Δολάριο Νήσων Κέιμαν",
+  "name_kzt": "Τένγκε Καζακστάν",
+  "name_lak": "Κιπ Λάος",
+  "name_lbp": "Λίρα Λιβάνου",
+  "name_lkr": "Ρουπία Σρι Λάνκα",
+  "name_lrd": "Δολάριο Λιβερίας",
+  "name_lsl": "Λότι Λεσότο",
+  "name_lyd": "Δηνάριο Λιβύης",
+  "name_mad": "Ντιρχάμ Μαρόκου",
+  "name_mdl": "Λέου Μολδαβίας",
+  "name_mga": "Αριάρι Μαδαγασκάρης",
+  "name_mkd": "Δηνάριο Βόρειας Μακεδονίας",
+  "name_mmk": "Κυάτ Μιανμάρ",
+  "name_mnt": "Τουγκρίκ Μογγολίας",
+  "name_mop": "Πατάκα Μακάου",
+  "name_mro": "Ουγκίγια Μαυριτανίας (προ 2018)",
+  "name_mru": "Ουγκίγια Μαυριτανίας",
+  "name_mur": "Ρουπία Μαυριτανίας",
+  "name_mvr": "Ρουφίγια Μαλδίβων",
+  "name_mwk": "Κουάτσα Μαλάουι",
+  "name_mxn": "Πέσο Μεξικού",
+  "name_myr": "Ρινγκίτ Μαλαισίας",
+  "name_mzn": "Μετικάλ Μοζαμβίκης",
+  "name_nad": "Δολάριο Ναμίμπιας",
+  "name_ngn": "Νάιρα Νιγηρίας",
+  "name_nio": "Κόρδοβα Νικαράγουας",
+  "name_nok": "Κορόνα Νορβηγίας",
+  "name_npr": "Ρουπία Νεπάλ",
+  "name_nzd": "Δολάριο Νέας Ζηλανδίας",
+  "name_omr": "Ριάλ Ομάν",
+  "name_pab": "Μπαλμπόα Παναμά",
+  "name_pen": "Σολ Περού",
+  "name_pgk": "Κίνα Παπούα-Νέας Γουινέας",
+  "name_php": "Πέσο Φιλιππίνων",
+  "name_pkr": "Ρουπία Πακιστάν",
+  "name_pln": "Ζλότι Πολωνίας",
+  "name_pyg": "Γκουαρανί Παραγουάης",
+  "name_qar": "Ριγιάλ Κατάρ",
+  "name_ron": "Λέου Ρουμανίας",
+  "name_rsd": "Δηνάριο Σερβίας",
+  "name_rub": "Ρούβλι Ρωσίας",
+  "name_rwf": "Φράγκο Ρουάντας",
+  "name_sar": "Ριάλ Σαουδικής Αραβίας",
+  "name_sbd": "Δολάριο Νήσων Σολομώντα",
+  "name_scr": "Ρουπία Σεϋχελλών",
+  "name_sdg": "Λίρα Σουδάν",
+  "name_sek": "Κορόνα Σουηδίας",
+  "name_sgd": "Δολάριο Σιγκαπούρης",
+  "name_shp": "Λίρα Αγίας Ελένης",
+  "name_sle": "Λεόνε Σιέρα Λεόνε",
+  "name_sll": "Λεόνε Σιέρα Λεόνε (προ 07/2022)",
+  "name_sos": "Σελίνι Σομαλίας",
+  "name_srd": "Δολάριο Σουρινάμ",
+  "name_ssp": "Λίρα Νοτίου Σουδάν",
+  "name_std": "Ντόμπρα Σάο Τομέ και Πρίνσιπε (προ 2018)",
+  "name_stn": "Ντόμπρα Σάο Τομέ και Πρίνσιπε",
+  "name_svc": "Κολόν Ελ Σαλβαδόρ",
+  "name_syp": "Λίρα Συρίας",
+  "name_szl": "Λιλανγκένι Σουαζιλάνδης",
+  "name_thb": "Μπατ Ταϊλάνδης",
+  "name_tjs": "Σομόνι Τατζικιστάν",
+  "name_tmt": "Μανάτ Τουρκμενιστάν",
+  "name_tnd": "Δηνάριο Τυνησίας",
+  "name_top": "Παάνγκα Τόνγκα",
+  "name_try": "Λίρα Τουρκίας",
+  "name_ttd": "Δολάριο Τρινιδάδ και Τομπάγκο",
+  "name_twd": "Δολάριο Ταϊβάν",
+  "name_tzs": "Σελίνι Τανζανίας",
+  "name_uah": "Γκρίβνα Ουκρανίας",
+  "name_ugx": "Σελίνι Ουγκάντας",
+  "name_usd": "Δολάριο ΗΠΑ",
+  "name_uyu": "Πέσο Ουρουγουάης",
+  "name_uzs": "Σομ Ουζμπεκιστάν",
+  "name_vef": "Μπολίβαρ Βενεζουέλας (παλαιό)",
+  "name_ves": "Μπολίβαρ Βενεζουέλας",
+  "name_vnd": "Ντονγκ Βιετνάμ",
+  "name_vuv": "Βάτου Βανουάτου",
+  "name_wst": "Τάλα Σαμόα",
+  "name_xaf": "Φράγκο Κεντρικής Αφρικής",
+  "name_xag": "Ουγκιά αργύρου",
+  "name_xau": "Ουγκιά χρυσού",
+  "name_xcd": "Δολάριο Ανατολικής Καραϊβικής",
+  "name_xdr": "Ειδικά Δικαιώματα Ανάληψης",
+  "name_xof": "Φράγκο Δυτικής Αφρικής",
+  "name_xpd": "Ουγκιά παλλάδιου",
+  "name_xpf": "Φράγκο Ειρηνικού",
+  "name_xpt": "Ουγκιά πλατίνας",
+  "name_yer": "Ριάλ Υεμένης",
+  "name_zar": "Ραντ Νοτιού Αφρικής",
+  "name_zmw": "Κουάτσα Ζάμπιας",
+  "name_zwl": "Δολάριο Ζιμπάμπουε",
+  "nano": "Νάνο-",
+  "nanometers": "Νανόμετρα",
+  "nanoseconds": "Νανοδευτερόλεπτα",
+  "nauticalMiles": "Ναυτικά μίλια",
+  "newton": "Νιούτον",
+  "newtonMeter": "Νιούτον μέτρο",
+  "nibble": "Νίμπλ",
+  "nok": "Νορβηγική Κορόνα",
+  "numeralSystems": "Αριθμητικά συστήματα",
+  "nzd": "Νεοζηλανδικό Δολάριο",
+  "octal": "Οκταδικός",
+  "ok": "Ok",
+  "otherPlatforms": "Converter NOW for other platforms",
+  "ounces": "Ουγκιές",
+  "parsec": "Πάρσεκ",
+  "pascal": "Πασκάλ",
+  "paste": "Paste",
+  "pebibit": "Πεμπιμπίτ",
+  "pebibyte": "Πεμπιμπάιτ",
+  "pennyweights": "Pennyweights",
+  "peta": "Πέτα-",
+  "petabit": "Πεταμπίτ",
+  "petabyte": "Πεταμπάιτ",
+  "php": "Φιλιππινέζικο Πέσο",
+  "pickColor": "Διάλεξε ένα χρώμα",
+  "pico": "Πίκο-",
+  "picometers": "Πικόμετρα",
+  "pln": "Πολωνικό Ζλότι",
+  "poundForce": "Λίβρα-δύναμη",
+  "poundForceFeet": "Λίβρα-δύναμη πόδια",
+  "poundForceInch": "Pound-force inch",
+  "poundal": "Πουντάλ",
+  "poundalMeter": "Πουντάλ μέτρο",
+  "pounds": "Λίβρες",
+  "poundsPerCubicFeet": "Pounds per Cubic Feet",
+  "poundsPerCubicInches": "Pounds per Cubic Inches",
+  "power": "Ισχύς",
+  "pressure": "Πίεση",
+  "problemImportFile": "There was a problem importing the file",
+  "propertySelectionOnStartup": "Property selection on startup",
+  "propertySelectionOnStartupSubtitle": "Show the property selection page on startup on small screen devices",
+  "psi": "Λίβρες ανά τετραγωνική ίντσα",
+  "pureBlackTheme": "AMOLED σκοτεινό θέμα",
+  "quintals": "Κουιντάλια",
+  "radiansDegree": "Ακτίνια",
+  "rankine": "Rankine",
+  "rateApp": "Αξιολόγησε την εφαρμογή",
+  "reamur": "Reamur",
+  "reason": "Reason",
+  "relatedSettings": "Related settings",
+  "removeTrailingZeros": "Αφαίρεση μη σημαντικών μηδενικών",
+  "reorder": "Αναδιάταξη",
+  "reorderProperties": "Αναδιάταξη ιδιοτήτων",
+  "reorderProperty": "Αναδιάταξη {property}",
+  "reorderUnits": "Αναδιάταξη μονάδων",
+  "repoGithub": "Άνοιξε το αποθετήριο στο GitHub",
+  "revokeInternetAccess": "Αναίρεση πρόσβασης στο διαδίκτυο",
+  "revokeInternetExplanation": "Αυτή η εφαρμογή χρησιμοποιεί το διαδίκτυο για να ενημερώνει τις τιμές συναλλάγματος μία φορά την ημέρα κατά την εκκίνηση. Αυτή η λήψη απαιτεί μόνο μερικά kilobytes. Ωστόσο, αν δεν χρειάζεστε αυτή τη δυνατότητα, μπορείτε να αποτρέψετε την εφαρμογή από το να έχει πρόσβαση στο διαδίκτυο ενεργοποιώντας αυτή την επιλογή.",
+  "romer": "Rømer",
+  "ron": "Ρουμανικό Λέι",
+  "routeError1": "Αυτή η σελίδα δεν υπάρχει",
+  "routeError2": "Επιστροφή στην πρώτη σελίδα",
+  "rub": "Ρωσικό Ρούβλι",
+  "save": "Αποθήκευση",
+  "search": "Αναζήτηση",
+  "seconds": "Δευτερόλεπτα",
+  "secondsDegree": "Δευτερόλεπτα",
+  "sek": "Σουηδική Κορόνα",
+  "selectAll": "Select all",
+  "settings": "Ρυθμίσεις",
+  "sgd": "Δολάριο Σιγκαπούρης",
+  "shoeSize": "Μέγεθος παπουτσιού",
+  "siPrefixes": "Πρόθεμα SI",
+  "significantFigures": "Δεκαδικά ψηφία",
+  "sourceCode": "Πηγαίος κώδικας",
+  "speed": "Ταχύτητα",
+  "speedOfLight": "Speed of light",
+  "squareCentimeters": "Τετραγωνικά Εκατοστά",
+  "squareFeet": "Τετραγωνικά Πόδια",
+  "squareFeetUsSurvey": "Τετραγωνικά Πόδια (τοπογραφικά ΗΠΑ)",
+  "squareInches": "Τετραγωνικές Ίντσες",
+  "squareKilometers": "Τετραγωνικά Χιλιόμετρα",
+  "squareMeters": "Τετραγωνικά Μέτρα",
+  "squareMiles": "Τετραγωνικά Μίλια",
+  "squareMillimeters": "Τετραγωνικά Χιλιοστά",
+  "squareYard": "Τετραγωνική Γιάρδα",
+  "stones": "Λίθοι",
+  "system": "Προεπιλογή συστήματος",
+  "tablespoonAustralian": "Αυστραλιανές κουταλιές τραπεζής",
+  "tablespoonUs": "Κουταλιές της σούπας US",
+  "teaspoonsMetric": "Metric teaspoons",
+  "teaspoonsUs": "Teaspoons US",
+  "tebibit": "Τεμπιμπίτ",
+  "tebibyte": "Τεμπιμπάιτ",
+  "temperature": "Θερμοκρασία",
+  "tera": "Τέρα-",
+  "terabit": "Τεραμπίτ",
+  "terabyte": "Τεραμπάιτ",
+  "thb": "Ταϊλανδέζικο Μπάτ",
+  "theme": "Θέμα",
+  "themeColor": "Χρώμα θέματος",
+  "time": "Χρόνος",
+  "today": "σήμερα",
+  "tonnes": "Τόνοι",
+  "torque": "Ροπή",
+  "torr": "Torricelli",
+  "trY": "Τουρκική Λίρα",
+  "troyOunces": "Troy ounces",
+  "twd": "Νέο Δολάριο Ταϊβάν",
   "ukIndiaChild": "Ηνωμένο Βασίλειο & Ινδία - Παιδί",
   "ukIndiaMan": "Ηνωμένο Βασίλειο & Ινδία - Άνδρας",
   "ukIndiaWoman": "Ηνωμένο Βασίλειο & Ινδία - Γυναίκα",
+  "uma": "Ενιαία ατομική μονάδα μάζας",
+  "undo": "Αναίρεση",
+  "undoClearAllMessage": "Καθαρίστηκαν όλα. Θέλεις να το αναιρέσεις;",
+  "unselectAll": "Unselect all",
+  "usFluidOunces": "US Oυγγιά Yγρών",
+  "usGallons": "US Gallons",
+  "usGill": "US Gill",
+  "usPints": "US Pints",
+  "usQuarts": "US Quarts",
   "usaCanadaChild": "ΗΠΑ & Καναδάς - Παιδί",
   "usaCanadaMan": "ΗΠΑ & Καναδάς - Άνδρας",
   "usaCanadaWoman": "ΗΠΑ & Καναδάς - Γυναίκα",
-  "japan": "Ιαπωνία",
-
+  "usd": "Δολάριο ΗΠΑ",
+  "useDeviceColor": "Χρήση χρώματος συσκευής",
+  "visibleUnits": "{property}, visible units",
+  "volume": "Όγκος",
   "watt": "Βατ",
-  "milliwatt": "Μιλιβάτ",
-  "kilowatt": "Κιλοβάτ",
-  "megawatt": "Μεγαβάτ",
-  "gigawatt": "Γιγαβάτ",
-  "europeanHorsePower": "Ευρωπαϊκή ιπποδύναμη",
-  "imperialHorsePower": "Αυτοκρατορική ιπποδύναμη",
-
-  "newton": "Νιούτον",
-  "dyne": "Dyne",
-  "poundForce": "Λίβρα-δύναμη",
-  "kilogramForce": "Κιλόγραμμα-δύναμη",
-  "poundal": "Πουντάλ",
-
-  "newtonMeter": "Νιούτον μέτρο",
-  "dyneMeter": "Δύνα μέτρο",
-  "poundForceFeet": "Λίβρα-δύναμη πόδια",
-  "kilogramForceMeter": "Κιλόγραμμα-δύναμη μέτρο",
-  "poundalMeter": "Πουντάλ μέτρο",
-  "poundForceInch": "Pound-force inch",
-  "@poundForceInch": {
-    "description": "Not yet translated. Once done, remove this comment."
-  },
-
-  "kilometersLiter": "Χιλιόμετρα ανά λίτρο",
-  "liters100km": "Λίτρα ανά 100 χιλιόμετρα",
-  "milesUsGallon": "Μίλια ανά Γαλόνι ΗΠΑ",
-  "milesImperialGallon": "Μίλια ανά Αυτοκρατορικό Γαλόνι",
-
-  "decimal": "Δεκαδικός",
-  "hexadecimal": "Εξαδικός",
-  "octal": "Οκταδικός",
-  "binary": "Δυαδικός",
-
-  "bit": "Μπιτ",
-  "nibble": "Νίμπλ",
-  "kilobit": "Κιλομπίτ",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "megabit": "Μεγαμπίτ",
-  "@megabit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "gigabit": "Γιγαμπίτ",
-  "@gigabit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "terabit": "Τεραμπίτ",
-  "@terabit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "petabit": "Πεταμπίτ",
-  "@petabit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "exabit": "Έξαμπίτ",
-  "@exabit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "kibibit": "Κιμπιμπίτ",
-  "mebibit": "Μεμπιμπίτ",
-  "gibibit": "Γκιμπιμπίτ",
-  "tebibit": "Τεμπιμπίτ",
-  "pebibit": "Πεμπιμπίτ",
-  "exbibit": "Εξμπιμπίτ",
-  "byte": "Μπάιτ",
-  "kilobyte": "Κιλομπάιτ",
-  "@kilobyte": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "megabyte": "Μεγκαμπάιτ",
-  "@megabyte": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "gigabyte": "Γκιγκαμπάιτ",
-  "@gigabyte": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "terabyte": "Τεραμπάιτ",
-  "@terabyte": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "petabyte": "Πεταμπάιτ",
-  "@petabyte": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "exabyte": "Εξαμπάιτ",
-  "@exabyte": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "kibibyte": "Κιμπιμπάιτ",
-  "mebibyte": "Μεμπιμπάιτ",
-  "gibibyte": "Γκιμπιμπάιτ",
-  "tebibyte": "Τεμπιμπάιτ",
-  "pebibyte": "Πεμπιμπάιτ",
-  "exbibyte": "Εξμπιμπάιτ",
-
-  "base": "Βάση",
-  "deca": "Δέκα-",
-  "hecto": "Εκτό-",
-  "kilo": "Κιλο-",
-  "mega": "Μέγα-",
-  "giga": "Γίγα-",
-  "tera": "Τέρα-",
-  "peta": "Πέτα-",
-  "exa": "Έξα-",
-  "zetta": "Ζέτα-",
+  "watthour": "Watt hour",
+  "weeks": "Εβδομάδες",
+  "yards": "Γιάρδες",
+  "years": "Χρόνια (365)",
+  "yocto": "Γιόκτο-",
   "yotta": "Γιότα-",
-  "deci": "Δέκατο-",
-  "centi": "Εκατοστό-",
-  "milli": "Χιλιοστό-",
-  "micro": "Μίκρο-",
-  "nano": "Νάνο-",
-  "pico": "Πίκο-",
-  "femto": "Φέμτο-",
-  "atto": "Άτο-",
+  "zar": "Νότιο Αφρικανικό Ραντ",
   "zepto": "Ζέπτο-",
-  "yocto": "Γιόκτο-"
+  "zetta": "Ζέτα-",
+  "name_xcg": "Caribbean Guilder",
+  "name_zig": "Zimbabwe Gold"
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:converterpro/models/currencies.dart';
+import 'package:converterpro/models/currency_provider.dart';
 import 'package:converterpro/models/import_export.dart';
 import 'package:converterpro/models/settings.dart';
 import 'package:converterpro/utils/palette.dart';
@@ -166,6 +167,28 @@ class SettingsPage extends ConsumerWidget {
                   child: Text(l10n.conversions, style: titlesStyle),
                 ),
                 if (!kIsWeb)
+                  DropdownListTile(
+                    leading: Icon(Icons.public, color: iconColor),
+                    title: l10n.currencyDataProvider,
+                    items: currencyProviders.map((e) => e.name).toList(),
+                    value: getCurrencyProviderById(
+                      ref.watch(currencyProviderIdProvider).value ?? 'ecb',
+                    ).name,
+                    onChanged: (String? string) {
+                      if (string != null) {
+                        final selected = currencyProviders.firstWhere(
+                          (e) => e.name == string,
+                        );
+                        ref
+                            .read(currencyProviderIdProvider.notifier)
+                            .set(selected.id);
+                        ref
+                            .read(CurrenciesNotifier.provider.notifier)
+                            .forceCurrenciesDownload(selected.id);
+                      }
+                    },
+                  ),
+                if (!kIsWeb)
                   SwitchListTile(
                     secondary: Icon(Icons.public_off, color: iconColor),
                     title: Text(l10n.revokeInternetAccess),
@@ -207,7 +230,7 @@ class SettingsPage extends ConsumerWidget {
                         ref.read(revokeInternetProvider.notifier).set(val);
                         ref
                             .read(CurrenciesNotifier.provider.notifier)
-                            .forceCurrenciesDownload();
+                            .forceCurrenciesDownload(null);
                       }
                     },
                     shape: const RoundedRectangleBorder(

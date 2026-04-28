@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="21" height="15" viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g0" x1="10.5" y1="0" x2="10.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+    <linearGradient id="g1" x1="10.5" y1="-0.0018" x2="10.5" y2="14.9982" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0A632F" />
+      <stop offset="1" stop-color="#05411E" />
+    </linearGradient>
+    <linearGradient id="g2" x1="3" y1="-0.0018" x2="3" y2="14.9982" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+    <linearGradient id="g3" x1="13.12705" y1="3.0403" x2="13.12705" y2="12.2914" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+  </defs>
+  <path d="M0,0h21v15h-21z" fill-rule="evenodd" fill="url(#g0)" />
+  <path d="M0,-0.0018h21v15h-21z" fill-rule="evenodd" fill="url(#g1)" />
+  <path d="M0,-0.0018h6v15h-6z" fill-rule="evenodd" fill="url(#g2)" />
+  <path d="M17.7526,8.0611C17.6563,8.999 17.2565,9.9003 16.5499,10.607C14.8655,12.2914 12.0753,12.2323 10.318,10.4749C8.5606,8.7175 8.5015,5.9274 10.1859,4.243C10.8926,3.5363 11.7938,3.1366 12.7318,3.0403C12.4364,3.2144 12.1567,3.4293 11.9014,3.6846C10.3702,5.2159 10.2944,7.6229 11.7322,9.0607C13.17,10.4985 15.577,10.4227 17.1083,8.8915C17.3636,8.6361 17.5785,8.3565 17.7526,8.0611L17.7526,8.0611ZM15.8193,6.0767L15.5807,7.5005L14.9137,6.2202L13.4857,6.4332L14.4974,5.4031L13.8535,4.1109L15.1457,4.7548L16.1757,3.7432L15.9628,5.171L17.2432,5.8381L15.8193,6.0767L15.8193,6.0767Z" fill-rule="evenodd" fill="#000000" />
+  <path d="M17.7526,8.0611C17.6563,8.999 17.2565,9.9003 16.5499,10.607C14.8655,12.2914 12.0753,12.2323 10.318,10.4749C8.5606,8.7175 8.5015,5.9274 10.1859,4.243C10.8926,3.5363 11.7938,3.1366 12.7318,3.0403C12.4364,3.2144 12.1567,3.4293 11.9014,3.6846C10.3702,5.2159 10.2944,7.6229 11.7322,9.0607C13.17,10.4985 15.577,10.4227 17.1083,8.8915C17.3636,8.6361 17.5785,8.3565 17.7526,8.0611L17.7526,8.0611ZM15.8193,6.0767L15.5807,7.5005L14.9137,6.2202L13.4857,6.4332L14.4974,5.4031L13.8535,4.1109L15.1457,4.7548L16.1757,3.7432L15.9628,5.171L17.2432,5.8381L15.8193,6.0767L15.8193,6.0767Z" fill-rule="evenodd" fill="url(#g3)" />
+</svg>
+

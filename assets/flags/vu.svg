@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="21" height="15" viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g0" x1="10.5" y1="0" x2="10.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+    <linearGradient id="g1" x1="10.700001" y1="9" x2="10.700001" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#27AB53" />
+      <stop offset="1" stop-color="#219447" />
+    </linearGradient>
+    <linearGradient id="g2" x1="10.700001" y1="0" x2="10.700001" y2="6" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#EC2547" />
+      <stop offset="1" stop-color="#CE1A39" />
+    </linearGradient>
+    <linearGradient id="g3" x1="10.700001" y1="0" x2="10.700001" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#262626" />
+      <stop offset="1" stop-color="#0D0D0D" />
+    </linearGradient>
+    <linearGradient id="g4" x1="10.1" y1="0.8" x2="10.1" y2="14.2" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFD449" />
+      <stop offset="1" stop-color="#FDCD34" />
+    </linearGradient>
+    <linearGradient id="g5" x1="2.6999998" y1="6" x2="2.6999998" y2="10.0191" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFD449" />
+      <stop offset="1" stop-color="#FDCD34" />
+    </linearGradient>
+  </defs>
+  <path d="M0,0h21v15h-21z" fill-rule="evenodd" fill="url(#g0)" />
+  <path d="M0.2,9h21v6h-21z" fill-rule="evenodd" fill="url(#g1)" />
+  <path d="M0.2,0h21v6h-21z" fill-rule="evenodd" fill="url(#g2)" />
+  <path d="M8.2,6L21.2,6L21.2,9L8.2,9L0.2,15L0.2,0L8.2,6Z" fill-rule="evenodd" fill="url(#g3)" />
+  <path d="M6.8667,7.5L-0.6,1.9L-1,1.6L-0.4,0.8L0,1.1L7.8667,7L20.7,7L21.2,7L21.2,8L20.7,8L7.7,8L8,7.9L0,13.9L-0.4,14.2L-1,13.4L-0.6,13.1L6.8667,7.5Z" fill="url(#g4)" />
+  <path d="M2.7,9C1.8716,9 1.2,8.3284 1.2,7.5C1.2,6.6716 1.8716,6 2.7,6C3.5284,6 4.2,6.6716 4.2,7.5C4.2,8.2272 3.3868,9.8627 2.7,10C2.6044,10.0191 2.8012,9 2.7,9ZM2.7,8.25C2.9761,8.5 3.2,7.7761 3.2,7.5C3.2,7.2239 2.9761,7 2.7,7C2.4239,7 2.2,7.2239 2.2,7.5C2.2,7.7761 2.4239,8.5 2.7,8.25Z" fill-rule="evenodd" fill="url(#g5)" />
+</svg>
+

@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:converterpro/models/currency_provider.dart';
 import 'package:converterpro/styles/consts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -163,6 +164,17 @@ final languageTagProvider =
         ..defaultValue = null
         ..validate = (val) =>
             val == null || mapLocale.keys.any((e) => e.toLanguageTag() == val);
+    });
+
+final currencyProviderIdProvider =
+    AsyncNotifierProvider<SettingsNotifier<String?>, String?>(() {
+      return SettingsNotifier<String>()
+        ..prefKey = 'currencyProviderId'
+        ..defaultValue = 'inforeuro'
+        ..validate =
+            (val) =>
+                val != null &&
+                currencyProviders.map((e) => e.id).contains(val);
     });
 
 final actualLocaleProvider = Provider<Locale?>((ref) {

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="21" height="15" viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g0" x1="10.5" y1="0" x2="10.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+    <linearGradient id="g1" x1="10.5" y1="0" x2="10.5" y2="14" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#E1244A" />
+      <stop offset="1" stop-color="#BE1134" />
+    </linearGradient>
+    <linearGradient id="g2" x1="5" y1="0" x2="5" y2="10" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0C3F8E" />
+      <stop offset="1" stop-color="#032A67" />
+    </linearGradient>
+    <linearGradient id="g3" x1="4.9999995" y1="2.0000002" x2="4.9999995" y2="7.4271" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+  </defs>
+  <path d="M0,0h21v15h-21z" fill-rule="evenodd" fill="url(#g0)" />
+  <path d="M10,0L21,0L21,2L10,2L10,0ZM10,4L21,4L21,6L10,6L10,4ZM10,8L21,8L21,10L10,10L10,8ZM0,12L21,12L21,14L0,14L0,12Z" fill-rule="evenodd" fill="url(#g1)" />
+  <path d="M0,0h10v10h-10z" fill-rule="evenodd" fill="url(#g2)" />
+  <path d="M5,6.17l-1.7634,1.2571l0.6506,-2.0655l-1.7404,-1.2886l2.1655,-0.0195l0.6877,-2.0535l0.6877,2.0535l2.1655,0.0195l-1.7404,1.2886l0.6506,2.0655z" fill-rule="evenodd" fill="#000000" />
+  <path d="M5,6.17l-1.7634,1.2571l0.6506,-2.0655l-1.7404,-1.2886l2.1655,-0.0195l0.6877,-2.0535l0.6877,2.0535l2.1655,0.0195l-1.7404,1.2886l0.6506,2.0655z" fill-rule="evenodd" fill="url(#g3)" />
+</svg>
+

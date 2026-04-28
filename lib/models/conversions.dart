@@ -1,3 +1,4 @@
+import 'package:converterpro/models/currencies.dart';
 import 'package:converterpro/models/order.dart';
 import 'package:converterpro/models/properties_list.dart';
 import 'package:converterpro/utils/utils.dart';
@@ -15,15 +16,25 @@ class ConversionsNotifier
 
   @override
   Future<Map<PROPERTYX, List<UnitData>>> build() async {
-    final conversionsOrder = (await ref.watch(
+    final conversionsOrderFuture = ref.watch(
       UnitsOrderNotifier.provider.future,
-    ));
-    final propertiesMap = await ref.watch(propertiesMapProvider.future);
+    );
+    // propertiesMapProvider is a synchronous Provider, so watching it here
+    // ensures ConversionsNotifier rebuilds whenever exchange rates change.
+    final propertiesMap = ref.watch(propertiesMapProvider);
+
+    final conversionsOrder = await conversionsOrderFuture;
+
+    final currenciesCount = propertiesMap[PROPERTYX.currencies]!.getAll().length;
+    dPrint(() => '[ConversionsNotifier] Rebuilt with $currenciesCount currencies');
 
     return conversionsOrder.map(
       (propertyx, orderedUnits) => MapEntry(
         propertyx,
         orderedUnits
+            .where(
+              (e) => propertiesMap[propertyx]!.getAll().any((u) => u.name == e),
+            )
             .map(
               (e) => UnitData(
                 propertiesMap[propertyx]!.getUnit(e),
@@ -83,9 +94,15 @@ class ConversionsNotifier
   /// values of the units
   Future<void> _refreshCurrentUnitDataList(PROPERTYX property) async {
     final currentUnitDataList = state.value![property]!;
-    final propertiesMap = await ref.read(propertiesMapProvider.future);
+    final propertiesMap = ref.read(propertiesMapProvider);
     for (UnitData currentUnitData in currentUnitDataList) {
       final currentProperty = propertiesMap[property]!;
+      // Guard: skip stale UnitData whose currency is no longer in the property
+      // (e.g. after switching to a provider with fewer currencies)
+      if (!currentProperty.getAll().any((u) => u.name == currentUnitData.unit.name)) {
+        currentUnitData.tec.value = TextEditingValue.empty;
+        continue;
+      }
       currentUnitData.unit = currentProperty.getUnit(currentUnitData.unit.name);
       if (currentUnitData != _selectedUnit) {
         if (currentUnitData.unit.stringValue == null) {
@@ -102,8 +119,14 @@ class ConversionsNotifier
   /// This function is used to convert all the values from one that has been
   /// modified
   Future<void> convert(UnitData unitData, var value, PROPERTYX property) async {
-    final propertiesMap = await ref.read(propertiesMapProvider.future);
-    propertiesMap[property]!.convert(unitData.unit.name, value);
+    final propertiesMap = ref.read(propertiesMapProvider);
+    final propertyInstance = propertiesMap[property]!;
+    final unitName = unitData.unit.name;
+    // Guard: ignore stale UnitData whose currency is no longer in the property
+    if (!propertyInstance.getAll().any((u) => u.name == unitName)) {
+      return;
+    }
+    propertyInstance.convert(unitName, value);
     _selectedUnit = unitData;
     await _refreshCurrentUnitDataList(property);
   }

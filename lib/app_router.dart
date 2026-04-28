@@ -35,8 +35,7 @@ final isEverythingLoadedProvider = Provider<bool>(
       ref.watch(PropertiesOrderNotifier.provider).hasValue &&
       ref.watch(UnitsOrderNotifier.provider).hasValue &&
       ref.watch(ConversionsNotifier.provider).hasValue &&
-      ref.watch(HiddenUnitsNotifier.provider).hasValue &&
-      ref.watch(propertiesMapProvider).hasValue,
+      ref.watch(HiddenUnitsNotifier.provider).hasValue,
 );
 
 final conversionPageHeroEnabledProvider = StateProvider<bool>((ref) => false);

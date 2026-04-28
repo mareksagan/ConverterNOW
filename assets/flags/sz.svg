@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="21" height="15" viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g0" x1="10.5" y1="0" x2="10.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+    <linearGradient id="g1" x1="10.5" y1="0" x2="10.5" y2="3" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#486BCA" />
+      <stop offset="1" stop-color="#3E5FBA" />
+    </linearGradient>
+    <linearGradient id="g2" x1="10.5" y1="12" x2="10.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#486BCA" />
+      <stop offset="1" stop-color="#3E5FBA" />
+    </linearGradient>
+    <linearGradient id="g3" x1="10.5" y1="3" x2="10.5" y2="12" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFDF20" />
+      <stop offset="1" stop-color="#FFDA00" />
+    </linearGradient>
+    <linearGradient id="g4" x1="10.5" y1="4" x2="10.5" y2="11" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#CF1615" />
+      <stop offset="1" stop-color="#B20D0C" />
+    </linearGradient>
+    <linearGradient id="g5" x1="10.5" y1="5" x2="10.5" y2="10" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+    <linearGradient id="g6" x1="8.5" y1="5" x2="8.5" y2="10" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#262626" />
+      <stop offset="1" stop-color="#0D0D0D" />
+    </linearGradient>
+  </defs>
+  <path d="M0,0h21v15h-21z" fill-rule="evenodd" fill="url(#g0)" />
+  <path d="M0,0h21v3h-21z" fill-rule="evenodd" fill="url(#g1)" />
+  <path d="M0,12h21v3h-21z" fill-rule="evenodd" fill="url(#g2)" />
+  <path d="M0,3h21v9h-21z" fill-rule="evenodd" fill="url(#g3)" />
+  <path d="M0,4h21v7h-21z" fill-rule="evenodd" fill="url(#g4)" />
+  <path d="M6,7.5a4.5,2.5 0,1 0,9 0a4.5,2.5 0,1 0,-9 0z" fill-rule="evenodd" fill="url(#g5)" />
+  <path d="M11,5l-5,0l-0,5l4,0z" fill-rule="evenodd" fill="url(#g6)" />
+  <path d="M11.5,7.5m-1,0a1,1 0,1 1,2 0a1,1 0,1 1,-2 0" fill-rule="evenodd" fill="#1A1A1A" />
+  <path d="M9.5,7.5m-1,0a1,1 0,1 1,2 0a1,1 0,1 1,-2 0" fill-rule="evenodd" fill="#F6F6F6" />
+</svg>
+

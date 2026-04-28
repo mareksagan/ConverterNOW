@@ -25,6 +25,7 @@ class ImportExportNotifier extends Notifier<void> {
     colorThemeProvider,
     themeModeProvider,
     languageTagProvider,
+    currencyProviderIdProvider,
   ];
 
   @override

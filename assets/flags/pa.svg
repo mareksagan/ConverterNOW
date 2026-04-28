@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="21" height="15" viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g0" x1="10.5" y1="0" x2="10.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+    <linearGradient id="g1" x1="10.5" y1="0" x2="10.5" y2="7" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#E52448" />
+      <stop offset="1" stop-color="#D01739" />
+    </linearGradient>
+    <linearGradient id="g2" x1="10.5" y1="7" x2="10.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1367AE" />
+      <stop offset="1" stop-color="#0A5492" />
+    </linearGradient>
+    <linearGradient id="g3" x1="10.5" y1="0" x2="10.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+    <linearGradient id="g4" x1="5" y1="1.5000001" x2="5" y2="5.118" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1367AE" />
+      <stop offset="1" stop-color="#0A5492" />
+    </linearGradient>
+    <linearGradient id="g5" x1="15.500001" y1="9" x2="15.500001" y2="12.618" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#E52448" />
+      <stop offset="1" stop-color="#D01739" />
+    </linearGradient>
+  </defs>
+  <path d="M0,0h21v15h-21z" fill-rule="evenodd" fill="url(#g0)" />
+  <path d="M0,0h21v7h-21z" fill-rule="evenodd" fill="url(#g1)" />
+  <path d="M0,7h21v8h-21z" fill-rule="evenodd" fill="url(#g2)" />
+  <path d="M0,7L0,0L10,0L10,7L0,7ZM10,15L10,7L21,7L21,15L10,15Z" fill-rule="evenodd" fill="url(#g3)" />
+  <path d="M5,4.32l-1.1756,0.798l0.3957,-1.3646l-1.1222,-0.8714l1.4201,-0.0454l0.482,-1.3366l0.482,1.3366l1.4201,0.0454l-1.1222,0.8714l0.3957,1.3646z" fill-rule="evenodd" fill="url(#g4)" />
+  <path d="M15.5,11.82l-1.1756,0.798l0.3957,-1.3646l-1.1222,-0.8714l1.4201,-0.0454l0.482,-1.3366l0.482,1.3366l1.4201,0.0454l-1.1222,0.8714l0.3957,1.3646z" fill-rule="evenodd" fill="url(#g5)" />
+</svg>
+

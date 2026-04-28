@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="21" height="15" viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g0" x1="10.5" y1="0" x2="10.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+    <linearGradient id="g1" x1="10.5" y1="0" x2="10.5" y2="5" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FF202D" />
+      <stop offset="1" stop-color="#FD0D1B" />
+    </linearGradient>
+    <linearGradient id="g2" x1="10.5" y1="10" x2="10.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2027AC" />
+      <stop offset="1" stop-color="#191F94" />
+    </linearGradient>
+    <linearGradient id="g3" x1="10.5" y1="5" x2="10.5" y2="11" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+    <linearGradient id="g4" x1="10.5" y1="5" x2="10.5" y2="11" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FF212E" />
+      <stop offset="1" stop-color="#FD0D1B" />
+    </linearGradient>
+  </defs>
+  <path d="M0,0h21v15h-21z" fill-rule="evenodd" fill="url(#g0)" />
+  <path d="M0,0h21v5h-21z" fill-rule="evenodd" fill="url(#g1)" />
+  <path d="M8,4L8.5,3.5L9,4L9,5L8,5L8,4ZM10,4L10.5,3.5L11,4L11,5L10,5L10,4ZM12,4L12.5,3.5L13,4L13,5L12,5L12,4Z" fill-rule="evenodd" fill="#1895DB" />
+  <path d="M9,4L9.5,3.5L10,4L10,5L9,5L9,4ZM11,4L11.5,3.5L12,4L12,5L11,5L11,4Z" fill-rule="evenodd" fill="#191F94" />
+  <path d="M0,10h21v5h-21z" fill-rule="evenodd" fill="url(#g2)" />
+  <path d="M0,10L0,5L21,5L21,10L0,10ZM12,10L13,10L12.7266,10.5468C12.6014,10.7971 12.2734,11 12,11L12,10ZM10,10L11,10L11,11L10,11L10,10ZM8,10L9,10L9,11C8.7239,11 8.4036,10.8072 8.2734,10.5468L8,10Z" fill-rule="evenodd" fill="url(#g3)" />
+  <path d="M10,5L11,5L11,6L10,6L10,5ZM12,5L12.5,5L13,6L12,6L12,5ZM8.5,5L9,5L9,6L8,6L8.5,5ZM9,6L10,6L10,7L9,7L9,6ZM11,6L12,6L12,7L11,7L11,6ZM10,7L11,7L11,8L10,8L10,7ZM12,7L13,7L13,8L12,8L12,7ZM11,8L12,8L12,9L11,9L11,8ZM8,7L9,7L9,8L8,8L8,7ZM9,8L10,8L10,9L9,9L9,8ZM8,9L9,9L9,10L8,10L8,9ZM10,9L11,9L11,10L10,10L10,9ZM12,9L13,9L13,10L12,10L12,9ZM11,10L12,10L12,11L11,11L11,10ZM9,10L10,10L10,11L9,11L9,10Z" fill-rule="evenodd" fill="url(#g4)" />
+</svg>
+

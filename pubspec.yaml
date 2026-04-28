@@ -33,6 +33,8 @@ dependencies:
   handy_window: ^0.4.2
   # Downloading the exchange rates
   http: ^1.6.0
+  # XML parsing for some currency APIs
+  xml: ^6.6.1
   # Translations
   intl: ^0.20.2
   # Required for import/export
@@ -121,11 +123,5 @@ flutter:
     - assets/fonts/OFL.txt
     - assets/property_icons_opti/
     - assets/flags_opti/
-    - assets/flags/br.png
-    - assets/flags/eu.png
-    - assets/flags/in.png
-    - assets/flags/mx.png
-    - assets/flags/nz.png
-    - assets/flags/us.png
     - path: assets/logo.png
       platforms: [windows]

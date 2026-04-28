@@ -376,24 +376,31 @@ Future<String?> showModalBottomRadioList({
     context: context,
     showDragHandle: true,
     builder: (context) {
-      return ListView(
-        shrinkWrap: true,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(title, style: Theme.of(context).textTheme.titleLarge),
-          ),
-          const SizedBox(height: 15),
-          RadioGroup(
-            groupValue: value,
-            onChanged: (value) => Navigator.pop(context, value),
-            child: Column(
-              children: items
-                  .map((item) => RadioListTile(value: item, title: Text(item)))
-                  .toList(),
+      return SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Text(title, style: Theme.of(context).textTheme.titleLarge),
             ),
-          ),
-        ],
+            const SizedBox(height: 8),
+            Flexible(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  final item = items[index];
+                  return ListTile(
+                    title: Text(item),
+                    trailing: item == value ? const Icon(Icons.check) : null,
+                    onTap: () => Navigator.pop(context, item),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       );
     },
   );

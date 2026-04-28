@@ -1,66 +1,46 @@
 import 'dart:convert';
+import 'package:converterpro/models/currency_provider.dart';
 import 'package:converterpro/models/settings.dart';
 import 'package:converterpro/utils/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Currencies {
+  /// Fallback rates only include EUR=1.0 to satisfy SimpleCustomProperty
+  /// assertions. All other currencies must come from a live provider.
   static const defaultExchangeRates = {
     'EUR': 1.0,
-    'AUD': 1.6514,
-    'BRL': 6.0127,
-    'CAD': 1.4856,
-    'CHF': 0.9442,
-    'CNY': 7.6141,
-    'CZK': 25.043,
-    'DKK': 7.459,
-    'GBP': 0.83215,
-    'HKD': 8.1554,
-    'HUF': 402.95,
-    'IDR': 16980.33,
-    'ILS': 3.7341,
-    'INR': 90.81,
-    'ISK': 147.3,
-    'JPY': 160.09,
-    'KRW': 1509.5,
-    'MXN': 21.3146,
-    'MYR': 4.647,
-    'NOK': 11.6515,
-    'NZD': 1.8352,
-    'PHP': 60.487,
-    'PLN': 4.1653,
-    'RON': 4.977,
-    'SEK': 11.2445,
-    'SGD': 1.4052,
-    'THB': 35.238,
-    'TRY': 37.9486,
-    'USD': 1.0478,
-    'ZAR': 19.2555,
   };
 
   /// The conversion rates with respect to EUR
   Map<String, double> exchangeRates;
 
-  /// The date of the last update encoded as 'yyyy-mm-dd'
+  /// The ISO 8601 datetime of the last update (e.g. 2026-04-28T10:34:56)
   String lastUpdate;
+
+  /// ID of the provider that supplied the rates
+  String providerId;
 
   Currencies({
     this.exchangeRates = defaultExchangeRates,
-    this.lastUpdate = '2025-02-15',
+    this.lastUpdate = '',
+    this.providerId = '',
   });
 
   /// Transform the exchangeRates map into a json that can be stored
   String toJson() => jsonEncode(exchangeRates);
 
-  /// It transforms a previous stored data (with the toJson method) into this
-  /// object
+  /// It transforms a previous stored data (into this object.
+  /// Note: only exchange rates are stored; metadata comes from separate prefs.
   factory Currencies.fromJson(String jsonString) {
-    var exchangeRates = Map<String, double>.from(defaultExchangeRates);
     Map jsonData = json.decode(jsonString);
+    final exchangeRates = <String, double>{};
     for (String key in jsonData.keys) {
-      exchangeRates[key] = jsonData[key];
+      final value = jsonData[key];
+      if (value is num) {
+        exchangeRates[key] = value.toDouble();
+      }
     }
     return Currencies(exchangeRates: exchangeRates);
   }
@@ -68,10 +48,12 @@ class Currencies {
   Currencies copyWith({
     Map<String, double>? exchangeRates,
     String? lastUpdate,
+    String? providerId,
   }) {
     return Currencies(
       exchangeRates: exchangeRates ?? this.exchangeRates,
       lastUpdate: lastUpdate ?? this.lastUpdate,
+      providerId: providerId ?? this.providerId,
     );
   }
 }
@@ -87,67 +69,85 @@ class CurrenciesNotifier extends AsyncNotifier<Currencies> {
     pref = await ref.read(sharedPref.future);
 
     final String now = DateFormat("yyyy-MM-dd").format(DateTime.now());
+    final String currentProviderId =
+        ref.watch(currencyProviderIdProvider).value ?? 'inforeuro';
+
+    dPrint(() => '[CurrenciesNotifier] build() provider=$currentProviderId');
+
     // Let's search before if we already have downloaded the exchange rates
-    String? lastUpdate = pref.getString("lastUpdateCurrencies");
-    // if I have never updated the conversions or if I have updated before today
-    // I have to update
+    String? lastUpdateDate = pref.getString("lastUpdateCurrenciesDate");
+    String? lastProviderId = pref.getString("lastCurrencyProviderId");
+
+    // if I have never updated the conversions, if I have updated before today
+    // or if the provider changed, I have to update
     if (!(ref.read(revokeInternetProvider).value ?? false) &&
-        (lastUpdate == null || lastUpdate != now)) {
-      return _downloadCurrencies();
+        (lastUpdateDate == null ||
+            lastUpdateDate != now ||
+            lastProviderId != currentProviderId)) {
+      dPrint(() => '[CurrenciesNotifier] Downloading for $currentProviderId');
+      return _downloadCurrencies(currentProviderId);
     }
     // If I already have the data of today I just use it, no need of read them
     // from the web
+    dPrint(() => '[CurrenciesNotifier] Reading saved data');
     return _readSavedCurrencies();
   }
 
-  void forceCurrenciesDownload() async {
-    state = AsyncData(await _downloadCurrencies());
+  void forceCurrenciesDownload(String? providerId) async {
+    final String currentProviderId = providerId ??
+        ref.read(currencyProviderIdProvider).value ?? 'inforeuro';
+    state = AsyncData(await _downloadCurrencies(currentProviderId));
   }
 
   Currencies _readSavedCurrencies() {
     String? lastUpdate = pref.getString('lastUpdateCurrencies');
+    String? providerId = pref.getString('lastCurrencyProviderId');
     String? currenciesRead = pref.getString('currenciesRates');
     if (currenciesRead != null) {
-      return Currencies.fromJson(
+      final saved = Currencies.fromJson(
         currenciesRead,
-      ).copyWith(lastUpdate: lastUpdate);
+      ).copyWith(lastUpdate: lastUpdate, providerId: providerId);
+      // Filter saved data to only include currencies supported by the provider
+      final provider = getCurrencyProviderById(providerId ?? 'inforeuro');
+      final allowed = provider.supportedCurrencies.toSet();
+      allowed.add('EUR');
+      final filteredRates = Map<String, double>.fromEntries(
+        saved.exchangeRates.entries.where((e) => allowed.contains(e.key)),
+      );
+      dPrint(() => '[CurrenciesNotifier] Read ${filteredRates.length} saved currencies for ${providerId ?? 'inforeuro'}');
+      return saved.copyWith(exchangeRates: filteredRates);
     }
     return Currencies();
   }
 
   /// Updates the currencies exchange rates with the latest values. It will also
   /// update the status at the end (updated or error)
-  Future<Currencies> _downloadCurrencies() async {
-    final stringRequest = Currencies.defaultExchangeRates.keys
-        .where((e) => e != 'EUR')
-        .join('+');
+  Future<Currencies> _downloadCurrencies(String providerId) async {
+    final provider = getCurrencyProviderById(providerId);
     try {
-      var response = await http.get(
-        Uri.https(
-          'data-api.ecb.europa.eu',
-          'service/data/EXR/D.$stringRequest.EUR.SP00.A',
-          {'lastNObservations': '1', 'detail': 'dataonly', 'format': 'csvdata'},
-        ),
-      );
-
-      // if successful
-      if (response.statusCode == 200) {
-        var lastUpdate = DateFormat("yyyy-MM-dd").format(DateTime.now());
-        Map<String, double> exchangeRates = {'EUR': 1};
-        final rows = const LineSplitter().convert(response.body);
-        final tableHeader = rows[0].split(',');
-        final valueIndex = tableHeader.indexOf('OBS_VALUE');
-        final currencyIndex = tableHeader.indexOf('CURRENCY');
-        rows.removeAt(0);
-        for (var row in rows) {
-          final elements = row.split(',');
-          final currency = elements[currencyIndex];
-          final value = double.parse(elements[valueIndex]);
-          exchangeRates[currency] = value;
+      final rates = await provider.fetchRates();
+      if (rates != null && rates.isNotEmpty) {
+        var lastUpdate = DateFormat("yyyy-MM-ddTHH:mm:ss").format(DateTime.now());
+        var lastUpdateDate = DateFormat("yyyy-MM-dd").format(DateTime.now());
+        // Only use what the provider returns — no hardcoded fallbacks.
+        final allowed = provider.supportedCurrencies.toSet();
+        allowed.add('EUR');
+        final mergedRates = Map<String, double>.from(Currencies.defaultExchangeRates);
+        for (final entry in rates.entries) {
+          if (allowed.contains(entry.key)) {
+            mergedRates[entry.key] = entry.value;
+          }
         }
-        pref.setString('currenciesRates', jsonEncode(exchangeRates));
+        pref.setString('currenciesRates', jsonEncode(mergedRates));
         pref.setString('lastUpdateCurrencies', lastUpdate);
-        return Currencies(exchangeRates: exchangeRates, lastUpdate: lastUpdate);
+        pref.setString('lastUpdateCurrenciesDate', lastUpdateDate);
+        pref.setString('lastCurrencyProviderId', providerId);
+        dPrint(() => '[CurrenciesNotifier] Downloaded ${mergedRates.length} currencies for $providerId');
+        return Currencies(
+          exchangeRates: mergedRates,
+          lastUpdate: lastUpdate,
+          providerId: providerId,
+        );
       }
     } catch (e) {
       dPrint(e.toString);

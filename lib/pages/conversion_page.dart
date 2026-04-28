@@ -10,6 +10,7 @@ import 'package:translations/app_localizations.dart';
 import 'package:converterpro/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:converterpro/data/property_unit_maps.dart';
+import 'package:converterpro/models/currency_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:vector_graphics/vector_graphics.dart';
 
@@ -61,7 +62,7 @@ class ConversionPage extends ConsumerWidget {
         );
       } else {
         subtitleWidget = Text(
-          _getLastUpdateString(context, currencies.lastUpdate),
+          _getLastUpdateString(context, currencies.lastUpdate, currencies.providerId),
           style: Theme.of(context).textTheme.titleSmall,
         );
       }
@@ -71,7 +72,8 @@ class ConversionPage extends ConsumerWidget {
       tffKey: unitData.unit.name.toString(),
       unitName: unitMap[unitData.unit.name]!,
       unitSymbol: unitData.unit.symbol,
-      symbolContainsIcon: unitData.property == PROPERTYX.currencies,
+      symbolContainsIcon: unitData.property == PROPERTYX.currencies &&
+          (unitData.unit.symbol?.contains(' ') ?? false),
       keyboardType: unitData.textInputType,
       controller: unitData.tec,
       validator: (String? input) {
@@ -227,17 +229,30 @@ class ConversionPage extends ConsumerWidget {
   }
 }
 
-String _getLastUpdateString(BuildContext context, String lastUpdate) {
+String _getLastUpdateString(BuildContext context, String lastUpdate, String providerId) {
   final l10n = AppLocalizations.of(context)!;
+  if (lastUpdate.isEmpty) {
+    return 'Exchange rate not available';
+  }
+
+  final providerName = providerId.isNotEmpty
+      ? getCurrencyProviderById(providerId).name
+      : '';
+
   DateTime lastUpdateCurrencies = DateTime.parse(lastUpdate);
   DateTime dateNow = DateTime.now();
+  final dateStr = DateFormat.yMd(
+    Localizations.localeOf(context).languageCode,
+  ).format(lastUpdateCurrencies);
+  final timeStr = DateFormat.Hm().format(lastUpdateCurrencies);
+
   if (lastUpdateCurrencies.day == dateNow.day &&
       lastUpdateCurrencies.month == dateNow.month &&
       lastUpdateCurrencies.year == dateNow.year) {
-    return l10n.lastCurrenciesUpdate + l10n.today;
+    final base = '${l10n.lastCurrenciesUpdate}${l10n.today} $timeStr';
+    return providerName.isNotEmpty ? '$base by $providerName' : base;
   }
-  return l10n.lastCurrenciesUpdate +
-      DateFormat.yMd(
-        Localizations.localeOf(context).languageCode,
-      ).format(lastUpdateCurrencies);
+
+  final base = '${l10n.lastCurrenciesUpdate}$dateStr $timeStr';
+  return providerName.isNotEmpty ? '$base by $providerName' : base;
 }

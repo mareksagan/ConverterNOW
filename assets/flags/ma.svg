@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="21" height="15" viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g0" x1="10.5" y1="0" x2="10.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+    <linearGradient id="g1" x1="10.5" y1="0" x2="10.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#E33B44" />
+      <stop offset="1" stop-color="#C02A32" />
+    </linearGradient>
+  </defs>
+  <path d="M0,0h21v15h-21z" fill-rule="evenodd" fill="url(#g0)" />
+  <path d="M0,0h21v15h-21z" fill-rule="evenodd" fill="url(#g1)" />
+  <path d="M10.5,9.255L7.855,11.1406L8.8309,8.0423L6.2202,6.1094L9.4684,6.0802L10.5,3L11.5316,6.0802L14.7798,6.1094L12.1691,8.0423L13.145,11.1406L10.5,9.255ZM10.5,8.0269L11.2941,8.593L11.0011,7.6628L11.7849,7.0825L10.8097,7.0737L10.5,6.1489L10.1903,7.0737L9.2151,7.0825L9.9989,7.6628L9.7059,8.593L10.5,8.0269Z" fill="#0A6135" />
+</svg>
+

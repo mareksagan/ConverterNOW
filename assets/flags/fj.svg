@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="21" height="15" viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g0" x1="10.5" y1="0" x2="10.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+    <linearGradient id="g1" x1="10.5" y1="0" x2="10.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#79CFF6" />
+      <stop offset="1" stop-color="#68BFE6" />
+    </linearGradient>
+    <linearGradient id="g2" x1="4.5" y1="0" x2="4.5" y2="7" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#042C90" />
+      <stop offset="1" stop-color="#00247E" />
+    </linearGradient>
+    <linearGradient id="g3" x1="15.5" y1="4" x2="15.5" y2="11" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+    <linearGradient id="g4" x1="15.5" y1="4" x2="15.5" y2="11" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#EB1D43" />
+      <stop offset="1" stop-color="#D21034" />
+    </linearGradient>
+    <linearGradient id="g5" x1="4.5" y1="0" x2="4.5" y2="7" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#DB1E36" />
+      <stop offset="1" stop-color="#D51931" />
+    </linearGradient>
+    <linearGradient id="g6" x1="4.75" y1="0" x2="4.75" y2="7.5" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+    <linearGradient id="g7" x1="4.5" y1="0" x2="4.5" y2="7" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#DB1E36" />
+      <stop offset="1" stop-color="#D51931" />
+    </linearGradient>
+  </defs>
+  <path d="M0,0h21v15h-21z" fill-rule="evenodd" fill="url(#g0)" />
+  <path d="M0,0h21v15h-21z" fill-rule="evenodd" fill="url(#g1)" />
+  <path d="M0,0h9v7h-9z" fill-rule="evenodd" fill="url(#g2)" />
+  <path d="M13,7.5L13,4L18,4L18,7.5C18,10 15.5,11 15.5,11C15.5,11 13,10 13,7.5Z" fill-rule="evenodd" fill="url(#g3)" />
+  <path d="M14,6.5C13.7239,6.5 13.5,6.2761 13.5,6C13.5,5.7239 13.7239,5.5 14,5.5C14.2761,5.5 14.5,5.7239 14.5,6C14.5,6.2761 14.2761,6.5 14,6.5ZM17,6.5C16.7239,6.5 16.5,6.2761 16.5,6C16.5,5.7239 16.7239,5.5 17,5.5C17.2761,5.5 17.5,5.7239 17.5,6C17.5,6.2761 17.2761,6.5 17,6.5Z" fill-rule="evenodd" fill="#2A915C" />
+  <path d="M13,4l5,0l0,1l-2,0l0,2l2,0l0,1l-2,0l0,3l-1,0l0,-3l-2,0l0,-1l2,0l0,-2l-2,0z" fill-rule="evenodd" fill="url(#g4)" />
+  <path d="M3.5,3L0,0L0.5,0L4,2.5L5,2.5L9,0L9,0.25C9,0.3881 8.9135,0.5618 8.7915,0.6489L5.5,3L5.5,4L8.8118,6.8387C8.9158,6.9278 8.884,7 8.75,7L8.75,7C8.6119,7 8.4135,6.9382 8.2915,6.8511L5,4.5L4,4.5L0,7L0,6.5L3.5,4L3.5,3Z" fill-rule="evenodd" fill="url(#g5)" />
+  <path d="M3.25,3.115L-0.6758,-0.25L0.5,-0.25L0.6453,-0.2034L4.0801,2.25L4.9283,2.25L9.25,-0.4511L9.25,0.25C9.25,0.4717 9.1221,0.72 8.9369,0.8523L5.75,3.1287L5.75,3.885L8.9745,6.6489C9.257,6.891 9.1132,7.25 8.75,7.25C8.5569,7.25 8.3082,7.1702 8.1462,7.0545L4.9199,4.75L4.0717,4.75L-0.25,7.4511L-0.25,6.3713L3.25,3.8713L3.25,3.115Z" fill-rule="evenodd" fill="#00000000" stroke="#FFFFFF" stroke-width="0.5" />
+  <path d="M0,2.5L0,4.5L3.5,4.5L3.5,7.0046C3.5,7.2782 3.714,7.5 4.0047,7.5L4.9953,7.5C5.274,7.5 5.5,7.2842 5.5,7.0046L5.5,4.5L9.0095,4.5C9.2804,4.5 9.5,4.286 9.5,3.9953L9.5,3.0047C9.5,2.726 9.2849,2.5 9.0095,2.5L5.5,2.5L5.5,0L3.5,0L3.5,2.5L0,2.5Z" fill-rule="evenodd" fill="url(#g6)" />
+  <path d="M0,3l4,0l0,-0.5l0,-2.5l1,0l0,2.5l0,0.5l4,0l0,1l-4,0l0,0.5l0,2.5l-1,0l0,-2.5l0,-0.5l-4,0z" fill-rule="evenodd" fill="url(#g7)" />
+</svg>
+

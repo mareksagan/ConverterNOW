@@ -1,58 +1,161 @@
 {
   "@@locale": "nl",
-
-  "appName": "Converter NOW",
-  "reorder": "Opnieuw ordenen",
-  "myOrdering": "Mijn ordening",
-  "about": "Over",
-  "lastCurrenciesUpdate": "Laatste update: ",
-  "today": "vandaag",
-  "enableDarkTheme": "Schakel naar donker thema",
-  "settings": "Instellingen",
-  "menu": "Menu",
-  "donation": "Doe een donatie",
-  "buyMeACoffee": "Trakteer me op een koffie'tje",
-  "donationDialog": "Hoi, zoals je misschien weet is deze app gratis en open source. Dat betekent dat je de app gratis kunt gebruiken en de broncode kunt kopiëren/bewerken. De ontwikkelaar maakt hier geen winst op, maar als je gelooft in dit project en nieuwe functies zou willen zien, overweeg me dan op een koffie'tje te trakteren.",
-  "drawerLogo": "Lade logo",
-  "rateApp": "Beoordeel de app",
-  "repoGithub": "Open de repo op GitHub",
-  "contributeTranslating": "Draag bij aan het vertalen van de app",
-  "search": "Zoekn",
-  "clearAll": "Wis alles",
-  "calculator": "Rekenmachine",
-  "significantFigures": "Significante getallen",
-  "removeTrailingZeros": "Verwijder de laatste nullen",
-  "longPressAdvice": "Houd ingedrukt om te verplaatsen",
-  "back": "Terug",
-  "save": "Opslaan",
-  "invalidCharacters": "Fout, ongeldige karakters",
-  "theme": "Thema",
-  "dark": "Donker",
-  "light": "Licht",
-  "system": "Systeem standaard",
-  "pureBlackTheme": "AMOLED donker thema",
-  "@pureBlackTheme": {
-    "description": "Revise this translation"
-  },
-  "propertySelectionOnStartup": "Property selection on startup",
-  "@propertySelectionOnStartup": {
+  "@appearance": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "propertySelectionOnStartupSubtitle": "Show the property selection page on startup on small screen devices",
-  "@propertySelectionOnStartupSubtitle": {
+  "@backupAndRestore": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "copy": "Kopiëren",
-  "paste": "Paste",
+  "@britishThermalUnit": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@cancel": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@centiliters": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@clearSettings": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@confirmationClear": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@conversions": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@deciliters": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@density": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@exportSettings": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@exportSuccess": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@findOutMore": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@gigaPascal": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@gramsPerCubicCentimeter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@gramsPerDeciliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@gramsPerLiter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@gramsPerMilliliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@hiddenUnits": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@hideUnits": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@importError": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@importSettings": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@importSuccess": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@kiloPascal": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@kilobit": {
+    "description": "Revise this translation to also include the 'decimal' part"
+  },
+  "@kilogramsPerCubicMeter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@kilogramsPerLiter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@kilojoules": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@ksi": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@megaPascal": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@microgramsPerDeciliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@microgramsPerLiter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@microgramsPerMilliliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@microliters": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@milligramsPerCubicCentimeter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@milligramsPerCubicMeter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@milligramsPerDeciliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@milligramsPerLiter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@milligramsPerMilliliter": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@minutesPerMile": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@ok": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
   "@paste": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "more": "Meer",
-  "language": "Taal",
-  "reorderProperties": "Meetwaarde opnieuw ordenen",
-  "reorderUnits": "Eenheden opnieuw ordenen",
-  "chooseProperty": "Kies een property",
-  "reorderProperty": "Herorden {property}",
+  "@pickColor": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@poundForceInch": {
+    "description": "Not yet translated. Once done, remove this comment."
+  },
+  "@poundsPerCubicFeet": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@poundsPerCubicInches": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@problemImportFile": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@propertySelectionOnStartup": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@propertySelectionOnStartupSubtitle": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@pureBlackTheme": {
+    "description": "Revise this translation"
+  },
+  "@reason": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@relatedSettings": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
   "@reorderProperty": {
     "placeholders": {
       "property": {
@@ -61,53 +164,36 @@
       }
     }
   },
-  "otherPlatforms": "Converter NOW voor andere platforms",
-  "sourceCode": "Broncode",
-  "undoClearAllMessage": "Alles gewist. Ongedaan maken?",
-  "undo": "Ongedaan maken",
-  "routeError1": "Deze pagina lijkt niet te bestaan",
-  "routeError2": "Ga terug naar de eerste pagina",
-  "ok": "Ok",
-  "@ok": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "revokeInternetAccess": "Revoke internet access",
   "@revokeInternetAccess": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "revokeInternetExplanation": "This app uses the internet to update currency exchange rates once a day upon opening. This download only requires a few kilobytes. However, if you don't need this feature, you can prevent the app from accessing the internet by enabling this option.",
   "@revokeInternetExplanation": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "useDeviceColor": "Use device color",
-  "@useDeviceColor": {
+  "@selectAll": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "pickColor": "Pick a color",
-  "@pickColor": {
+  "@speedOfLight": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "themeColor": "Theme color",
+  "@teaspoonsMetric": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
+  "@teaspoonsUs": {
+    "description": "Not yet translated. Once done, remove this comment"
+  },
   "@themeColor": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "appearance": "Appearance",
-  "@appearance": {
+  "@unselectAll": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "conversions": "Conversions",
-  "@conversions": {
+  "@usQuarts": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "findOutMore": "Find out more",
-  "@findOutMore": {
+  "@useDeviceColor": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "hideUnits": "Hide units",
-  "@hideUnits": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "visibleUnits": "{property}, visible units",
   "@visibleUnits": {
     "description": "Not yet translated. Once done, remove this comment",
     "placeholders": {
@@ -117,494 +203,528 @@
       }
     }
   },
-  "hiddenUnits": "Hidden units",
-  "@hiddenUnits": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "selectAll": "Select all",
-  "@selectAll": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "unselectAll": "Unselect all",
-  "@unselectAll": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "backupAndRestore": "Backup & Restore",
-  "@backupAndRestore": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "exportSettings": "Export settings",
-  "@exportSettings": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "importSettings": "Import settings",
-  "@importSettings": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "clearSettings": "Clear all settings",
-  "@clearSettings": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "exportSuccess": "Settings exported successfully",
-  "@exportSuccess": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "importSuccess": "Settings imported successfully",
-  "@importSuccess": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "problemImportFile": "There was a problem importing the file",
-  "@problemImportFile": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "relatedSettings": "Related settings",
-  "@relatedSettings": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "reason": "Reason",
-  "@reason": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "importError": "Import Error",
-  "@importError": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "confirmationClear": "Are you sure you want to clear all settings? This action cannot be undone.",
-  "@confirmationClear": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "cancel": "Cancel",
-  "@cancel": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "length": "Lengte",
-  "area": "Oppervlak",
-  "volume": "Inhoud",
-  "time": "Tijd",
-  "temperature": "Temperatuur",
-  "speed": "Snelheid",
-  "siPrefixes": "SI Eenheden",
-  "mass": "Massa",
-  "pressure": "Druk",
-  "energy": "Energie",
-  "angles": "Hoeken",
-  "currencies": "Valuta",
-  "shoeSize": "Shoenmaten",
-  "digitalData": "Digitale data",
-  "power": "Vermogen",
-  "density": "Density",
-  "@density": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "torque": "Koppel",
-  "force": "Kracht",
-  "fuelConsumption": "Brandstof verbruik",
-  "numeralSystems": "Numerieke systemen",
-
-  "meters": "Meter",
-  "centimeters": "Centimeter",
-  "inches": "Inches",
-  "feet": "Voet",
-  "nauticalMiles": "Britse zeemijl",
-  "yards": "Yards",
-  "miles": "Mijl",
-  "millimeters": "Millimeter",
-  "micrometers": "Micrometer",
-  "nanometers": "Nanometer",
-  "angstroms": "Ångström",
-  "picometers": "Picometer",
-  "kilometers": "Kilometer",
-  "astronomicalUnits": "Astronomische Eenheden",
-  "lightYears": "Lichtjaar",
-  "parsec": "Parsec",
-  "mils": "Mils",
-  "feetUsSurvey": "Voet (Amerikaans)",
-
-  "squareMeters": "Vierkante Meter",
-  "squareCentimeters": "Vierkante Centimeter",
-  "squareInches": "Vierkante Inch",
-  "squareFeet": "Vierkante Voet",
-  "squareMiles": "Vierkante Mijl",
-  "squareYard": "Vierkante Yard",
-  "squareMillimeters": "Vierkante Millimeter",
-  "squareKilometers": "Vierkante Kilometer",
-  "hectares": "Hectare",
-  "acres": "Acre",
-  "are": "Are",
-  "squareFeetUsSurvey": "Vierkante Voet (Amerikaans)",
-
-  "gramsPerCubicCentimeter": "Grams per Cubic Centimeter",
-  "@gramsPerCubicCentimeter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "gramsPerLiter": "Grams per Liter",
-  "@gramsPerLiter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "gramsPerMilliliter": "Grams per Milliliter",
-  "@gramsPerMilliliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "gramsPerDeciliter": "Grams per Deciliter",
-  "@gramsPerDeciliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "kilogramsPerLiter": "Kilograms per Liter",
-  "@kilogramsPerLiter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "kilogramsPerCubicMeter": "Kilograms per Cubic Meter",
-  "@kilogramsPerCubicMeter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "milligramsPerLiter": "Milligrams per Liter",
-  "@milligramsPerLiter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "milligramsPerDeciliter": "Milligrams per Deciliter",
-  "@milligramsPerDeciliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "milligramsPerMilliliter": "Milligrams per Milliliter",
-  "@milligramsPerMilliliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "milligramsPerCubicMeter": "Milligrams per Cubic Meter",
-  "@milligramsPerCubicMeter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "milligramsPerCubicCentimeter": "Milligrams per Cubic Centimeter",
-  "@milligramsPerCubicCentimeter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "microgramsPerLiter": "Micrograms per Liter",
-  "@microgramsPerLiter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "microgramsPerDeciliter": "Micrograms per Deciliter",
-  "@microgramsPerDeciliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "microgramsPerMilliliter": "Micrograms per Milliliter",
-  "@microgramsPerMilliliter": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "poundsPerCubicInches": "Pounds per Cubic Inches",
-  "@poundsPerCubicInches": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "poundsPerCubicFeet": "Pounds per Cubic Feet",
-  "@poundsPerCubicFeet": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "cubicMeters": "Kubieke Meter",
-  "liters": "Liters",
-  "imperialGallons": "Britse Gallon",
-  "usGallons": "Amerikaanse Gallon",
-  "imperialPints": "Britse Pint",
-  "usPints": "Amerikaanse Pint",
-  "milliliters": "Milliliter",
-  "tablespoonUs": "Eetlepel",
-  "tablespoonAustralian": "Australische Eetlepel",
-  "cups": "Kopjes (Cups)",
-  "cubicCentimeters": "Kubieke Centimeter",
-  "cubicFeet": "Kubieke Voet",
-  "cubicInches": "Kubieke Inch",
-  "cubicMillimeters": "Kubieke Millimeter",
-  "imperialFluidOunces": "Britse Vloeibare Ounce",
-  "usFluidOunces": "Amerikaanse Vloeibare Ounce",
-  "imperialGill": "Britse Gill (kwart pint)",
-  "usGill": "Amerikaanse Gill (kwart pint)",
-  "usQuarts": "US Quarts",
-  "@usQuarts": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "microliters": "Microliters",
-  "@microliters": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "deciliters": "Deciliters",
-  "@deciliters": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "centiliters": "Centiliters",
-  "@centiliters": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "teaspoonsUs": "Teaspoons US",
-  "@teaspoonsUs": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "teaspoonsMetric": "Metric teaspoons",
-  "@teaspoonsMetric": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "seconds": "Seconden",
-  "deciseconds": "Deciseconden",
-  "centiseconds": "Centiseconden",
-  "milliseconds": "Milliseconden",
-  "microseconds": "Microseconden",
-  "nanoseconds": "Nanoseconden",
-  "minutes": "Minuten",
-  "hours": "Uren",
-  "days": "Dagen",
-  "weeks": "Weken",
-  "years": "Jaren (365)",
-  "lustrum": "Lustrum",
-  "decades": "Decennia",
-  "centuries": "Eeuwen",
-  "millennium": "Millennia",
-
-  "fahrenheit": "Fahrenheit",
-  "celsius": "Celsius (Centigrade)",
-  "kelvin": "Kelvin",
-  "reamur": "Reamur",
-  "romer": "Rømer",
-  "delisle": "Delisle",
-  "rankine": "Rankine",
-
-  "metersSecond": "Meters per Seconde",
-  "kilometersHour": "Kilometers per Uur",
-  "milesHour": "Mijl per Uur",
-  "knots": "Knopen",
-  "feetSecond": "Voet per Seconde",
-  "minutesPerKilometer": "Minuten per Kilometer",
-  "minutesPerMile": "Minutes per mile",
-  "@minutesPerMile": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "speedOfLight": "Speed of light",
-  "@speedOfLight": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "grams": "Gram",
-  "ettograms": "Ettogram",
-  "kilograms": "Kilogram",
-  "pounds": "Pond",
-  "ounces": "Ons",
-  "quintals": "Quintals",
-  "tonnes": "Ton",
-  "milligrams": "Milligram",
-  "uma": "Unified atomic mass unit",
-  "carats": "Karaat",
-  "centigrams": "Centigram",
-  "pennyweights": "Pennyweights",
-  "troyOunces": "Troy ounce",
-  "stones": "Stones",
-
-  "pascal": "Pascal",
-  "atmosphere": "Atmosfeer",
-  "bar": "Bar",
-  "millibar": "Millibar",
-  "psi": "Pond per Vierkante Inch",
-  "torr": "Torricelli",
-  "hectoPascal": "Hectopascal",
-  "inchesOfMercury": "Inch-Kwikdruk",
-  "kiloPascal": "Kilopascal",
-  "@kiloPascal": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "ksi": "Kilopounds per square inch",
-  "@ksi": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "megaPascal": "Megapascal",
-  "@megaPascal": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "gigaPascal": "Gigapascal",
-  "@gigaPascal": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "joule": "Joule",
-  "calories": "Calorieën",
-  "kilowattHour": "Kilowattuur",
-  "electronvolt": "Electron volt",
-  "footPound": "Voet pond",
-  "kilocalories": "Kilocalorieën",
-  "kilojoules": "Kilojoules",
-  "@kilojoules": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-  "watthour": "Watt hour",
   "@watthour": {
     "description": "Not yet translated. Once done, remove this comment"
   },
-  "britishThermalUnit": "British thermal unit",
-  "@britishThermalUnit": {
-    "description": "Not yet translated. Once done, remove this comment"
-  },
-
-  "degree": "Graden",
-  "minutesDegree": "Minuten",
-  "secondsDegree": "Seconden",
-  "radiansDegree": "Radialen",
-
-  "usd": "Amerikaanse Dollar",
-  "eur": "Euro",
-  "gbp": "Britse Pound",
-  "inr": "Indiase Rupee",
-  "cny": "Chinese Yuan",
-  "jpy": "Japanese Yen",
-  "chf": "Zwitserse Franc",
-  "sek": "Zweedse Krona",
-  "rub": "Russische Roebel",
-  "cad": "Canadese Dollar",
-  "krw": "Zuid-Koreaanse Won",
-  "brl": "Braziliaanse Real",
-  "hkd": "Hong Kong Dollar",
+  "about": "Over",
+  "acres": "Acre",
+  "angles": "Hoeken",
+  "angstroms": "Ångström",
+  "appName": "Converter NOW",
+  "appearance": "Appearance",
+  "are": "Are",
+  "area": "Oppervlak",
+  "astronomicalUnits": "Astronomische Eenheden",
+  "atmosphere": "Atmosfeer",
+  "atto": "Atto-",
   "aud": "Australische Dollar",
-  "nzd": "Nieuw-Zeelandse Dollar",
-  "mxn": "Mexicaanse Peso",
-  "sgd": "Singaporese Dollar",
-  "nok": "Norweegse Krone",
-  "trY": "Turkse Lira",
-  "zar": "Zuid-Afrikaanse Rand",
-  "dkk": "Deense Krone",
-  "pln": "Poolse Złoty",
-  "thb": "Thaise Baht",
-  "myr": "Malaysische Ringgit",
-  "huf": "Hongaarse Forint",
+  "back": "Terug",
+  "backupAndRestore": "Backup & Restore",
+  "bar": "Bar",
+  "base": "Base",
+  "binary": "Binair",
+  "bit": "Bit",
+  "britishThermalUnit": "British thermal unit",
+  "brl": "Braziliaanse Real",
+  "buyMeACoffee": "Trakteer me op een koffie'tje",
+  "byte": "Byte",
+  "cad": "Canadese Dollar",
+  "calculator": "Rekenmachine",
+  "calories": "Calorieën",
+  "cancel": "Cancel",
+  "carats": "Karaat",
+  "celsius": "Celsius (Centigrade)",
+  "centi": "Centi-",
+  "centigrams": "Centigram",
+  "centiliters": "Centiliters",
+  "centimeters": "Centimeter",
+  "centiseconds": "Centiseconden",
+  "centuries": "Eeuwen",
+  "chf": "Zwitserse Franc",
+  "chooseProperty": "Kies een property",
+  "clearAll": "Wis alles",
+  "clearSettings": "Clear all settings",
+  "cny": "Chinese Yuan",
+  "confirmationClear": "Are you sure you want to clear all settings? This action cannot be undone.",
+  "contributeTranslating": "Draag bij aan het vertalen van de app",
+  "conversions": "Conversions",
+  "copy": "Kopiëren",
+  "cubicCentimeters": "Kubieke Centimeter",
+  "cubicFeet": "Kubieke Voet",
+  "cubicInches": "Kubieke Inch",
+  "cubicMeters": "Kubieke Meter",
+  "cubicMillimeters": "Kubieke Millimeter",
+  "cups": "Kopjes (Cups)",
+  "currencies": "Valuta",
   "czk": "Tjechische Koruna",
-  "ils": "Israelische Shekel",
-  "idr": "Indonesische Rupiah",
-  "php": "Filipijnse Peso",
-  "ron": "Roemeense Leu",
-  "isk": "Icelandse Króna",
-  "twd": "Nieuw-Taiwanese Dollar",
-  "mad": "Morokaanse Dirham",
-
+  "dark": "Donker",
+  "days": "Dagen",
+  "deca": "Deca-",
+  "decades": "Decennia",
+  "deci": "Deci-",
+  "deciliters": "Deciliters",
+  "decimal": "Decimaal",
+  "deciseconds": "Deciseconden",
+  "degree": "Graden",
+  "delisle": "Delisle",
+  "density": "Density",
+  "digitalData": "Digitale data",
+  "dkk": "Deense Krone",
+  "donation": "Doe een donatie",
+  "donationDialog": "Hoi, zoals je misschien weet is deze app gratis en open source. Dat betekent dat je de app gratis kunt gebruiken en de broncode kunt kopiëren/bewerken. De ontwikkelaar maakt hier geen winst op, maar als je gelooft in dit project en nieuwe functies zou willen zien, overweeg me dan op een koffie'tje te trakteren.",
+  "drawerLogo": "Lade logo",
+  "dyne": "Dyne",
+  "dyneMeter": "Dynemeter",
+  "electronvolt": "Electron volt",
+  "enableDarkTheme": "Schakel naar donker thema",
+  "energy": "Energie",
+  "ettograms": "Ettogram",
   "euChina": "EU & China",
+  "eur": "Euro",
+  "europeanHorsePower": "Europese Paardenkracht",
+  "exa": "Exa-",
+  "exabit": "Exabit",
+  "exabyte": "Exabyte",
+  "exbibit": "Exbibit",
+  "exbibyte": "Exbibyte",
+  "exportSettings": "Export settings",
+  "exportSuccess": "Settings exported successfully",
+  "fahrenheit": "Fahrenheit",
+  "feet": "Voet",
+  "feetSecond": "Voet per Seconde",
+  "feetUsSurvey": "Voet (Amerikaans)",
+  "femto": "Femto-",
+  "findOutMore": "Find out more",
+  "footPound": "Voet pond",
+  "force": "Kracht",
+  "fuelConsumption": "Brandstof verbruik",
+  "gbp": "Britse Pound",
+  "gibibit": "Gibibit",
+  "gibibyte": "Gibibyte",
+  "giga": "Giga-",
+  "gigaPascal": "Gigapascal",
+  "gigabit": "Gigabit",
+  "gigabyte": "Gigabyte",
+  "gigawatt": "GigaWatt",
+  "grams": "Gram",
+  "gramsPerCubicCentimeter": "Grams per Cubic Centimeter",
+  "gramsPerDeciliter": "Grams per Deciliter",
+  "gramsPerLiter": "Grams per Liter",
+  "gramsPerMilliliter": "Grams per Milliliter",
+  "hectares": "Hectare",
+  "hecto": "Hecto-",
+  "hectoPascal": "Hectopascal",
+  "hexadecimal": "Hexadecimaal",
+  "hiddenUnits": "Hidden units",
+  "hideUnits": "Hide units",
+  "hkd": "Hong Kong Dollar",
+  "hours": "Uren",
+  "huf": "Hongaarse Forint",
+  "idr": "Indonesische Rupiah",
+  "ils": "Israelische Shekel",
+  "imperialFluidOunces": "Britse Vloeibare Ounce",
+  "imperialGallons": "Britse Gallon",
+  "imperialGill": "Britse Gill (kwart pint)",
+  "imperialHorsePower": "Metrische Paardenkracht",
+  "imperialPints": "Britse Pint",
+  "importError": "Import Error",
+  "importSettings": "Import settings",
+  "importSuccess": "Settings imported successfully",
+  "inches": "Inches",
+  "inchesOfMercury": "Inch-Kwikdruk",
+  "inr": "Indiase Rupee",
+  "invalidCharacters": "Fout, ongeldige karakters",
+  "isk": "Icelandse Króna",
+  "japan": "Japan",
+  "joule": "Joule",
+  "jpy": "Japanese Yen",
+  "kelvin": "Kelvin",
+  "kibibit": "Kibibit",
+  "kibibyte": "Kibibyte",
+  "kilo": "Kilo-",
+  "kiloPascal": "Kilopascal",
+  "kilobit": "Kilobit",
+  "kilobyte": "Kilobyte",
+  "kilocalories": "Kilocalorieën",
+  "kilogramForce": "Kilogram-kracht",
+  "kilogramForceMeter": "Kilogram-kracht meter",
+  "kilograms": "Kilogram",
+  "kilogramsPerCubicMeter": "Kilograms per Cubic Meter",
+  "kilogramsPerLiter": "Kilograms per Liter",
+  "kilojoules": "Kilojoules",
+  "kilometers": "Kilometer",
+  "kilometersHour": "Kilometers per Uur",
+  "kilometersLiter": "Kilometer per liter",
+  "kilowatt": "Kilowatt",
+  "kilowattHour": "Kilowattuur",
+  "knots": "Knopen",
+  "krw": "Zuid-Koreaanse Won",
+  "ksi": "Kilopounds per square inch",
+  "language": "Taal",
+  "lastCurrenciesUpdate": "Laatste update: ",
+  "length": "Lengte",
+  "light": "Licht",
+  "lightYears": "Lichtjaar",
+  "liters": "Liters",
+  "liters100km": "Liter per 100 km",
+  "longPressAdvice": "Houd ingedrukt om te verplaatsen",
+  "lustrum": "Lustrum",
+  "mad": "Morokaanse Dirham",
+  "mass": "Massa",
+  "mebibit": "Mebibit",
+  "mebibyte": "Mebibyte",
+  "mega": "Mega-",
+  "megaPascal": "Megapascal",
+  "megabit": "Megabit",
+  "megabyte": "Megabyte",
+  "megawatt": "Megawatt",
+  "menu": "Menu",
+  "meters": "Meter",
+  "metersSecond": "Meters per Seconde",
+  "micro": "Micro-",
+  "microgramsPerDeciliter": "Micrograms per Deciliter",
+  "microgramsPerLiter": "Micrograms per Liter",
+  "microgramsPerMilliliter": "Micrograms per Milliliter",
+  "microliters": "Microliters",
+  "micrometers": "Micrometer",
+  "microseconds": "Microseconden",
+  "miles": "Mijl",
+  "milesHour": "Mijl per Uur",
+  "milesImperialGallon": "Mijl per Britse Gallon",
+  "milesUsGallon": "Mijl per Amerikaanse Gallon",
+  "millennium": "Millennia",
+  "milli": "Milli-",
+  "millibar": "Millibar",
+  "milligrams": "Milligram",
+  "milligramsPerCubicCentimeter": "Milligrams per Cubic Centimeter",
+  "milligramsPerCubicMeter": "Milligrams per Cubic Meter",
+  "milligramsPerDeciliter": "Milligrams per Deciliter",
+  "milligramsPerLiter": "Milligrams per Liter",
+  "milligramsPerMilliliter": "Milligrams per Milliliter",
+  "milliliters": "Milliliter",
+  "millimeters": "Millimeter",
+  "milliseconds": "Milliseconden",
+  "milliwatt": "Milliwatt",
+  "mils": "Mils",
+  "minutes": "Minuten",
+  "minutesDegree": "Minuten",
+  "minutesPerKilometer": "Minuten per Kilometer",
+  "minutesPerMile": "Minutes per mile",
+  "more": "Meer",
+  "mxn": "Mexicaanse Peso",
+  "myOrdering": "Mijn ordening",
+  "myr": "Malaysische Ringgit",
+  "name_aed": "VAE-dirham",
+  "name_afn": "Afghaans afghani",
+  "name_all": "Albanese lek",
+  "name_amd": "Armeense dram",
+  "name_ang": "Antilliaanse gulden",
+  "name_aoa": "Angolese kwanza",
+  "name_ars": "Argentijnse peso",
+  "name_aud": "Australische dollar",
+  "name_awg": "Arubaanse florin",
+  "name_azn": "Azerbeidzjaanse manat",
+  "name_bam": "Bosnische inwisselbare mark",
+  "name_bbd": "Barbadiaanse dollar",
+  "name_bdt": "Bengalese taka",
+  "name_bgn": "Bulgaarse lev",
+  "name_bhd": "Bahreinse dinar",
+  "name_bif": "Burundese frank",
+  "name_bmd": "Bermudiaanse dollar",
+  "name_bnd": "Bruneise dollar",
+  "name_bob": "Boliviaanse boliviano",
+  "name_brl": "Braziliaanse real",
+  "name_bsd": "Bahamaanse dollar",
+  "name_btc": "Bitcoin",
+  "name_btn": "Bhutaanse ngultrum",
+  "name_bwp": "Botswaanse pula",
+  "name_byn": "Wit-Russische roebel",
+  "name_bzd": "Belizaanse dollar",
+  "name_cad": "Canadese dollar",
+  "name_cdf": "Congolese frank",
+  "name_chf": "Zwitserse frank",
+  "name_clf": "Chileense Unidades de fomento",
+  "name_clp": "Chileense peso",
+  "name_cnh": "Chinese renminbi (Buitengaats)",
+  "name_cny": "Chinese renminbi",
+  "name_cop": "Colombiaanse peso",
+  "name_crc": "Costa Ricaanse colon",
+  "name_cuc": "Cubaanse convertibele peso",
+  "name_cup": "Cubaanse peso",
+  "name_cve": "Kaapverdische escudo",
+  "name_czk": "Tsjechische kroon",
+  "name_djf": "Djiboutiaanse frank",
+  "name_dkk": "Deense kroon",
+  "name_dop": "Dominicaanse peso",
+  "name_dzd": "Algerijnse dinar",
+  "name_egp": "Egyptisch pond",
+  "name_ern": "Eritrese nakfa",
+  "name_etb": "Ethiopische birr",
+  "name_eur": "Euro",
+  "name_fjd": "Fiji-dollar",
+  "name_fkp": "Falklandeilands pond",
+  "name_fok": "Faeröerse kroon",
+  "name_gbp": "Brits pond sterling",
+  "name_gel": "Georgische lari",
+  "name_ggp": "Guernsey pond",
+  "name_ghs": "Ghanese cedi",
+  "name_gip": "Gibraltarees pond",
+  "name_gmd": "Gambiaanse dalasi",
+  "name_gnf": "Guineese frank",
+  "name_gtq": "Guatemalaanse quetzal",
+  "name_gyd": "Guyaanse dollar",
+  "name_hkd": "Hongkongse dollar",
+  "name_hnl": "Hondurese lempira",
+  "name_hrk": "Kroatische kuna",
+  "name_htg": "Haïtiaanse gourde",
+  "name_huf": "Hongaarse forint",
+  "name_idr": "Indonesische roepia",
+  "name_ils": "Nieuwe Israëlische sjekel",
+  "name_imp": "Manx pond",
+  "name_inr": "Indiase roepie",
+  "name_iqd": "Iraakse dinar",
+  "name_irr": "Iraanse rial",
+  "name_isk": "Ijslandse kroon",
+  "name_jep": "Jersey pond",
+  "name_jmd": "Jamaicaanse dollar",
+  "name_jod": "Jordaanse dinar",
+  "name_jpy": "Japanse yen",
+  "name_kes": "Keniaanse shilling",
+  "name_kgs": "Kirgizische som",
+  "name_khr": "Cambodjaanse riel",
+  "name_kmf": "Comorese frank",
+  "name_kpw": "Noord-Koreaanse won",
+  "name_krw": "Zuid-Koreaanse won",
+  "name_kwd": "Koeweitse dinar",
+  "name_kyd": "Kaaimaneilandse dollar",
+  "name_kzt": "Kazachse tenge",
+  "name_lak": "Laotiaanse kip",
+  "name_lbp": "Libanees pond",
+  "name_lkr": "Sri Lankaanse roepie",
+  "name_lrd": "Liberiaanse dollar",
+  "name_lsl": "Lesothaanse loti",
+  "name_lyd": "Libische dinar",
+  "name_mad": "Marokkaanse dirham",
+  "name_mdl": "Moldavische leu",
+  "name_mga": "Malagassische ariary",
+  "name_mkd": "Macedonische denar",
+  "name_mmk": "Myanmarese kyat",
+  "name_mnt": "Mongolische tugrik",
+  "name_mop": "Macause pataca",
+  "name_mro": "Mauritaanse ouguiya (pre-2018)",
+  "name_mru": "Mauritaanse ouguiya",
+  "name_mur": "Mauritiaanse roepie",
+  "name_mvr": "Maldivische rufiyaa",
+  "name_mwk": "Malawische kwacha",
+  "name_mxn": "Mexicaanse peso",
+  "name_myr": "Maleisische ringgit",
+  "name_mzn": "Mozambikaanse metical",
+  "name_nad": "Namibische dollar",
+  "name_ngn": "Nigeriaanse naira",
+  "name_nio": "Nicaraguaanse córdoba Oro",
+  "name_nok": "Noorse kroon",
+  "name_npr": "Nepalese roepie",
+  "name_nzd": "Nieuw-Zeelandse dollar",
+  "name_omr": "Omaanse rial",
+  "name_pab": "Panamese balboa",
+  "name_pen": "Nieuwe Peruviaanse sol",
+  "name_pgk": "Papoease kina",
+  "name_php": "Filipijnse peso",
+  "name_pkr": "Pakistaanse roepie",
+  "name_pln": "Poolse zloty",
+  "name_pyg": "Paraguayaanse guaraní",
+  "name_qar": "Qatarese rial",
+  "name_ron": "Roemeense leu",
+  "name_rsd": "Servische dinar",
+  "name_rub": "Russische roebel",
+  "name_rwf": "Rwandese frank",
+  "name_sar": "Saoedi-Arabische riyal",
+  "name_sbd": "Salomon-dollar",
+  "name_scr": "Seychelse roepie",
+  "name_sdg": "Soedanees pond",
+  "name_sek": "Zweedse kroon",
+  "name_sgd": "Singaporese dollar",
+  "name_shp": "Sint-Heleens pond",
+  "name_sle": "Sierra Leoonse leone",
+  "name_sll": "Sierra Leoonse leone (pre-07/2022)",
+  "name_sos": "Somalische shilling",
+  "name_srd": "Surinaamse dollar",
+  "name_ssp": "Zuid-Soedanees pond",
+  "name_std": "São Tomé en Principe dobra (1977–2017)",
+  "name_stn": "Santomese dobra",
+  "name_svc": "Salvadoraanse colon",
+  "name_syp": "Syrisch pond",
+  "name_szl": "Swazische lilangeni",
+  "name_thb": "Thaise baht",
+  "name_tjs": "Tadzjiekse somoni",
+  "name_tmt": "Turkmeense manat",
+  "name_tnd": "Tunesische dinar",
+  "name_top": "Tongaanse pa\\'anga",
+  "name_try": "Turkse lira",
+  "name_ttd": "Trinidad en Tobago dollar",
+  "name_twd": "Nieuwe Taiwanese dollar",
+  "name_tzs": "Tanzaniaanse shilling",
+  "name_uah": "Oekraïense grivna",
+  "name_ugx": "Oegandese shilling",
+  "name_usd": "Amerikaanse dollar",
+  "name_uyu": "Uruguayaanse peso",
+  "name_uzs": "Oezbeekse sum",
+  "name_vef": "Venezolaanse bolívar fuerte (oud)",
+  "name_ves": "Venezolaanse bolívar soberano",
+  "name_vnd": "Vietnamese dong",
+  "name_vuv": "Vanuatuaanse vatu",
+  "name_wst": "Samoaanse tala",
+  "name_xaf": "CFA-frank BEAC",
+  "name_xag": "Zilver ons",
+  "name_xau": "Goud ons",
+  "name_xcd": "Oost-Caribische dollar",
+  "name_xdr": "Speciale trekkingsrechten (IMF)",
+  "name_xof": "CFA-frank BCEAO",
+  "name_xpd": "Palladium ons",
+  "name_xpf": "CFP-frank",
+  "name_xpt": "Platina ons",
+  "name_yer": "Jemenitische rial",
+  "name_zar": "Zuid-Afrikaanse rand",
+  "name_zmw": "Zambiaanse kwacha",
+  "name_zwl": "Zimbabwaanse dollar",
+  "nano": "Nano-",
+  "nanometers": "Nanometer",
+  "nanoseconds": "Nanoseconden",
+  "nauticalMiles": "Britse zeemijl",
+  "newton": "Newton",
+  "newtonMeter": "Newtonmeter",
+  "nibble": "Nibble",
+  "nok": "Norweegse Krone",
+  "numeralSystems": "Numerieke systemen",
+  "nzd": "Nieuw-Zeelandse Dollar",
+  "octal": "Octaal",
+  "ok": "Ok",
+  "otherPlatforms": "Converter NOW voor andere platforms",
+  "ounces": "Ons",
+  "parsec": "Parsec",
+  "pascal": "Pascal",
+  "paste": "Paste",
+  "pebibit": "Pebibit",
+  "pebibyte": "Pebibyte",
+  "pennyweights": "Pennyweights",
+  "peta": "Peta-",
+  "petabit": "Petabit",
+  "petabyte": "Petabyte",
+  "php": "Filipijnse Peso",
+  "pickColor": "Pick a color",
+  "pico": "Pico-",
+  "picometers": "Picometer",
+  "pln": "Poolse Złoty",
+  "poundForce": "Pound-kracht",
+  "poundForceFeet": "Pound-kracht voet",
+  "poundForceInch": "Pound-force inch",
+  "poundal": "Poundal",
+  "poundalMeter": "Poundal meter",
+  "pounds": "Pond",
+  "poundsPerCubicFeet": "Pounds per Cubic Feet",
+  "poundsPerCubicInches": "Pounds per Cubic Inches",
+  "power": "Vermogen",
+  "pressure": "Druk",
+  "problemImportFile": "There was a problem importing the file",
+  "propertySelectionOnStartup": "Property selection on startup",
+  "propertySelectionOnStartupSubtitle": "Show the property selection page on startup on small screen devices",
+  "psi": "Pond per Vierkante Inch",
+  "pureBlackTheme": "AMOLED donker thema",
+  "quintals": "Quintals",
+  "radiansDegree": "Radialen",
+  "rankine": "Rankine",
+  "rateApp": "Beoordeel de app",
+  "reamur": "Reamur",
+  "reason": "Reason",
+  "relatedSettings": "Related settings",
+  "removeTrailingZeros": "Verwijder de laatste nullen",
+  "reorder": "Opnieuw ordenen",
+  "reorderProperties": "Meetwaarde opnieuw ordenen",
+  "reorderProperty": "Herorden {property}",
+  "reorderUnits": "Eenheden opnieuw ordenen",
+  "repoGithub": "Open de repo op GitHub",
+  "revokeInternetAccess": "Revoke internet access",
+  "revokeInternetExplanation": "This app uses the internet to update currency exchange rates once a day upon opening. This download only requires a few kilobytes. However, if you don't need this feature, you can prevent the app from accessing the internet by enabling this option.",
+  "romer": "Rømer",
+  "ron": "Roemeense Leu",
+  "routeError1": "Deze pagina lijkt niet te bestaan",
+  "routeError2": "Ga terug naar de eerste pagina",
+  "rub": "Russische Roebel",
+  "save": "Opslaan",
+  "search": "Zoekn",
+  "seconds": "Seconden",
+  "secondsDegree": "Seconden",
+  "sek": "Zweedse Krona",
+  "selectAll": "Select all",
+  "settings": "Instellingen",
+  "sgd": "Singaporese Dollar",
+  "shoeSize": "Shoenmaten",
+  "siPrefixes": "SI Eenheden",
+  "significantFigures": "Significante getallen",
+  "sourceCode": "Broncode",
+  "speed": "Snelheid",
+  "speedOfLight": "Speed of light",
+  "squareCentimeters": "Vierkante Centimeter",
+  "squareFeet": "Vierkante Voet",
+  "squareFeetUsSurvey": "Vierkante Voet (Amerikaans)",
+  "squareInches": "Vierkante Inch",
+  "squareKilometers": "Vierkante Kilometer",
+  "squareMeters": "Vierkante Meter",
+  "squareMiles": "Vierkante Mijl",
+  "squareMillimeters": "Vierkante Millimeter",
+  "squareYard": "Vierkante Yard",
+  "stones": "Stones",
+  "system": "Systeem standaard",
+  "tablespoonAustralian": "Australische Eetlepel",
+  "tablespoonUs": "Eetlepel",
+  "teaspoonsMetric": "Metric teaspoons",
+  "teaspoonsUs": "Teaspoons US",
+  "tebibit": "Tebibit",
+  "tebibyte": "Tebibyte",
+  "temperature": "Temperatuur",
+  "tera": "Tera-",
+  "terabit": "Terabit",
+  "terabyte": "Terabyte",
+  "thb": "Thaise Baht",
+  "theme": "Thema",
+  "themeColor": "Theme color",
+  "time": "Tijd",
+  "today": "vandaag",
+  "tonnes": "Ton",
+  "torque": "Koppel",
+  "torr": "Torricelli",
+  "trY": "Turkse Lira",
+  "troyOunces": "Troy ounce",
+  "twd": "Nieuw-Taiwanese Dollar",
   "ukIndiaChild": "Groot Brittannië & India - Kind",
   "ukIndiaMan": "Groot Brittanië & India - Man",
   "ukIndiaWoman": "Groot Brittannië & India - Vrouw",
+  "uma": "Unified atomic mass unit",
+  "undo": "Ongedaan maken",
+  "undoClearAllMessage": "Alles gewist. Ongedaan maken?",
+  "unselectAll": "Unselect all",
+  "usFluidOunces": "Amerikaanse Vloeibare Ounce",
+  "usGallons": "Amerikaanse Gallon",
+  "usGill": "Amerikaanse Gill (kwart pint)",
+  "usPints": "Amerikaanse Pint",
+  "usQuarts": "US Quarts",
   "usaCanadaChild": "Verenigde Staten & Canada - Kind",
   "usaCanadaMan": "Verenigde Staten & Canada - Man",
   "usaCanadaWoman": "Verenigde Staten & Canada - Vrouw",
-  "japan": "Japan",
-
+  "usd": "Amerikaanse Dollar",
+  "useDeviceColor": "Use device color",
+  "visibleUnits": "{property}, visible units",
+  "volume": "Inhoud",
   "watt": "Watt",
-  "milliwatt": "Milliwatt",
-  "kilowatt": "Kilowatt",
-  "megawatt": "Megawatt",
-  "gigawatt": "GigaWatt",
-  "europeanHorsePower": "Europese Paardenkracht",
-  "imperialHorsePower": "Metrische Paardenkracht",
-
-  "newton": "Newton",
-  "dyne": "Dyne",
-  "poundForce": "Pound-kracht",
-  "kilogramForce": "Kilogram-kracht",
-  "poundal": "Poundal",
-
-  "newtonMeter": "Newtonmeter",
-  "dyneMeter": "Dynemeter",
-  "poundForceFeet": "Pound-kracht voet",
-  "kilogramForceMeter": "Kilogram-kracht meter",
-  "poundalMeter": "Poundal meter",
-  "poundForceInch": "Pound-force inch",
-  "@poundForceInch": {
-    "description": "Not yet translated. Once done, remove this comment."
-  },
-
-  "kilometersLiter": "Kilometer per liter",
-  "liters100km": "Liter per 100 km",
-  "milesUsGallon": "Mijl per Amerikaanse Gallon",
-  "milesImperialGallon": "Mijl per Britse Gallon",
-
-  "decimal": "Decimaal",
-  "hexadecimal": "Hexadecimaal",
-  "octal": "Octaal",
-  "binary": "Binair",
-
-  "bit": "Bit",
-  "nibble": "Nibble",
-  "kilobit": "Kilobit",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "megabit": "Megabit",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "gigabit": "Gigabit",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "terabit": "Terabit",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "petabit": "Petabit",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "exabit": "Exabit",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "kibibit": "Kibibit",
-  "mebibit": "Mebibit",
-  "gibibit": "Gibibit",
-  "tebibit": "Tebibit",
-  "pebibit": "Pebibit",
-  "exbibit": "Exbibit",
-  "byte": "Byte",
-  "kilobyte": "Kilobyte",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "megabyte": "Megabyte",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "gigabyte": "Gigabyte",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "terabyte": "Terabyte",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "petabyte": "Petabyte",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "exabyte": "Exabyte",
-  "@kilobit": {
-    "description": "Revise this translation to also include the 'decimal' part"
-  },
-  "kibibyte": "Kibibyte",
-  "mebibyte": "Mebibyte",
-  "gibibyte": "Gibibyte",
-  "tebibyte": "Tebibyte",
-  "pebibyte": "Pebibyte",
-  "exbibyte": "Exbibyte",
-
-  "base": "Base",
-  "deca": "Deca-",
-  "hecto": "Hecto-",
-  "kilo": "Kilo-",
-  "mega": "Mega-",
-  "giga": "Giga-",
-  "tera": "Tera-",
-  "peta": "Peta-",
-  "exa": "Exa-",
-  "zetta": "Zetta-",
+  "watthour": "Watt hour",
+  "weeks": "Weken",
+  "yards": "Yards",
+  "years": "Jaren (365)",
+  "yocto": "Yocto-",
   "yotta": "Yotta-",
-  "deci": "Deci-",
-  "centi": "Centi-",
-  "milli": "Milli-",
-  "micro": "Micro-",
-  "nano": "Nano-",
-  "pico": "Pico-",
-  "femto": "Femto-",
-  "atto": "Atto-",
+  "zar": "Zuid-Afrikaanse Rand",
   "zepto": "Zepto-",
-  "yocto": "Yocto-"
+  "zetta": "Zetta-",
+  "name_xcg": "Caribbean Guilder",
+  "name_zig": "Zimbabwe Gold"
 }

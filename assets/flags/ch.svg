@@ -1,7 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
-  <defs/>
-  <path fill="#f00" d="M118.9,194.67 C372.13,32.74 623.69,296.9 881.1,133.32 L881.1,805.32 C752.39,887.13 624.56,860.97 494.87,835.11 C370.94,810.4 245.58,785.69 118.9,866.67 L118.9,194.67"/>
-  <path fill="#fff" d="M261.81,415.5 C419.09,395.59 576.29,479.17 738.19,458.39 L738.19,584.39 C580.88,604.59 423.7,521.02 261.81,541.5 L261.81,415.5"/>
-  <path fill="#fff" d="M428.54,276.56 C475.7,284.62 522.87,295.42 571.46,303.66 L571.46,723.66 C524.3,715.66 477.13,704.87 428.54,696.56 L428.54,276.56"/>
-  <path fill="#1A1A1A" opacity="0.2" d="M118.9,194.67 C372.13,32.74 623.59,296.84 881.1,133.32 L881.1,805.32 C752.34,887.1 624.6,860.98 494.87,835.11 C370.98,810.41 245.53,785.66 118.9,866.67 L118.9,194.67 M150.15,210.47 L150.15,814.97 C382.37,697.24 613.21,908.84 849.85,789.42 L849.85,184.92 C616.34,302.78 385.43,91.23 150.15,210.47"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="21" height="15" viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g0" x1="10.5" y1="0" x2="10.5" y2="15" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+    <linearGradient id="g1" x1="10.5" y1="15" x2="10.5" y2="4.592426E-16" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FF0000" />
+      <stop offset="1" stop-color="#FF3131" />
+    </linearGradient>
+    <linearGradient id="g2" x1="10.5" y1="3" x2="10.5" y2="12" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" />
+      <stop offset="1" stop-color="#F0F0F0" />
+    </linearGradient>
+  </defs>
+  <path d="M0,0h21v15h-21z" fill-rule="evenodd" fill="url(#g0)" />
+  <path d="M0,0h21v15h-21z" fill-rule="evenodd" fill="url(#g1)" />
+  <path d="M9,9L6.2558,9C6.1145,9 6,8.8861 6,8.7442L6,6.2558C6,6.1145 6.1139,6 6.2558,6L9,6L9,3.2558C9,3.1145 9.1139,3 9.2558,3L11.7442,3C11.8855,3 12,3.1139 12,3.2558L12,6L14.7442,6C14.8855,6 15,6.1139 15,6.2558L15,8.7442C15,8.8855 14.8861,9 14.7442,9L12,9L12,11.7442C12,11.8855 11.8861,12 11.7442,12L9.2558,12C9.1145,12 9,11.8861 9,11.7442L9,9Z" fill-rule="evenodd" fill="url(#g2)" />
 </svg>
+
