@@ -236,7 +236,7 @@ String _getLastUpdateString(BuildContext context, String lastUpdate, String prov
   }
 
   final providerName = providerId.isNotEmpty
-      ? getCurrencyProviderById(providerId).name
+      ? getCurrencyProviderById(providerId).initials
       : '';
 
   DateTime lastUpdateCurrencies = DateTime.parse(lastUpdate);
