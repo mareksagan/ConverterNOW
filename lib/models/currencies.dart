@@ -72,7 +72,7 @@ class CurrenciesNotifier extends AsyncNotifier<Currencies> {
     final String currentProviderId =
         ref.watch(currencyProviderIdProvider).value ?? 'inforeuro';
 
-    dPrint(() => '[CurrenciesNotifier] build() provider=$currentProviderId');
+    print('[CurrenciesNotifier] build() provider=$currentProviderId');
 
     // Let's search before if we already have downloaded the exchange rates
     String? lastUpdateDate = pref.getString("lastUpdateCurrenciesDate");
@@ -84,18 +84,19 @@ class CurrenciesNotifier extends AsyncNotifier<Currencies> {
         (lastUpdateDate == null ||
             lastUpdateDate != now ||
             lastProviderId != currentProviderId)) {
-      dPrint(() => '[CurrenciesNotifier] Downloading for $currentProviderId');
+      print('[CurrenciesNotifier] Downloading for $currentProviderId (lastDate=$lastUpdateDate, lastProvider=$lastProviderId, today=$now)');
       return _downloadCurrencies(currentProviderId);
     }
     // If I already have the data of today I just use it, no need of read them
     // from the web
-    dPrint(() => '[CurrenciesNotifier] Reading saved data');
+    print('[CurrenciesNotifier] Reading saved data (lastDate=$lastUpdateDate, lastProvider=$lastProviderId, today=$now)');
     return _readSavedCurrencies();
   }
 
   void forceCurrenciesDownload(String? providerId) async {
     final String currentProviderId = providerId ??
         ref.read(currencyProviderIdProvider).value ?? 'inforeuro';
+    print('[CurrenciesNotifier] forceCurrenciesDownload: $currentProviderId');
     state = AsyncData(await _downloadCurrencies(currentProviderId));
   }
 
@@ -103,6 +104,7 @@ class CurrenciesNotifier extends AsyncNotifier<Currencies> {
     String? lastUpdate = pref.getString('lastUpdateCurrencies');
     String? providerId = pref.getString('lastCurrencyProviderId');
     String? currenciesRead = pref.getString('currenciesRates');
+    print('[CurrenciesNotifier] _readSavedCurrencies: providerId=$providerId, lastUpdate=$lastUpdate, hasData=${currenciesRead != null}');
     if (currenciesRead != null) {
       final saved = Currencies.fromJson(
         currenciesRead,
@@ -114,18 +116,21 @@ class CurrenciesNotifier extends AsyncNotifier<Currencies> {
       final filteredRates = Map<String, double>.fromEntries(
         saved.exchangeRates.entries.where((e) => allowed.contains(e.key)),
       );
-      dPrint(() => '[CurrenciesNotifier] Read ${filteredRates.length} saved currencies for ${providerId ?? 'inforeuro'}');
+      print('[CurrenciesNotifier] Read ${filteredRates.length} saved currencies for ${providerId ?? 'inforeuro'}');
       return saved.copyWith(exchangeRates: filteredRates);
     }
+    print('[CurrenciesNotifier] No saved data found, returning empty Currencies()');
     return Currencies();
   }
 
   /// Updates the currencies exchange rates with the latest values. It will also
   /// update the status at the end (updated or error)
   Future<Currencies> _downloadCurrencies(String providerId) async {
+    print('[CurrenciesNotifier] _downloadCurrencies: $providerId');
     final provider = getCurrencyProviderById(providerId);
     try {
       final rates = await provider.fetchRates();
+      print('[CurrenciesNotifier] fetchRates returned: ${rates != null ? '${rates.length} rates' : 'null'}');
       if (rates != null && rates.isNotEmpty) {
         var lastUpdate = DateFormat("yyyy-MM-ddTHH:mm:ss").format(DateTime.now());
         var lastUpdateDate = DateFormat("yyyy-MM-dd").format(DateTime.now());
@@ -138,19 +143,21 @@ class CurrenciesNotifier extends AsyncNotifier<Currencies> {
             mergedRates[entry.key] = entry.value;
           }
         }
-        pref.setString('currenciesRates', jsonEncode(mergedRates));
-        pref.setString('lastUpdateCurrencies', lastUpdate);
-        pref.setString('lastUpdateCurrenciesDate', lastUpdateDate);
-        pref.setString('lastCurrencyProviderId', providerId);
-        dPrint(() => '[CurrenciesNotifier] Downloaded ${mergedRates.length} currencies for $providerId');
+        await pref.setString('currenciesRates', jsonEncode(mergedRates));
+        await pref.setString('lastUpdateCurrencies', lastUpdate);
+        await pref.setString('lastUpdateCurrenciesDate', lastUpdateDate);
+        await pref.setString('lastCurrencyProviderId', providerId);
+        print('[CurrenciesNotifier] Downloaded ${mergedRates.length} currencies for $providerId');
         return Currencies(
           exchangeRates: mergedRates,
           lastUpdate: lastUpdate,
           providerId: providerId,
         );
       }
-    } catch (e) {
-      dPrint(e.toString);
+      print('[CurrenciesNotifier] fetchRates returned null or empty, falling back to saved data');
+    } catch (e, st) {
+      print('[CurrenciesNotifier] ERROR during download: $e');
+      print('[CurrenciesNotifier] Stack: $st');
     }
     return _readSavedCurrencies();
   }

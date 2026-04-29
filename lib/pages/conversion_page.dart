@@ -230,14 +230,17 @@ class ConversionPage extends ConsumerWidget {
 }
 
 String _getLastUpdateString(BuildContext context, String lastUpdate, String providerId) {
+  print('[LastUpdate] lastUpdate=$lastUpdate, providerId=$providerId');
   final l10n = AppLocalizations.of(context)!;
   if (lastUpdate.isEmpty) {
     return 'Exchange rate not available';
   }
 
-  final providerName = providerId.isNotEmpty
-      ? getCurrencyProviderById(providerId).initials
-      : '';
+  final provider = providerId.isNotEmpty
+      ? getCurrencyProviderById(providerId)
+      : null;
+  final providerName = provider?.initials ?? '';
+  print('[LastUpdate] resolved provider=${provider?.name}, initials=$providerName');
 
   DateTime lastUpdateCurrencies = DateTime.parse(lastUpdate);
   DateTime dateNow = DateTime.now();
