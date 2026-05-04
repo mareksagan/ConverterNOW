@@ -17,6 +17,8 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  # Required for CBVS PDF text extraction (cross-platform zlib)
+  archive: ^4.0.9
   # Various collection utilities
   collection: ^1.19.1
   # App dynamic color theme

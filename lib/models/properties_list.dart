@@ -112,6 +112,7 @@ const Map<String, String> _currenciesSymbols = {
   'PHP': '₱ assets/flags_opti/ph.svg.vec',
   'PKR': '₨ assets/flags_opti/pk.svg.vec',
   'PLN': 'zł assets/flags_opti/pl.svg.vec',
+  'PRB': 'р.',
   'PYG': '₲ assets/flags_opti/py.svg.vec',
   'QAR': 'ر.ق assets/flags_opti/qa.svg.vec',
   'RON': 'lei assets/flags_opti/ro.svg.vec',
@@ -159,6 +160,7 @@ const Map<String, String> _currenciesSymbols = {
   'YER': 'ر.ي assets/flags_opti/ye.svg.vec',
   'ZAR': 'R assets/flags_opti/za.svg.vec',
   'ZIG': 'ZiG',
+  'ZWG': 'ZWG',
   'ZMW': 'ZK assets/flags_opti/zm.svg.vec',
 };
 

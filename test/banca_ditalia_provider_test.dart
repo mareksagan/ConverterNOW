@@ -20,6 +20,6 @@ void main() {
       expect(rates['EUR'], equals(1.0));
       expect(rates.containsKey('USD'), isTrue);
       expect(rates['USD'], greaterThan(0));
-    });
+    }, timeout: const Timeout(Duration(seconds: 60)));
   });
 }

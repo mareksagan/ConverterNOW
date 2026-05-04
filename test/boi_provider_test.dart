@@ -22,6 +22,6 @@ void main() {
       expect(rates.containsKey('ILS'), isTrue);
       expect(rates['USD'], greaterThan(0));
       expect(rates['ILS'], greaterThan(0));
-    });
+    }, timeout: const Timeout(Duration(seconds: 60)));
   });
 }

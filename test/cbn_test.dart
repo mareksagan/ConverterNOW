@@ -22,6 +22,6 @@ void main() {
       expect(rates.containsKey('NGN'), isTrue);
       expect(rates['USD'], greaterThan(0));
       expect(rates['NGN'], greaterThan(0));
-    });
+    }, timeout: const Timeout(Duration(seconds: 60)));
   });
 }

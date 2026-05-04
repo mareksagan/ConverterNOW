@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:archive/archive.dart';
+import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
 import 'package:xml/xml.dart';
@@ -14,9 +16,71 @@ http.Client _createPermissiveClient() {
     ..badCertificateCallback = (cert, host, port) {
       return host == 'tassidicambio.bancaditalia.it' ||
           host == 'api.nbp.pl' ||
-          host == 'static.nbp.pl';
+          host == 'static.nbp.pl' ||
+          host == 'www.bcv.org.ve' ||
+          host == 'www.bcv.cv' ||
+          host == 'www.cbs.sc';
     };
   return IOClient(httpClient);
+}
+
+String _extractPdfText(List<int> bytes) {
+  final buffer = StringBuffer();
+  final pdfStr = latin1.decode(bytes);
+
+  var startIdx = 0;
+  while (true) {
+    final streamPos = pdfStr.indexOf('stream\n', startIdx);
+    if (streamPos == -1) {
+      // Try \r\n variant
+      final streamPos2 = pdfStr.indexOf('stream\r\n', startIdx);
+      if (streamPos2 == -1) break;
+      final dataStart = streamPos2 + 8;
+      final endPos = pdfStr.indexOf('\r\nendstream', dataStart);
+      if (endPos == -1) break;
+      _tryExtractPdfStream(bytes, dataStart, endPos, buffer);
+      startIdx = endPos + 12;
+    } else {
+      final dataStart = streamPos + 7;
+      final endPos = pdfStr.indexOf('\nendstream', dataStart);
+      if (endPos == -1) break;
+      _tryExtractPdfStream(bytes, dataStart, endPos, buffer);
+      startIdx = endPos + 11;
+    }
+  }
+
+  return buffer.toString();
+}
+
+void _tryExtractPdfStream(
+  List<int> bytes,
+  int dataStart,
+  int dataEnd,
+  StringBuffer buffer,
+) {
+  try {
+    final streamBytes = bytes.sublist(dataStart, dataEnd);
+    final decompressed = const ZLibDecoder().decodeBytes(streamBytes);
+    final decodedStr = latin1.decode(decompressed);
+
+    // Extract text from TJ array operators: [(s1)(s2)] TJ
+    final tjPattern = RegExp(r'\[([^\]]*)\]\s*TJ', dotAll: true);
+    for (final match in tjPattern.allMatches(decodedStr)) {
+      final arr = match.group(1)!;
+      final strPattern = RegExp(r'\(([^)]*)\)');
+      final pieces = <String>[];
+      for (final strMatch in strPattern.allMatches(arr)) {
+        pieces.add(strMatch.group(1)!);
+      }
+      final combined = pieces.join();
+      if (combined.trim().isNotEmpty) {
+        buffer.write(combined);
+        buffer.write(' ');
+      }
+    }
+  } catch (_) {
+    // Not a zlib stream or parsing error – ignore
+  }
 }
 
 abstract class CurrencyProvider {
@@ -291,6 +355,82 @@ class BankOfCanadaProvider implements CurrencyProvider {
     'AUD', 'BRL', 'CHF', 'CNY', 'EUR', 'GBP', 'HKD', 'IDR', 'INR', 'JPY',
     'KRW', 'MXN', 'NOK', 'NZD', 'PEN', 'RUB', 'SAR', 'SEK', 'SGD', 'TRY',
     'TWD', 'USD', 'ZAR',
+  ];
+}
+
+class BermudaCustomsProvider implements CurrencyProvider {
+  @override
+  String get id => 'bermuda_customs';
+
+  @override
+  String get name => 'Bermuda Customs';
+
+  @override
+  String get initials => 'BMD';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final response = await http.get(
+        Uri.parse('https://www.gov.bm/weekly-exchange-rates-importers'),
+      ).timeout(const Duration(seconds: 15));
+      if (response.statusCode != 200) return null;
+      return parseBermudaCustomsHtml(response.body);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseBermudaCustomsHtml(String html) {
+    // Find the first exchange-rate table (most recent month is first).
+    final tableRegExp = RegExp(
+      r'<table[^>]*>(.*?)</table>',
+      caseSensitive: false,
+      dotAll: true,
+    );
+
+    String? tableHtml;
+    for (final match in tableRegExp.allMatches(html)) {
+      final candidate = match.group(1)!;
+      if (candidate.contains('U.S. Dollar')) {
+        tableHtml = candidate;
+        break;
+      }
+    }
+    if (tableHtml == null) return null;
+
+    final rawRates = <String, double>{};
+
+    // Each row: Currency name (ISO) | first week rate | ...
+    final rowRegExp = RegExp(
+      r'<tr>\s*<td>([^<]+)</td>\s*<td>([0-9.]+)</td>',
+      caseSensitive: false,
+    );
+
+    for (final match in rowRegExp.allMatches(tableHtml)) {
+      final cellText = match.group(1)!.trim();
+      final rate = double.tryParse(match.group(2)!);
+      if (rate == null || rate <= 0) continue;
+
+      final isoMatches = RegExp(r'([A-Z]{3})').allMatches(cellText);
+      if (isoMatches.isEmpty) continue;
+      final currency = isoMatches.last.group(1)!;
+
+      rawRates[currency] = rate;
+    }
+
+    if (!rawRates.containsKey('EUR')) return null;
+
+    // Rates are quoted as BMD per unit of foreign currency.
+    rawRates['BMD'] = 1.0;
+    return _normalizeToEurBase(rawRates);
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AUD', 'BMD', 'CAD', 'CHF', 'DKK', 'EUR', 'GBP', 'HKD', 'JMD', 'JPY',
+    'NOK', 'NZD', 'SEK', 'SGD', 'USD',
   ];
 }
 
@@ -1550,6 +1690,105 @@ class TcmbProvider implements CurrencyProvider {
   ];
 }
 
+class BccCongoProvider implements CurrencyProvider {
+  @override
+  String get id => 'bcc_congo';
+
+  @override
+  String get name => 'Banque Centrale du Congo';
+
+  @override
+  String get initials => 'BCC';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+          'https://www.bcc.cd/operations-et-marches/domaine-operationnel/operations-de-change/cours-de-change',
+        ),
+      ).timeout(const Duration(seconds: 15));
+      if (response.statusCode != 200) return null;
+      return parseBccCongoHtml(response.body);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseBccCongoHtml(String html) {
+    // Remove HTML comments to avoid matching commented-out cells
+    final commentRegExp = RegExp(r'<!--.*?-->', dotAll: true);
+    final cleanHtml = html.replaceAll(commentRegExp, '');
+
+    // Find the first exchange-rate table
+    final tableRegExp = RegExp(
+      r'<table[^>]*class="table"[^>]*>(.*?)<\/table>',
+      caseSensitive: false,
+      dotAll: true,
+    );
+
+    String? tableHtml;
+    for (final match in tableRegExp.allMatches(cleanHtml)) {
+      final candidate = match.group(1)!;
+      if (candidate.contains('<th>Code</th>')) {
+        tableHtml = candidate;
+        break;
+      }
+    }
+    if (tableHtml == null) return null;
+
+    final rawRates = <String, double>{};
+
+    final rowRegExp = RegExp(
+      r'<tr[^>]*>(.*?)<\/tr>',
+      caseSensitive: false,
+      dotAll: true,
+    );
+
+    final cellRegExp = RegExp(
+      r'<td[^>]*>(.*?)<\/td>',
+      caseSensitive: false,
+      dotAll: true,
+    );
+
+    for (final rowMatch in rowRegExp.allMatches(tableHtml)) {
+      final row = rowMatch.group(1)!;
+      final cells = cellRegExp.allMatches(row).map((m) {
+        var text = m.group(1)!.trim();
+        text = text.replaceAll(RegExp(r'<[^>]*>'), '').trim();
+        return text;
+      }).toList();
+
+      if (cells.length < 3) continue;
+
+      final code = cells[0];
+      final rateStr = cells[2];
+
+      if (!RegExp(r'^[A-Z]{3}$').hasMatch(code)) continue;
+
+      // French number format: spaces as thousand separators, comma as decimal
+      final normalizedRateStr = rateStr.replaceAll(' ', '').replaceAll(',', '.');
+      final rate = double.tryParse(normalizedRateStr);
+      if (rate == null || rate <= 0) continue;
+
+      rawRates[code] = rate;
+    }
+
+    if (!rawRates.containsKey('EUR')) return null;
+
+    // Rates are quoted as CDF per unit of foreign currency
+    rawRates['CDF'] = 1.0;
+    return _normalizeToEurBase(rawRates);
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AOA', 'AUD', 'BIF', 'CAD', 'CHF', 'CNY', 'CDF', 'EUR', 'GBP', 'JPY',
+    'RWF', 'TZS', 'UGX', 'USD', 'XAF', 'XDR', 'ZAR', 'ZMW',
+  ];
+}
+
 class BccProvider implements CurrencyProvider {
   @override
   String get id => 'bcc';
@@ -2217,6 +2456,112 @@ class CbbhProvider implements CurrencyProvider {
   ];
 }
 
+class CbarProvider implements CurrencyProvider {
+  @override
+  String get id => 'cbar';
+
+  @override
+  String get name => 'Central Bank of Azerbaijan';
+
+  @override
+  String get initials => 'CBAR';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    print('[CBAR] Starting fetchRates()');
+    try {
+      final now = DateTime.now();
+      for (var i = 0; i < 7; i++) {
+        final date = now.subtract(Duration(days: i));
+        final dateStr =
+            '${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}.${date.year}';
+
+        final response = await http.get(
+          Uri.http('www.cbar.az', '/currencies/$dateStr.xml'),
+        ).timeout(const Duration(seconds: 30));
+
+        print('[CBAR] Response status: ${response.statusCode}');
+
+        if (response.statusCode == 200) {
+          final rawRates = parseCbarXml(response.body);
+          if (rawRates == null || rawRates.isEmpty) {
+            print('[CBAR] ERROR: parseCbarXml returned null or empty');
+            continue;
+          }
+
+          // AZN itself
+          rawRates['AZN'] = 1.0;
+
+          final normalized = _normalizeToEurBase(rawRates);
+          print('[CBAR] Normalized rates count: ${normalized.length}');
+          return normalized;
+        }
+      }
+      print('[CBAR] ERROR: statusCode != 200 after 7 days');
+    } on TimeoutException catch (e) {
+      print('[CBAR] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[CBAR] ERROR: $e');
+      print('[CBAR] Stack: $st');
+    }
+    return null;
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseCbarXml(String xml) {
+    try {
+      final document = XmlDocument.parse(xml);
+      final rawRates = <String, double>{};
+
+      // Find the foreign-currencies ValType
+      for (final valType in document.findAllElements('ValType')) {
+        final typeAttr = valType.getAttribute('Type');
+        if (typeAttr == null || !typeAttr.toLowerCase().contains('xarici')) {
+          continue;
+        }
+
+        for (final valute in valType.findElements('Valute')) {
+          final code = valute.getAttribute('Code');
+          final nominalStr = valute.findElements('Nominal').firstOrNull?.innerText;
+          final valueStr = valute.findElements('Value').firstOrNull?.innerText;
+
+          if (code == null || valueStr == null) continue;
+
+          // Skip precious metals (sometimes mixed in)
+          if (code == 'XAU' || code == 'XAG' || code == 'XPT' || code == 'XPD') {
+            continue;
+          }
+
+          // Parse nominal (may contain text like "100" or "1 t.u.")
+          final nominalClean = nominalStr?.replaceAll(RegExp(r'[^0-9]'), '');
+          final nominal = int.tryParse(nominalClean ?? '1') ?? 1;
+          if (nominal == 0) continue;
+
+          final value = double.tryParse(valueStr);
+          if (value == null || value == 0) continue;
+
+          // Rate is AZN per <nominal> units of foreign currency
+          rawRates[code] = value / nominal;
+        }
+      }
+
+      if (rawRates.isEmpty) return null;
+      return rawRates;
+    } catch (e) {
+      print('[CBAR] ERROR parsing XML: $e');
+      return null;
+    }
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AED', 'AUD', 'AZN', 'BYN', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'EUR',
+    'GBP', 'GEL', 'HKD', 'HUF', 'ILS', 'INR', 'JPY', 'KGS', 'KRW', 'KWD',
+    'KZT', 'MDL', 'NOK', 'NZD', 'PKR', 'PLN', 'QAR', 'RON', 'RUB', 'RSD',
+    'SEK', 'SGD', 'SAR', 'SDR', 'TRY', 'TMT', 'UAH', 'USD', 'UZS',
+  ];
+}
+
 class CbbProvider implements CurrencyProvider {
   @override
   String get id => 'cbb';
@@ -2624,6 +2969,126 @@ class NrbProvider implements CurrencyProvider {
     'AED', 'AUD', 'BHD', 'CAD', 'CHF', 'CNY', 'DKK', 'EUR', 'GBP', 'HKD',
     'INR', 'JPY', 'KRW', 'KWD', 'MYR', 'NPR', 'OMR', 'QAR', 'SAR', 'SEK',
     'SGD', 'THB', 'USD',
+  ];
+}
+
+class BcpProvider implements CurrencyProvider {
+  @override
+  String get id => 'bcp';
+
+  @override
+  String get name => 'Banco Central del Paraguay';
+
+  @override
+  String get initials => 'BCP';
+
+  static final _nameToIso = <String, String>{
+    'DÓLAR ESTADOUNIDENSE': 'USD',
+    'YEN JAPONÉS': 'JPY',
+    'LIBRA ESTERLINA': 'GBP',
+    'FRANCO SUIZO': 'CHF',
+    'CORONA SUECA': 'SEK',
+    'CORONA DANESA': 'DKK',
+    'CORONA NORUEGA': 'NOK',
+    'REAL BRASILEÑO': 'BRL',
+    'PESO ARGENTINO': 'ARS',
+    'DÓLAR CANADIENSE': 'CAD',
+    'RAND SUDAFRICANO': 'ZAR',
+    'DERECHOS ESPECIALES DE GIRO': 'XDR',
+    'ONZA DE ORO': 'XAU',
+    'PESO CHILENO': 'CLP',
+    'EURO': 'EUR',
+    'PESO URUGUAYO': 'UYU',
+    'DÓLAR AUSTRALIANO': 'AUD',
+    'YUAN RENMINBI DE CHINA': 'CNY',
+    'DÓLAR DE SINGAPUR': 'SGD',
+    'BOLIVIANO': 'BOB',
+    'SOL PERUANO': 'PEN',
+    'DÓLAR NEOZELANDÉS': 'NZD',
+    'PESO MEXICANO': 'MXN',
+    'PESO COLOMBIANO': 'COP',
+    'DÓLAR TAIWANÉS': 'TWD',
+    'DIRHAM DE LOS EMIRATOS ÁRABES UNIDOS': 'AED',
+  };
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    print('[BCP] Starting fetchRates()');
+    try {
+      const url =
+          'https://www.bcp.gov.py/webapps/web/cotizacion/monedas/pdf';
+      final response = await http
+          .get(Uri.parse(url))
+          .timeout(const Duration(seconds: 15));
+
+      if (response.statusCode == 200 &&
+          response.bodyBytes.length > 4 &&
+          String.fromCharCodes(response.bodyBytes.sublist(0, 4)) == '%PDF') {
+        print('[BCP] Got PDF');
+        final text = _extractPdfText(response.bodyBytes);
+        final rawRates = parseBcpPdf(text);
+        if (rawRates == null || rawRates.isEmpty) {
+          print('[BCP] ERROR: parseBcpPdf returned null or empty');
+          return null;
+        }
+
+        // PYG itself
+        rawRates['PYG'] = 1.0;
+
+        final normalized = _normalizeToEurBase(rawRates);
+        print('[BCP] Normalized rates count: ${normalized.length}');
+        return normalized;
+      }
+      print('[BCP] ERROR: statusCode != 200 or not a PDF');
+    } on TimeoutException catch (e) {
+      print('[BCP] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[BCP] ERROR: $e');
+      print('[BCP] Stack: $st');
+    }
+    return null;
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseBcpPdf(String text) {
+    final rawRates = <String, double>{};
+
+    // For each currency name, find its position in the text and then
+    // locate the next two numeric tokens after it.
+    for (final entry in _nameToIso.entries) {
+      final name = entry.key;
+      final iso = entry.value;
+      if (iso == 'XAU') continue; // skip gold
+
+      final idx = text.toUpperCase().indexOf(name.toUpperCase());
+      if (idx == -1) continue;
+
+      // Search forward from the end of the currency name for numbers
+      final tail = text.substring(idx + name.length);
+      final numberRegex = RegExp(r'[0-9.,]+');
+      final numbers = numberRegex.allMatches(tail).toList();
+      if (numbers.length < 2) continue;
+
+      // The first two numbers after the currency name are rate2 and rate3
+      final rate3Str = numbers[1].group(0)!;
+      // Convert European number format (1.234,56 → 1234.56)
+      final rate3 = double.tryParse(
+        rate3Str.replaceAll('.', '').replaceAll(',', '.'),
+      );
+      if (rate3 == null || rate3 == 0) continue;
+
+      rawRates[iso] = rate3;
+    }
+
+    if (rawRates.isEmpty) return null;
+    return rawRates;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AED', 'ARS', 'AUD', 'BOB', 'BRL', 'CAD', 'CHF', 'CLP', 'CNY', 'COP',
+    'DKK', 'EUR', 'GBP', 'JPY', 'MXN', 'NOK', 'NZD', 'PEN', 'PYG', 'SEK',
+    'SGD', 'TWD', 'USD', 'UYU', 'XDR', 'ZAR',
   ];
 }
 
@@ -3727,47 +4192,4780 @@ class BpstatProvider implements CurrencyProvider {
   ];
 }
 
+class BankNegaraMalaysiaProvider implements CurrencyProvider {
+  @override
+  String get id => 'bank_negara_malaysia';
+
+  @override
+  String get name => 'Bank Negara Malaysia';
+
+  @override
+  String get initials => 'BNM';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    print('[BNM_MY] Starting fetchRates()');
+    try {
+      final response = await http.get(
+        Uri.https('api.bnm.gov.my', '/public/exchange-rate'),
+        headers: {'accept': 'application/vnd.BNM.API.v1+json'},
+      ).timeout(const Duration(seconds: 15));
+
+      print('[BNM_MY] Response status: ${response.statusCode}, body len: ${response.body.length}');
+
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        final dataList = jsonData['data'];
+        if (dataList is! List) {
+          print('[BNM_MY] ERROR: data is not a List');
+          return null;
+        }
+
+        final rawRates = <String, double>{};
+
+        for (final item in dataList) {
+          if (item is! Map) continue;
+
+          var currencyCode = item['currency_code'] as String?;
+          final unit = item['unit'] as num? ?? 1;
+          final rateObj = item['rate'];
+
+          if (currencyCode == null || rateObj is! Map) continue;
+
+          final middleRate = rateObj['middle_rate'] as num?;
+          if (middleRate == null || middleRate == 0 || unit == 0) continue;
+
+          // Map SDR to XDR
+          if (currencyCode == 'SDR') currencyCode = 'XDR';
+
+          // Rate is MYR per <unit> of foreign currency
+          rawRates[currencyCode] = middleRate.toDouble() / unit.toDouble();
+        }
+
+        print('[BNM_MY] Parsed ${rawRates.length} raw rates');
+        if (rawRates.isEmpty) return null;
+
+        rawRates['MYR'] = 1.0;
+
+        final normalized = _normalizeToEurBase(rawRates);
+        print('[BNM_MY] Normalized rates count: ${normalized.length}');
+        return normalized;
+      }
+      print('[BNM_MY] ERROR: statusCode != 200');
+    } on TimeoutException catch (e) {
+      print('[BNM_MY] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[BNM_MY] ERROR: $e');
+      print('[BNM_MY] Stack: $st');
+    }
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AED', 'AUD', 'BND', 'CAD', 'CHF', 'CNY', 'EGP', 'EUR', 'GBP', 'HKD',
+    'IDR', 'INR', 'JPY', 'KHR', 'KRW', 'MMK', 'MYR', 'NPR', 'NZD', 'PHP',
+    'PKR', 'SAR', 'SGD', 'THB', 'TWD', 'USD', 'VND', 'XDR',
+  ];
+}
+class BankOfLatviaProvider implements CurrencyProvider {
+  @override
+  String get id => 'bank_of_latvia';
+
+  @override
+  String get name => 'Bank of Latvia';
+
+  @override
+  String get initials => 'LVL';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    print('[BankOfLatvia] Starting fetchRates()');
+    try {
+      final response = await http.get(
+        Uri.https('www.bank.lv', '/vk/ecb.xml'),
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+          'Accept': 'application/xml,text/xml,*/*',
+        },
+      ).timeout(const Duration(seconds: 15));
+
+      print('[BankOfLatvia] Response status: ${response.statusCode}, body len: ${response.body.length}');
+
+      if (response.statusCode == 200) {
+        final document = XmlDocument.parse(response.body);
+        final rawRates = <String, double>{};
+
+        final currencies = document.findAllElements('Currency');
+        for (final currency in currencies) {
+          final idElement = currency.getElement('ID');
+          final rateElement = currency.getElement('Rate');
+
+          if (idElement == null || rateElement == null) continue;
+
+          final isoCode = idElement.innerText.trim().toUpperCase();
+          final rateStr = rateElement.innerText.trim();
+          if (isoCode.isEmpty || rateStr.isEmpty) continue;
+
+          final rate = double.tryParse(rateStr);
+          if (rate == null || rate == 0) continue;
+
+          rawRates[isoCode] = rate;
+        }
+
+        print('[BankOfLatvia] Parsed ${rawRates.length} raw rates');
+        if (rawRates.isEmpty) return null;
+
+        rawRates['EUR'] = 1.0;
+
+        print('[BankOfLatvia] Returning ${rawRates.length} rates (EUR-based)');
+        return rawRates;
+      }
+      print('[BankOfLatvia] ERROR: statusCode != 200');
+    } on TimeoutException catch (e) {
+      print('[BankOfLatvia] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[BankOfLatvia] ERROR: $e');
+      print('[BankOfLatvia] Stack: $st');
+    }
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AUD', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'EUR', 'GBP', 'HKD',
+    'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JPY', 'KRW', 'MXN', 'MYR', 'NOK',
+    'NZD', 'PHP', 'PLN', 'RON', 'SEK', 'SGD', 'THB', 'TRY', 'USD', 'ZAR',
+  ];
+}
+class BankOfLithuaniaProvider implements CurrencyProvider {
+  @override
+  String get id => 'bank_of_lithuania';
+
+  @override
+  String get name => 'Bank of Lithuania';
+
+  @override
+  String get initials => 'LB';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    print('[LB] Starting fetchRates()');
+    try {
+      final response = await http.get(
+        Uri.https(
+          'lb.lt',
+          '/webservices/fxrates/fxrates.asmx/getCurrentFxRates',
+          {'tp': 'eu'},
+        ),
+      ).timeout(const Duration(seconds: 15));
+
+      print('[LB] Response status: ${response.statusCode}, body len: ${response.body.length}');
+
+      if (response.statusCode == 200) {
+        final document = XmlDocument.parse(response.body);
+        final exchangeRates = <String, double>{};
+
+        for (final fxRate in document.findAllElements('FxRate')) {
+          final ccyAmtList = fxRate.findElements('CcyAmt').toList();
+          if (ccyAmtList.length < 2) continue;
+
+          final targetCcy = ccyAmtList[1].findElements('Ccy').firstOrNull?.innerText;
+          final targetAmt = ccyAmtList[1].findElements('Amt').firstOrNull?.innerText;
+
+          if (targetCcy == null || targetAmt == null) continue;
+
+          final rate = double.tryParse(targetAmt);
+          if (rate == null || rate == 0) continue;
+
+          exchangeRates[targetCcy] = rate;
+        }
+
+        print('[LB] Parsed ${exchangeRates.length} rates');
+        if (exchangeRates.isEmpty) return null;
+
+        exchangeRates['EUR'] = 1.0;
+        return exchangeRates;
+      }
+      print('[LB] ERROR: statusCode != 200');
+    } on TimeoutException catch (e) {
+      print('[LB] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[LB] ERROR: $e');
+      print('[LB] Stack: $st');
+    }
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AED', 'AFN', 'ALL', 'AMD', 'ARS', 'AUD', 'AZN', 'BAM', 'BDT', 'BHD',
+    'BOB', 'BRL', 'BYN', 'CAD', 'CHF', 'CLP', 'CNY', 'COP', 'CZK', 'DKK',
+    'DZD', 'EGP', 'ETB', 'EUR', 'GBP', 'GEL', 'GNF', 'HKD', 'HUF', 'IDR',
+    'ILS', 'INR', 'IQD', 'IRR', 'ISK', 'JOD', 'JPY', 'KES', 'KGS', 'KRW',
+    'KWD', 'KZT', 'LBP', 'LKR', 'LYD', 'MAD', 'MDL', 'MGA', 'MKD', 'MNT',
+    'MXN', 'MYR', 'MZN', 'NOK', 'NZD', 'PAB', 'PEN', 'PHP', 'PKR', 'PLN',
+    'QAR', 'RON', 'RSD', 'RUB', 'SAR', 'SEK', 'SGD', 'SYP', 'THB', 'TJS',
+    'TMT', 'TND', 'TRY', 'TWD', 'TZS', 'UAH', 'USD', 'UYU', 'UZS', 'VES',
+    'VND', 'XAF', 'XOF', 'YER', 'ZAR',
+  ];
+}
+class BcnProvider implements CurrencyProvider {
+  @override
+  String get id => 'bcn';
+
+  @override
+  String get name => 'Banco Central de Nicaragua';
+
+  @override
+  String get initials => 'BCN';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    print('[BCN] Starting fetchRates()');
+    try {
+      // 1. Fetch EUR/USD from ECB (lightweight single-series query)
+      final ecbResponse = await http.get(
+        Uri.https(
+          'data-api.ecb.europa.eu',
+          'service/data/EXR/D.USD.EUR.SP00.A',
+          {'lastNObservations': '1', 'detail': 'dataonly', 'format': 'csvdata'},
+        ),
+      ).timeout(const Duration(seconds: 15));
+
+      double? eurUsdRate;
+      if (ecbResponse.statusCode == 200) {
+        final rows = const LineSplitter().convert(ecbResponse.body);
+        for (var row in rows) {
+          if (row.trim().isEmpty) continue;
+          final parts = row.split(',');
+          // CSV header contains OBS_VALUE; find the value in the last data row
+          if (parts.length >= 2) {
+            final value = double.tryParse(parts.last);
+            if (value != null && value > 0) {
+              eurUsdRate = value;
+              break;
+            }
+          }
+        }
+      }
+
+      if (eurUsdRate == null) {
+        print('[BCN] ERROR: Could not fetch EUR/USD from ECB');
+        return null;
+      }
+      print('[BCN] EUR/USD from ECB: $eurUsdRate');
+
+      // 2. Fetch BCN PDF for USD/NIO
+      final now = DateTime.now();
+      for (var i = 0; i < 7; i++) {
+        final date = now.subtract(Duration(days: i));
+        final dateStr =
+            '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+        final url =
+            'https://www.bcn.gob.ni/IRR/tipo_cambio_mensual/tipoc_pdf.php?'
+            'Fecha_inicial=$dateStr&Fecha_final=$dateStr';
+
+        print('[BCN] Trying $url');
+        final response = await http
+            .get(Uri.parse(url))
+            .timeout(const Duration(seconds: 15));
+
+        if (response.statusCode == 200 &&
+            response.bodyBytes.length > 4 &&
+            String.fromCharCodes(response.bodyBytes.sublist(0, 4)) == '%PDF') {
+          print('[BCN] Got PDF for $dateStr');
+          final text = _extractPdfText(response.bodyBytes);
+          final usdNioRate = parseBcnPdf(text);
+          print('[BCN] Parsed USD/NIO: $usdNioRate');
+
+          if (usdNioRate == null || usdNioRate == 0) {
+            print('[BCN] ERROR: Could not parse USD/NIO from PDF');
+            continue;
+          }
+
+          // Compute EUR/NIO = EUR/USD * USD/NIO
+          final eurNioRate = eurUsdRate * usdNioRate;
+          final rates = <String, double>{
+            'EUR': 1.0,
+            'USD': eurUsdRate,
+            'NIO': eurNioRate,
+          };
+          print('[BCN] Returning ${rates.length} rates');
+          return rates;
+        }
+      }
+      print('[BCN] No valid PDF found in the last 7 days');
+    } on TimeoutException catch (e) {
+      print('[BCN] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[BCN] ERROR: $e');
+      print('[BCN] Stack: $st');
+    }
+    return null;
+  }
+
+  @visibleForTesting
+  static double? parseBcnPdf(String text) {
+    // Look for lines like "28-Abril-2026 36.6243"
+    final lineRegex = RegExp(
+      r'^\d{1,2}-[A-Za-z]+-\d{4}\s+([0-9]+\.[0-9]+)',
+      multiLine: true,
+    );
+    final match = lineRegex.firstMatch(text);
+    if (match == null) return null;
+    return double.tryParse(match.group(1)!);
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'EUR', 'USD', 'NIO',
+  ];
+}
+
+class BcvVenezuelaProvider implements CurrencyProvider {
+  @override
+  String get id => 'bcv_venezuela';
+
+  @override
+  String get name => 'Banco Central de Venezuela';
+
+  @override
+  String get initials => 'BCV';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final client = _createPermissiveClient();
+      final response = await client
+          .get(Uri.parse('https://www.bcv.org.ve/'))
+          .timeout(const Duration(seconds: 15));
+      client.close();
+
+      print('[BCV-VE] Response status: ${response.statusCode}');
+      if (response.statusCode != 200) {
+        print('[BCV-VE] ERROR: GET failed with ${response.statusCode}');
+        return null;
+      }
+
+      final result = parseBcvVenezuelaHtml(response.body);
+      print('[BCV-VE] Parsed result: ${result != null ? '${result.length} rates' : 'null'}');
+      return result;
+    } on TimeoutException catch (e) {
+      print('[BCV-VE] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[BCV-VE] ERROR: $e');
+      print('[BCV-VE] Stack: $st');
+    }
+    return null;
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseBcvVenezuelaHtml(String html) {
+    final rawRates = <String, double>{};
+
+    // The BCV homepage shows reference rates in a sidebar widget.
+    // Each currency is in a <div id="euro|dolar|yuan|lira|rublo"> block
+    // with the ISO code in a <span> and the rate in a <strong>.
+    final regex = RegExp(
+      r'<div\s+id="(euro|dolar|yuan|lira|rublo)"[^>]*>.*?<span>\s*([A-Z]{3})\s*</span>.*?<strong>\s*([0-9.,]+)\s*</strong>',
+      caseSensitive: false,
+      dotAll: true,
+    );
+
+    for (final match in regex.allMatches(html)) {
+      final iso = match.group(2)!.toUpperCase();
+      final rateStr = match.group(3)!;
+      // BCV uses comma as decimal separator (European format).
+      final rate = double.tryParse(rateStr.replaceAll(',', '.'));
+      if (rate != null && rate > 0) {
+        rawRates[iso] = rate;
+      }
+    }
+
+    print('[BCV-VE] Raw rates: $rawRates');
+    if (rawRates.isEmpty || !rawRates.containsKey('EUR')) {
+      return null;
+    }
+
+    rawRates['VES'] = 1.0;
+    return _normalizeToEurBase(rawRates);
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'CNY', 'EUR', 'RUB', 'TRY', 'USD', 'VES',
+  ];
+}
+
+class BceaoProvider implements CurrencyProvider {
+  @override
+  String get id => 'bceao';
+
+  @override
+  String get name => 'Central Bank of West African States';
+
+  @override
+  String get initials => 'BCEAO';
+
+  static final _rowPattern = RegExp(
+    r'<td>([^<]+)</td>\s*<td>([^<]+)</td>\s*<td>([^<]+)</td>',
+    caseSensitive: false,
+  );
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final now = DateTime.now().toUtc();
+      for (int i = 0; i < 7; i++) {
+        final date = now.subtract(Duration(days: i));
+        final dateStr =
+            '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+
+        final response = await http.get(
+          Uri.https(
+            'www.bceao.int',
+            '/en/cours/get_all_devise_by_date',
+            {'dateJour': dateStr},
+          ),
+        );
+
+        if (response.statusCode != 200) {
+          print('[BCEAO] Date $dateStr: status=${response.statusCode}');
+          continue;
+        }
+
+        final body = response.body;
+        final rawRates = <String, double>{};
+
+        for (final match in _rowPattern.allMatches(body)) {
+          var isoCode = match.group(1)!.trim().toUpperCase();
+          final purchaseStr = match.group(2)!.trim();
+          final saleStr = match.group(3)!.trim();
+
+          // Fix typo in BCEAO HTML
+          if (isoCode == 'GPB') isoCode = 'GBP';
+
+          // Parse rates (comma is decimal separator)
+          final purchase = double.tryParse(purchaseStr.replaceAll(',', '.'));
+          final sale = double.tryParse(saleStr.replaceAll(',', '.'));
+          if (purchase == null || sale == null || purchase == 0) continue;
+
+          // Use average of purchase and sale as the representative rate
+          rawRates[isoCode] = (purchase + sale) / 2.0;
+        }
+
+        print('[BCEAO] Parsed ${rawRates.length} raw rates for $dateStr');
+        if (rawRates.isNotEmpty) {
+          rawRates['XOF'] = 1.0;
+          final normalized = _normalizeToEurBase(rawRates);
+          print('[BCEAO] Normalized rates count: ${normalized.length}');
+          return normalized;
+        }
+      }
+      print('[BCEAO] ERROR: No rates found in last 7 days');
+    } catch (e, st) {
+      print('[BCEAO] ERROR: $e');
+      print('[BCEAO] Stack: $st');
+    }
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AED', 'CAD', 'CHF', 'CNY', 'EUR', 'GBP', 'JPY', 'USD', 'XOF',
+  ];
+}
+class BcraProvider implements CurrencyProvider {
+  @override
+  String get id => 'bcra';
+
+  @override
+  String get name => 'Banco Central de la República Argentina';
+
+  @override
+  String get initials => 'BCRA';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    print('[BCRA] Starting fetchRates()');
+    try {
+      final response = await http.get(
+        Uri.https(
+          'api.bcra.gob.ar',
+          '/estadisticascambiarias/v1.0/Cotizaciones',
+        ),
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+          'Accept': 'application/json,*/*',
+        },
+      ).timeout(const Duration(seconds: 15));
+
+      print('[BCRA] Response status: ${response.statusCode}, body len: ${response.body.length}');
+
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        final results = jsonData['results'];
+        if (results == null) {
+          print('[BCRA] ERROR: No results in response');
+          return null;
+        }
+
+        final detalle = results['detalle'];
+        if (detalle is! List) {
+          print('[BCRA] ERROR: detalle is not a List');
+          return null;
+        }
+
+        final rawRates = <String, double>{};
+
+        for (final item in detalle) {
+          if (item is! Map) continue;
+
+          var isoCode = (item['codigoMoneda'] as String?)?.trim().toUpperCase();
+          final tipoCotizacion = item['tipoCotizacion'];
+
+          if (isoCode == null || isoCode.isEmpty) continue;
+          if (tipoCotizacion == null) continue;
+
+          final rate = (tipoCotizacion is num)
+              ? tipoCotizacion.toDouble()
+              : double.tryParse(tipoCotizacion.toString());
+          if (rate == null || rate == 0) continue;
+
+          // BCRA uses MXP for Mexican Peso, map to standard MXN
+          if (isoCode == 'MXP') isoCode = 'MXN';
+
+          rawRates[isoCode] = rate;
+        }
+
+        print('[BCRA] Parsed ${rawRates.length} raw rates');
+        if (rawRates.isEmpty) return null;
+
+        rawRates['ARS'] = 1.0;
+
+        final normalized = _normalizeToEurBase(rawRates);
+        print('[BCRA] Normalized rates count: ${normalized.length}');
+        return normalized;
+      }
+      print('[BCRA] ERROR: statusCode != 200');
+    } on TimeoutException catch (e) {
+      print('[BCRA] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[BCRA] ERROR: $e');
+      print('[BCRA] Stack: $st');
+    }
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'ARS', 'AUD', 'BOB', 'BRL', 'CAD', 'CHF', 'CLP', 'CNH', 'CNY', 'COP',
+    'CZK', 'DKK', 'EUR', 'GBP', 'HKD', 'ILS', 'INR', 'JPY', 'MXN', 'NOK',
+    'NZD', 'PEN', 'PYG', 'RUB', 'SEK', 'SGD', 'TRY', 'USD', 'UYU', 'VND',
+    'XDR', 'ZAR',
+  ];
+}
+class BoaProvider implements CurrencyProvider {
+  @override
+  String get id => 'boa';
+
+  @override
+  String get name => 'Bank of Albania';
+
+  @override
+  String get initials => 'BOA';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final response = await http
+          .get(
+            Uri.parse('https://www.bankofalbania.org/Markets/Official_exchange_rate/'),
+          )
+          .timeout(const Duration(seconds: 15));
+
+      print('[BOA] Response status: ${response.statusCode}');
+      if (response.statusCode != 200) {
+        print('[BOA] ERROR: GET failed with ${response.statusCode}');
+        return null;
+      }
+
+      final rawRates = parseBoaHtml(response.body);
+      if (rawRates == null || rawRates.isEmpty) {
+        print('[BOA] ERROR: parseBoaHtml returned null or empty');
+        return null;
+      }
+
+      rawRates['ALL'] = 1.0;
+      final normalized = _normalizeToEurBase(rawRates);
+      print('[BOA] Normalized rates count: ${normalized.length}');
+      return normalized;
+    } on TimeoutException catch (e) {
+      print('[BOA] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[BOA] ERROR: $e');
+      print('[BOA] Stack: $st');
+    }
+    return null;
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseBoaHtml(String html) {
+    final rawRates = <String, double>{};
+
+    // Match table rows: <tr>...<td>Currency Name</td><td>ISO</td><td>Rate</td>...
+    final rowRegex = RegExp(
+      r'<tr[^>]*>\s*<t[dh][^>]*>([^<]+)</t[dh]>\s*<t[dh][^>]*>([A-Z]{3})</t[dh]>\s*<t[dh][^>]*>([0-9.,]+)</t[dh]>',
+      caseSensitive: false,
+      dotAll: true,
+    );
+
+    const skipCurrencies = {'SDR', 'XAU', 'XAG'};
+
+    for (final match in rowRegex.allMatches(html)) {
+      final name = match.group(1)!.trim();
+      final iso = match.group(2)!.toUpperCase();
+      final rateStr = match.group(3)!;
+
+      if (skipCurrencies.contains(iso)) continue;
+
+      final rate = double.tryParse(rateStr.replaceAll(',', ''));
+      if (rate == null || rate == 0) continue;
+
+      // JPY is quoted per 100 units (e.g. "Japanese Yen   (100)").
+      if (name.contains('(100)')) {
+        rawRates[iso] = rate / 100.0;
+      } else {
+        rawRates[iso] = rate;
+      }
+    }
+
+    if (rawRates.isEmpty || !rawRates.containsKey('EUR')) {
+      return null;
+    }
+
+    return rawRates;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AUD', 'CAD', 'CHF', 'CNH', 'CNY', 'CZK', 'DKK', 'EUR', 'GBP', 'HUF',
+    'JPY', 'MKD', 'NOK', 'RUB', 'SEK', 'TRY', 'USD', 'ALL',
+  ];
+}
+
+class BcuProvider implements CurrencyProvider {
+  @override
+  String get id => 'bcu';
+
+  @override
+  String get name => 'Banco Central del Uruguay';
+
+  @override
+  String get initials => 'BCU';
+
+  // Known BCU currency IDs (discovered by scanning the SOAP service)
+  static const _currencyIds = [
+    2,     // XDR
+    105,   // AUD
+    500,   // ARS
+    1000,  // BRL
+    1111,  // EUR
+    1300,  // CLP
+    1490,  // NZD
+    1620,  // ZAR
+    1800,  // DKK
+    2222,  // USD
+    2309,  // CAD
+    2700,  // GBP
+    3600,  // JPY
+    4000,  // PEN
+    4150,  // CNY
+    4155,  // CNH
+    4200,  // MXN
+    4300,  // HUF
+    4400,  // TRY
+    4600,  // NOK
+    4800,  // PYG
+    4900,  // ISK
+    5100,  // HKD
+    5300,  // KRW
+    5400,  // RUB
+    5500,  // COP
+    5600,  // MYR
+    5700,  // INR
+    5800,  // SEK
+    5900,  // CHF
+    6200,  // VEF (old Venezuelan bolivar)
+  ];
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    print('[BCU] Starting fetchRates()');
+    try {
+      // Build SOAP request body template (currency IDs are static)
+      final itemsBuffer = StringBuffer();
+      for (final id in _currencyIds) {
+        itemsBuffer.write('<item>$id</item>');
+      }
+
+      // BCU doesn't publish on weekends/holidays; scan backwards up to 7 days
+      for (int dayOffset = 0; dayOffset < 7; dayOffset++) {
+        final date = DateTime.now().subtract(Duration(days: dayOffset));
+        final fecha = '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+
+        final soapBody = '''<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <soap:Body>
+    <wsbcucotizaciones.Execute xmlns="Cotiza">
+      <Entrada>
+        <Moneda>$itemsBuffer</Moneda>
+        <FechaDesde>$fecha</FechaDesde>
+        <FechaHasta>$fecha</FechaHasta>
+        <Grupo>0</Grupo>
+      </Entrada>
+    </wsbcucotizaciones.Execute>
+  </soap:Body>
+</soap:Envelope>''';
+
+        final response = await http.post(
+          Uri.https('cotizaciones.bcu.gub.uy', '/wscotizaciones/servlet/awsbcucotizaciones'),
+          headers: {
+            'Content-Type': 'text/xml; charset=utf-8',
+            'SOAPAction': 'Cotizaaction/AWSBCUCOTIZACIONES.Execute',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+          },
+          body: soapBody,
+        ).timeout(const Duration(seconds: 20));
+
+        print('[BCU] Date $fecha: status=${response.statusCode}, len=${response.body.length}');
+
+        if (response.statusCode != 200) continue;
+
+        final document = XmlDocument.parse(response.body);
+        final rawRates = <String, double>{};
+
+        // Find all datoscotizaciones.dato elements
+        final datos = document.findAllElements('datoscotizaciones.dato');
+        for (final dato in datos) {
+          final codigoIsoElement = dato.findAllElements('CodigoISO').firstOrNull;
+          final tccElement = dato.findAllElements('TCC').firstOrNull;
+
+          if (codigoIsoElement == null || tccElement == null) continue;
+
+          var isoCode = codigoIsoElement.innerText.trim().toUpperCase();
+          final tccStr = tccElement.innerText.trim();
+
+          if (isoCode.isEmpty || tccStr.isEmpty) continue;
+
+          // Skip non-standard / non-ISO codes
+          if (isoCode == 'DLS.' || isoCode == 'U\$A' || isoCode == 'R\$') continue;
+
+          final rate = double.tryParse(tccStr);
+          if (rate == null || rate == 0) continue;
+
+          // Map old Venezuelan bolivar code to current standard
+          if (isoCode == 'VEF') isoCode = 'VES';
+
+          // Map SDR to XDR
+          if (isoCode == 'SDR') isoCode = 'XDR';
+
+          // BCU uses 'EURO' instead of standard 'EUR'
+          if (isoCode == 'EURO') isoCode = 'EUR';
+
+          rawRates[isoCode] = rate;
+        }
+
+        print('[BCU] Parsed ${rawRates.length} raw rates for $fecha');
+        if (rawRates.isNotEmpty) {
+          rawRates['UYU'] = 1.0;
+
+          final normalized = _normalizeToEurBase(rawRates);
+          print('[BCU] Normalized rates count: ${normalized.length}');
+          return normalized;
+        }
+      }
+      print('[BCU] ERROR: No rates found in last 7 days');
+    } on TimeoutException catch (e) {
+      print('[BCU] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[BCU] ERROR: $e');
+      print('[BCU] Stack: $st');
+    }
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'ARS', 'AUD', 'BRL', 'CAD', 'CHF', 'CLP', 'CNH', 'CNY', 'COP', 'DKK',
+    'EUR', 'GBP', 'HKD', 'HUF', 'INR', 'ISK', 'JPY', 'KRW', 'MXN', 'MYR',
+    'NOK', 'NZD', 'PEN', 'PYG', 'RUB', 'SEK', 'TRY', 'USD', 'UYU', 'VES',
+    'XDR', 'ZAR',
+  ];
+}
+class BcvProvider implements CurrencyProvider {
+  @override
+  String get id => 'bcv';
+
+  @override
+  String get name => 'Bank of Cape Verde';
+
+  @override
+  String get initials => 'BCV';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final client = _createPermissiveClient();
+      for (var i = 0; i < 7; i++) {
+        final date = DateTime.now().subtract(Duration(days: i));
+        final dateStr =
+            '${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}.${date.year}';
+
+        final response = await client.get(
+          Uri.https(
+            'www.bcv.cv',
+            '/en/PoliticaMonetaria/EstatisticasCambiais/Paginas/Estatisticas_Cambiais.aspx',
+            {
+              '_sd': dateStr,
+              '_fd': dateStr,
+              '_mdrange': '$dateStr-$dateStr',
+              '_refd': dateStr,
+              '_expType': 'XML',
+            },
+          ),
+        ).timeout(const Duration(seconds: 15));
+
+        print('[BCV] Response status for $dateStr: ${response.statusCode}');
+        if (response.statusCode != 200) continue;
+
+        final document = XmlDocument.parse(response.body);
+        final rawRates = <String, double>{};
+
+        for (final result in document.findAllElements('RESULT')) {
+          final currency =
+              result.findElements('Currency').firstOrNull?.innerText;
+          final unitsStr =
+              result.findElements('Units').firstOrNull?.innerText;
+          final purchaseStr =
+              result.findElements('Purchase').firstOrNull?.innerText;
+          final saleStr =
+              result.findElements('Sale').firstOrNull?.innerText;
+
+          if (currency == null || purchaseStr == null || saleStr == null) {
+            continue;
+          }
+
+          final units = int.tryParse(unitsStr ?? '1') ?? 1;
+          if (units == 0) continue;
+
+          // The BCV XML uses comma as decimal separator and may contain
+          // non-breaking spaces (e.g. "11 929,63700").
+          final purchase = double.tryParse(
+            purchaseStr
+                .replaceAll('\u00A0', '')
+                .replaceAll(',', '.'),
+          );
+          final sale = double.tryParse(
+            saleStr
+                .replaceAll('\u00A0', '')
+                .replaceAll(',', '.'),
+          );
+
+          if (purchase == null || sale == null || purchase == 0) continue;
+
+          // Average of purchase/sale, scaled by units.
+          rawRates[currency] = ((purchase + sale) / 2.0) / units;
+        }
+
+        print('[BCV] Parsed ${rawRates.length} raw rates for $dateStr');
+        if (rawRates.containsKey('EUR')) {
+          rawRates['CVE'] = 1.0;
+          client.close();
+          final normalized = _normalizeToEurBase(rawRates);
+          print('[BCV] Normalized rates count: ${normalized.length}');
+          return normalized;
+        }
+      }
+      client.close();
+      print('[BCV] ERROR: No valid data found in the last 7 days');
+    } on TimeoutException catch (e) {
+      print('[BCV] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[BCV] ERROR: $e');
+      print('[BCV] Stack: $st');
+    }
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'BRL', 'CAD', 'CHF', 'CNY', 'CVE', 'DKK', 'EUR', 'GBP', 'JPY', 'NOK',
+    'SEK', 'USD', 'XOF', 'ZAR',
+  ];
+}
+class BnbProvider implements CurrencyProvider {
+  @override
+  String get id => 'bnb';
+
+  @override
+  String get name => 'Bulgarian National Bank';
+
+  @override
+  String get initials => 'BNB';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    print('[BNB] Starting fetchRates()');
+    try {
+      final response = await http.get(
+        Uri.https(
+          'www.bnb.bg',
+          '/Statistics/StExternalSector/StExchangeRates/StERForeignCurrencies/',
+          {'download': 'xml', 'lang': 'EN'},
+        ),
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+          'Accept': 'application/xml,text/xml,*/*',
+        },
+      ).timeout(const Duration(seconds: 15));
+
+      print('[BNB] Response status: ${response.statusCode}, body len: ${response.body.length}');
+
+      if (response.statusCode == 200) {
+        final document = XmlDocument.parse(response.body);
+        final rawRates = <String, double>{};
+
+        final rows = document.findAllElements('ROW');
+        for (final row in rows) {
+          final codeElement = row.getElement('CODE');
+          final rateElement = row.getElement('RATE');
+
+          if (codeElement == null || rateElement == null) continue;
+
+          final isoCode = codeElement.innerText.trim().toUpperCase();
+          final rateStr = rateElement.innerText.trim();
+
+          // Skip header row
+          if (isoCode == 'CODE' || isoCode.isEmpty || rateStr.isEmpty) continue;
+
+          final rate = double.tryParse(rateStr);
+          if (rate == null || rate == 0) continue;
+
+          rawRates[isoCode] = rate;
+        }
+
+        print('[BNB] Parsed ${rawRates.length} raw rates');
+        if (rawRates.isEmpty) return null;
+
+        rawRates['EUR'] = 1.0;
+
+        print('[BNB] Returning ${rawRates.length} rates (EUR-based)');
+        return rawRates;
+      }
+      print('[BNB] ERROR: statusCode != 200');
+    } on TimeoutException catch (e) {
+      print('[BNB] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[BNB] ERROR: $e');
+      print('[BNB] Stack: $st');
+    }
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AUD', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'EUR', 'GBP', 'HKD',
+    'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JPY', 'KRW', 'MXN', 'MYR', 'NOK',
+    'NZD', 'PHP', 'PLN', 'RON', 'SEK', 'SGD', 'THB', 'TRY', 'USD', 'ZAR',
+  ];
+}
+
+class BrbProvider implements CurrencyProvider {
+  @override
+  String get id => 'brb';
+
+  @override
+  String get name => 'Banque de la République du Burundi';
+
+  @override
+  String get initials => 'BRB';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final now = DateTime.now();
+      final dateStr =
+          '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+      final response = await http.get(
+        Uri.parse(
+          'https://www.brb.bi/Details%20Taux%20de%20Change?field_code_value=&field_date_value%5Bdate%5D=$dateStr',
+        ),
+      ).timeout(const Duration(seconds: 15));
+
+      if (response.statusCode != 200) return null;
+
+      final rawRates = parseBrbHtml(response.body);
+      if (rawRates == null || rawRates.isEmpty) return null;
+
+      rawRates['BIF'] = 1.0;
+      return _normalizeToEurBase(rawRates);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseBrbHtml(String html) {
+    final rawRates = <String, double>{};
+
+    final rowRegex = RegExp(
+      r'<tr[^>]*>\s*<td[^>]*>.*?<a[^>]*>([A-Z]{3})</a>.*?</td>\s*<td[^>]*>\s*([0-9.,]+)\s*</td>\s*<td[^>]*>\s*([0-9.,]+)\s*</td>\s*<td[^>]*>\s*([0-9.,]+)\s*</td>',
+      caseSensitive: false,
+      dotAll: true,
+    );
+
+    for (final match in rowRegex.allMatches(html)) {
+      var iso = match.group(1)!.toUpperCase();
+      final rateStr = match.group(3)!; // Taux Moyen (average rate)
+
+      // Map DTS (French: Droits de Tirage Spéciaux) to XDR
+      if (iso == 'DTS') iso = 'XDR';
+
+      final rate = double.tryParse(rateStr.trim());
+      if (rate == null || rate == 0) continue;
+
+      rawRates[iso] = rate;
+    }
+
+    if (rawRates.isEmpty || !rawRates.containsKey('EUR')) {
+      return null;
+    }
+
+    return rawRates;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'BIF', 'EUR', 'USD', 'XDR',
+  ];
+}
+
+class BogProvider implements CurrencyProvider {
+  @override
+  String get id => 'bog';
+
+  @override
+  String get name => 'Bank of Guyana';
+
+  @override
+  String get initials => 'BOG';
+
+  static final _rowPattern = RegExp(
+    r'<tr>\s*<td[^>]*>.*?</td>\s*<td[^>]*>.*?<span class="tabs">([A-Z]{3})</span>.*?</td>\s*<td[^>]*>.*?<span class="tabs">([0-9.]*)</span>.*?</td>\s*<td[^>]*>.*?<span class="tabs">([0-9.]*)',
+    dotAll: true,
+    caseSensitive: false,
+  );
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final response = await http.get(
+        Uri.https('bankofguyana.org.gy', '/bog/'),
+        headers: {
+          'User-Agent':
+              'Mozilla/5.0 (X11; Linux x86_64; rv:150.0) Gecko/20100101 Firefox/150.0',
+        },
+      ).timeout(const Duration(seconds: 15));
+
+      print('[BOG] Response status: ${response.statusCode}');
+      if (response.statusCode != 200) {
+        print('[BOG] ERROR: GET failed with ${response.statusCode}');
+        return null;
+      }
+
+      final body = response.body;
+      final rawRates = <String, double>{};
+
+      for (final match in _rowPattern.allMatches(body)) {
+        final currency = match.group(1)!;
+        final buyStr = match.group(2)!.trim();
+        final sellStr = match.group(3)!.trim();
+
+        final buy = double.tryParse(buyStr);
+        if (buy == null || buy == 0) continue;
+
+        final sell = double.tryParse(sellStr);
+        if (sell != null && sell > 0) {
+          rawRates[currency] = (buy + sell) / 2.0;
+        } else {
+          rawRates[currency] = buy;
+        }
+      }
+
+      print('[BOG] Parsed ${rawRates.length} raw rates');
+      if (!rawRates.containsKey('EUR')) {
+        print('[BOG] ERROR: Missing EUR rate');
+        return null;
+      }
+
+      rawRates['GYD'] = 1.0;
+      final normalized = _normalizeToEurBase(rawRates);
+      print('[BOG] Normalized rates count: ${normalized.length}');
+      return normalized;
+    } on TimeoutException catch (e) {
+      print('[BOG] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[BOG] ERROR: $e');
+      print('[BOG] Stack: $st');
+    }
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'BBD', 'BZD', 'CAD', 'EUR', 'GBP', 'GYD', 'JMD', 'TTD', 'USD', 'XCD',
+  ];
+}
+class BojProvider implements CurrencyProvider {
+  @override
+  String get id => 'boj';
+
+  @override
+  String get name => 'Bank of Japan';
+
+  @override
+  String get initials => 'BOJ';
+
+  /// Extracts the latest non-null value from a BOJ time-series response.
+  double? _latestValue(Map<String, dynamic> series) {
+    final valuesObj = series['VALUES'];
+    if (valuesObj is! Map) return null;
+
+    final dates = valuesObj['SURVEY_DATES'];
+    final values = valuesObj['VALUES'];
+    if (dates is! List || values is! List) return null;
+    if (dates.length != values.length) return null;
+
+    for (var i = dates.length - 1; i >= 0; i--) {
+      final val = values[i];
+      if (val != null && val is num) {
+        return val.toDouble();
+      }
+    }
+    return null;
+  }
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    print('[BOJ] Starting fetchRates()');
+    try {
+      final now = DateTime.now();
+      final year = now.year;
+      final month = now.month.toString().padLeft(2, '0');
+      final prevYear = now.month == 1 ? now.year - 1 : now.year;
+      final prevMonth = now.month == 1 ? '12' : (now.month - 1).toString().padLeft(2, '0');
+
+      final response = await http.get(
+        Uri.https(
+          'www.stat-search.boj.or.jp',
+          '/api/v1/getDataCode',
+          {
+            'format': 'json',
+            'lang': 'en',
+            'db': 'FM08',
+            'code': 'FXERD01,FXERD31',
+            'startDate': '$prevYear$prevMonth',
+            'endDate': '$year$month',
+          },
+        ),
+      ).timeout(const Duration(seconds: 15));
+
+      print('[BOJ] Response status: ${response.statusCode}, body len: ${response.body.length}');
+
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+
+        if (jsonData['STATUS'] != 200) {
+          print('[BOJ] ERROR: API status ${jsonData['STATUS']}');
+          return null;
+        }
+
+        final resultSet = jsonData['RESULTSET'];
+        if (resultSet is! List) {
+          print('[BOJ] ERROR: RESULTSET is not a List');
+          return null;
+        }
+
+        double? usdJpy; // FXERD01: JPY per USD
+        double? eurUsd; // FXERD31: USD per EUR
+
+        for (final series in resultSet) {
+          if (series is! Map) continue;
+          final seriesMap = series as Map<String, dynamic>;
+          final code = seriesMap['SERIES_CODE'] as String?;
+          if (code == null) continue;
+
+          final value = _latestValue(seriesMap);
+          if (value == null || value == 0) continue;
+
+          if (code == 'FXERD01') {
+            usdJpy = value;
+          } else if (code == 'FXERD31') {
+            eurUsd = value;
+          }
+        }
+
+        print('[BOJ] USD/JPY: $usdJpy, EUR/USD: $eurUsd');
+
+        if (usdJpy == null || eurUsd == null) {
+          print('[BOJ] ERROR: Missing required series');
+          return null;
+        }
+
+        final rawRates = <String, double>{
+          'JPY': 1.0, // base currency
+          'USD': usdJpy, // JPY per USD
+          'EUR': eurUsd * usdJpy, // JPY per EUR = USD per EUR * JPY per USD
+        };
+
+        final normalized = _normalizeToEurBase(rawRates);
+        print('[BOJ] Normalized rates count: ${normalized.length}');
+        return normalized;
+      }
+      print('[BOJ] ERROR: statusCode != 200');
+    } on TimeoutException catch (e) {
+      print('[BOJ] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[BOJ] ERROR: $e');
+      print('[BOJ] Stack: $st');
+    }
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => ['EUR', 'JPY', 'USD'];
+}
+class BokProvider implements CurrencyProvider {
+  @override
+  String get id => 'bok';
+
+  @override
+  String get name => 'Bank of Korea';
+
+  @override
+  String get initials => 'BOK';
+
+  // Map BOK item codes to ISO codes (more reliable than Korean names)
+  static final _codeToIso = {
+    '0000001': 'USD',
+    '0000002': 'JPY',
+    '0000003': 'EUR',
+    '0000012': 'GBP',
+    '0000013': 'CAD',
+    '0000014': 'CHF',
+    '0000015': 'HKD',
+    '0000016': 'SEK',
+    '0000017': 'AUD',
+    '0000018': 'DKK',
+  };
+
+  static final _perUnitPattern = RegExp(r'\((\d+)(?:엔|루피아|동)\)');
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    print('[BOK] Starting fetchRates()');
+    try {
+      // BOK doesn't publish on weekends/holidays; scan backwards up to 7 days
+      for (int dayOffset = 0; dayOffset < 7; dayOffset++) {
+        final date = DateTime.now().subtract(Duration(days: dayOffset));
+        final dateStr = '${date.year}${date.month.toString().padLeft(2, '0')}${date.day.toString().padLeft(2, '0')}';
+
+        final response = await http.get(
+          Uri.https(
+            'ecos.bok.or.kr',
+            '/api/StatisticSearch/sample/json/kr/1/10/731Y001/D/$dateStr/$dateStr',
+          ),
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            'Accept': 'application/json',
+          },
+        ).timeout(const Duration(seconds: 15));
+
+        print('[BOK] Date $dateStr: status=${response.statusCode}, len=${response.body.length}');
+
+        if (response.statusCode != 200) continue;
+
+        final jsonData = jsonDecode(response.body);
+        final rows = jsonData['StatisticSearch']?['row'];
+        if (rows is! List) {
+          print('[BOK] ERROR: No row data in response');
+          continue;
+        }
+
+        final rawRates = <String, double>{};
+
+        for (final item in rows) {
+          if (item is! Map) continue;
+
+          final itemCode = item['ITEM_CODE1'] as String?;
+          final itemName = item['ITEM_NAME1'] as String?;
+          final dataValue = item['DATA_VALUE'];
+
+          if (itemCode == null || dataValue == null) continue;
+
+          final isoCode = _codeToIso[itemCode];
+          if (isoCode == null) {
+            // Try to detect unknown currencies dynamically
+            print('[BOK] Unknown item code: $itemCode, name: $itemName');
+            continue;
+          }
+
+          final rate = (dataValue is num)
+              ? dataValue.toDouble()
+              : double.tryParse(dataValue.toString());
+          if (rate == null || rate == 0) continue;
+
+          // Check for per-unit scaling (e.g. "(100엔)")
+          if (itemName != null) {
+            final match = _perUnitPattern.firstMatch(itemName);
+            if (match != null) {
+              final unit = int.tryParse(match.group(1)!);
+              if (unit != null && unit > 0) {
+                rawRates[isoCode] = rate / unit;
+                continue;
+              }
+            }
+          }
+
+          rawRates[isoCode] = rate;
+        }
+
+        print('[BOK] Parsed ${rawRates.length} raw rates for $dateStr');
+        if (rawRates.isNotEmpty) {
+          rawRates['KRW'] = 1.0;
+
+          final normalized = _normalizeToEurBase(rawRates);
+          print('[BOK] Normalized rates count: ${normalized.length}');
+          return normalized;
+        }
+      }
+      print('[BOK] ERROR: No rates found in last 7 days');
+    } on TimeoutException catch (e) {
+      print('[BOK] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[BOK] ERROR: $e');
+      print('[BOK] Stack: $st');
+    }
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AUD', 'CAD', 'CHF', 'DKK', 'EUR', 'GBP', 'HKD', 'JPY', 'KRW', 'SEK',
+    'USD',
+  ];
+}
+class BomProvider implements CurrencyProvider {
+  @override
+  String get id => 'bom';
+
+  @override
+  String get name => 'Bank of Mongolia';
+
+  @override
+  String get initials => 'BOM';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final now = DateTime.now();
+      final startDate = DateTime(now.year - 1, now.month, now.day);
+      final startStr =
+          '${startDate.year}-${startDate.month.toString().padLeft(2, '0')}-${startDate.day.toString().padLeft(2, '0')}';
+      final endStr =
+          '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+
+      final response = await http.post(
+        Uri.parse(
+          'https://www.mongolbank.mn/en/currency-rates/data?startDate=$startStr&endDate=$endStr',
+        ),
+      );
+
+      if (response.statusCode != 200) {
+        print('[BOM] HTTP ${response.statusCode}');
+        return null;
+      }
+
+      return parseBomJson(response.body);
+    } catch (e, st) {
+      print('[BOM] ERROR: $e');
+      print('[BOM] Stack: $st');
+    }
+    return null;
+  }
+
+  /// Parses the BOM JSON response and returns EUR-normalized rates.
+  @visibleForTesting
+  Map<String, double>? parseBomJson(String jsonText) {
+    final jsonData = jsonDecode(jsonText);
+    final data = jsonData['data'];
+    if (data is! List || data.isEmpty) {
+      print('[BOM] No data in response');
+      return null;
+    }
+
+    // Use the last (most recent) entry
+    final latest = data.last as Map<String, dynamic>;
+    final rawRates = <String, double>{};
+
+    // Skip non-currency and metadata entries
+    final skipKeys = {'RATE_DATE'};
+
+    for (final entry in latest.entries) {
+      final key = entry.key;
+      if (skipKeys.contains(key)) continue;
+
+      final valueStr = entry.value?.toString();
+      if (valueStr == null || valueStr.isEmpty) continue;
+
+      // Remove commas from values like "3,570.82"
+      final cleaned = valueStr.replaceAll(',', '');
+      final rate = double.tryParse(cleaned);
+      if (rate == null || rate <= 0) continue;
+
+      rawRates[key] = rate;
+    }
+
+    print('[BOM] Parsed ${rawRates.length} raw rates');
+    if (rawRates.isEmpty) return null;
+
+    rawRates['MNT'] = 1.0;
+    final normalized = _normalizeToEurBase(rawRates);
+    print('[BOM] Normalized rates count: ${normalized.length}');
+    return normalized;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AED', 'AUD', 'BGN', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'EGP', 'GBP',
+    'HKD', 'HUF', 'IDR', 'INR', 'JPY', 'KRW', 'KWD', 'KZT', 'MYR', 'NOK',
+    'NZD', 'PLN', 'RUB', 'SEK', 'SGD', 'THB', 'TRY', 'TWD', 'UAH', 'USD',
+    'VND', 'ZAR', 'MNT',
+  ];
+}
+class BotProvider implements CurrencyProvider {
+  @override
+  String get id => 'bot';
+
+  @override
+  String get name => 'Bank of Thailand';
+
+  @override
+  String get initials => 'BOT';
+
+  static final _perUnitPattern = RegExp(r'\(per\s+(\d[\d,]*)\s+.*?\)', caseSensitive: false);
+  static final _parenNumberPattern = RegExp(r'\((\d[\d,]*)\s+.*?\)');
+
+  int _extractMultiplier(String countryName) {
+    // Match "(per 100 yen)" or "(per 1,000 rupiah)"
+    final match = _perUnitPattern.firstMatch(countryName);
+    if (match != null) {
+      final numStr = match.group(1)!.replaceAll(',', '');
+      return int.tryParse(numStr) ?? 1;
+    }
+    // Match "(100 Riel)" without "per"
+    final match2 = _parenNumberPattern.firstMatch(countryName);
+    if (match2 != null) {
+      final numStr = match2.group(1)!.replaceAll(',', '');
+      return int.tryParse(numStr) ?? 1;
+    }
+    return 1;
+  }
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    print('[BOT] Starting fetchRates()');
+    try {
+      final response = await http.get(
+        Uri.https(
+          'www.bot.or.th',
+          '/content/bot/en/statistics/exchange-rate/jcr:content/root/container/statisticstable2.results.level3cache.json',
+        ),
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+          'Accept': '*/*',
+          'Referer': 'https://www.bot.or.th/en/statistics/exchange-rate.html',
+        },
+      ).timeout(const Duration(seconds: 15));
+
+      print('[BOT] Response status: ${response.statusCode}, body len: ${response.body.length}');
+
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        final ratesList = jsonData['responseContent'];
+        if (ratesList is! List) {
+          print('[BOT] ERROR: responseContent is not a List');
+          return null;
+        }
+
+        final rawRates = <String, double>{};
+
+        for (final item in ratesList) {
+          if (item is! Map) continue;
+
+          final currencyId = item['currency_id'] as String?;
+          final rateStr = item['buying_transfer'] as String?;
+          final countryName = item['countryName'] as String?;
+
+          if (currencyId == null || rateStr == null || countryName == null) continue;
+          if (rateStr == '-') continue;
+
+          final rate = double.tryParse(rateStr);
+          if (rate == null || rate == 0) continue;
+
+          final multiplier = _extractMultiplier(countryName);
+          if (multiplier == 0) continue;
+
+          // Rate is THB per <multiplier> units of foreign currency
+          rawRates[currencyId] = rate / multiplier;
+        }
+
+        print('[BOT] Parsed ${rawRates.length} raw rates');
+        if (rawRates.isEmpty) return null;
+
+        rawRates['THB'] = 1.0;
+
+        final normalized = _normalizeToEurBase(rawRates);
+        print('[BOT] Normalized rates count: ${normalized.length}');
+        return normalized;
+      }
+      print('[BOT] ERROR: statusCode != 200');
+    } on TimeoutException catch (e) {
+      print('[BOT] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[BOT] ERROR: $e');
+      print('[BOT] Stack: $st');
+    }
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AED', 'AUD', 'BDT', 'BHD', 'BND', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK',
+    'EGP', 'EUR', 'GBP', 'HKD', 'HUF', 'IDR', 'ILS', 'INR', 'JOD', 'JPY',
+    'KES', 'KHR', 'KRW', 'KWD', 'LAK', 'LKR', 'MXN', 'MYR', 'MMK', 'NOK',
+    'NPR', 'NZD', 'OMR', 'PGK', 'PHP', 'PKR', 'PLN', 'QAR', 'RUB', 'SAR',
+    'SEK', 'SGD', 'THB', 'TWD', 'VND', 'ZAR',
+  ];
+}
+class BslProvider implements CurrencyProvider {
+  @override
+  String get id => 'bsl';
+
+  @override
+  String get name => 'Bank of Sierra Leone';
+
+  @override
+  String get initials => 'BSL';
+
+  static final _nameToIso = <String, String>{
+    'POUND STERLING': 'GBP',
+    'U.S. DOLLAR': 'USD',
+    'CANADIAN DOLLAR': 'CAD',
+    'SWISS FRANC': 'CHF',
+    'SWEDISH KRONER': 'SEK',
+    'JAPANESE YEN': 'JPY',
+    'NORWEGIAN KRONE': 'NOK',
+    'EURO': 'EUR',
+    'DANISH KRONE': 'DKK',
+    'AUSTRALIAN DOLLAR': 'AUD',
+    'SAUDI RIYAL': 'SAR',
+    'KUWAIT DINAH': 'KWD',
+    'U.A.E.DIRHAMS': 'AED',
+    'U.A.E. DIRHAM': 'AED',
+    'U.A.E.DIRHAM': 'AED',
+    'SOUTH AFRICAN RAND': 'ZAR',
+    'CHINESE RENMINBI': 'CNY',
+    'HONG KONG': 'HKD',
+    'S.D.R.': 'XDR',
+    'CFA FRANC': 'XOF',
+    'GAMBIAN DALASI': 'GMD',
+    'GUINEAN FRANC': 'GNF',
+    'GHANABANK CEDI': 'GHS',
+    'NAIRA': 'NGN',
+    'CENTRAL BANK LIBERIA': 'LRD',
+    'CABO VERDE ESCUDOS': 'CVE',
+  };
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    print('[BSL] Starting fetchRates()');
+    try {
+      final now = DateTime.now();
+      for (var i = 0; i < 7; i++) {
+        final date = now.subtract(Duration(days: i));
+        final dd = date.day.toString().padLeft(2, '0');
+        final mm = date.month.toString().padLeft(2, '0');
+        final yyyy = date.year;
+        final url =
+            'https://bsl.gov.sl/Indicative%20Exchange%20Rates%20-$dd-$mm-$yyyy.pdf';
+
+        print('[BSL] Trying $url');
+        final response = await http
+            .get(Uri.parse(url))
+            .timeout(const Duration(seconds: 15));
+
+        if (response.statusCode == 200 &&
+            response.bodyBytes.length > 4 &&
+            String.fromCharCodes(response.bodyBytes.sublist(0, 4)) == '%PDF') {
+          print('[BSL] Got PDF');
+          final text = _extractPdfText(response.bodyBytes);
+          final result = parseBslPdfText(text);
+          print('[BSL] Parsed result: ${result != null ? '${result.length} rates' : 'null'}');
+          return result;
+        }
+      }
+      print('[BSL] No PDF found in the last 7 days');
+    } on TimeoutException catch (e) {
+      print('[BSL] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[BSL] ERROR: $e');
+      print('[BSL] Stack: $st');
+    }
+    return null;
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseBslPdfText(String text) {
+    final rawRates = <String, double>{};
+
+    // Match known currency names followed by a numeric rate.
+    // Some PDF extraction lines contain two column entries concatenated,
+    // e.g. "POUND STERLING 30.7687 U.S. DOLLAR 22.7925".
+    // We build a regex that matches every occurrence of (name, number).
+    final namePattern = _nameToIso.keys.map(RegExp.escape).join('|');
+    final regex = RegExp(
+      '($namePattern)\\s+([0-9]+\\.[0-9]+)',
+      caseSensitive: false,
+    );
+
+    for (final match in regex.allMatches(text)) {
+      final name = match.group(1)!.toUpperCase();
+      final rateStr = match.group(2)!;
+      final iso = _nameToIso[name];
+      if (iso == null) continue;
+
+      final rate = double.tryParse(rateStr);
+      if (rate == null || rate == 0) continue;
+
+      // Keep the first (reference-rates section) occurrence
+      if (!rawRates.containsKey(iso)) {
+        rawRates[iso] = rate;
+      }
+    }
+
+    if (!rawRates.containsKey('EUR')) {
+      print('[BSL] ERROR: EUR rate not found in PDF text');
+      return null;
+    }
+
+    // SLE itself: 1 SLE = 1 SLE
+    rawRates['SLE'] = 1.0;
+
+    return _normalizeToEurBase(rawRates);
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AUD', 'CAD', 'CHF', 'CNY', 'CVE', 'DKK', 'EUR', 'GBP', 'GHS', 'GMD',
+    'GNF', 'HKD', 'JPY', 'KWD', 'LRD', 'NGN', 'NOK', 'SAR', 'SEK', 'SLE',
+    'USD', 'XDR', 'XOF', 'ZAR',
+  ];
+}
+
+class BsiProvider implements CurrencyProvider {
+  @override
+  String get id => 'bsi';
+
+  @override
+  String get name => 'Bank of Slovenia';
+
+  @override
+  String get initials => 'BSI';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final response = await http.get(
+        Uri.parse('https://www.bsi.si/_data/tecajnice/EksotTecBS.xml'),
+      );
+
+      if (response.statusCode != 200) {
+        print('[BSI] HTTP ${response.statusCode}');
+        return null;
+      }
+
+      return parseBsiXml(response.body);
+    } catch (e, st) {
+      print('[BSI] ERROR: $e');
+      print('[BSI] Stack: $st');
+    }
+    return null;
+  }
+
+  /// Parses the BSI exotic-rates XML and returns EUR-normalized rates.
+  @visibleForTesting
+  Map<String, double>? parseBsiXml(String xml) {
+    final document = XmlDocument.parse(xml);
+    final rawRates = <String, double>{};
+
+    for (final tecaj in document.findAllElements('tecaj')) {
+      final oznaka = tecaj.getAttribute('oznaka');
+      final valueText = tecaj.innerText;
+
+      if (oznaka == null || valueText.isEmpty) continue;
+
+      final value = double.tryParse(valueText.replaceAll(',', '.'));
+      if (value == null || value == 0) continue;
+
+      // Rates are "units of foreign currency per 1 EUR"
+      rawRates[oznaka] = value;
+    }
+
+    print('[BSI] Parsed ${rawRates.length} raw rates');
+    if (rawRates.isNotEmpty) {
+      rawRates['EUR'] = 1.0;
+      final normalized = _normalizeToEurBase(rawRates);
+      print('[BSI] Normalized rates count: ${normalized.length}');
+      return normalized;
+    }
+
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AED', 'AFN', 'ALL', 'AMD', 'AOA', 'ARS', 'AWG', 'AZN', 'BAM', 'BBD',
+    'BDT', 'BHD', 'BIF', 'BND', 'BOB', 'BRL', 'BSD', 'BTN', 'BWP', 'BZD',
+    'CAD', 'CDF', 'CLP', 'COP', 'CRC', 'CUP', 'CVE', 'DJF', 'DOP', 'DZD',
+    'EGP', 'ERN', 'ETB', 'EUR', 'FJD', 'FKP', 'GEL', 'GHS', 'GIP', 'GMD',
+    'GNF', 'GTQ', 'GYD', 'HTG', 'HNL', 'IDR', 'IQD', 'IRR', 'JMD', 'JOD',
+    'KES', 'KGS', 'KHR', 'KMF', 'KPW', 'KWD', 'KYD', 'KZT', 'LAK', 'LBP',
+    'LKR', 'LRD', 'LSL', 'LYD', 'MAD', 'MDL', 'MGA', 'MKD', 'MMK', 'MNT',
+    'MOP', 'MRU', 'MUR', 'MVR', 'MWK', 'MZN', 'NAD', 'NGN', 'NIO', 'NPR',
+    'OMR', 'PAB', 'PEN', 'PGK', 'PKR', 'PYG', 'QAR', 'RON', 'RSD', 'RWF',
+    'SAR', 'SBD', 'SCR', 'SDG', 'SHP', 'SLE', 'SOS', 'SRD', 'SSP', 'STN',
+    'SVC', 'SYP', 'SZL', 'THB', 'TJS', 'TMT', 'TND', 'TOP', 'TTD', 'TWD',
+    'TZS', 'UAH', 'UGX', 'UYU', 'UZS', 'VES', 'VND', 'VUV', 'WST', 'XAF',
+    'XAG', 'XAU', 'XCD', 'XDR', 'XOF', 'XPD', 'XPF', 'XPT', 'YER', 'ZAR',
+    'ZMW',
+  ];
+}
+class CbkProvider implements CurrencyProvider {
+  @override
+  String get id => 'cbk';
+
+  @override
+  String get name => 'Central Bank of Kenya';
+
+  @override
+  String get initials => 'CBK';
+
+  static final _nameToIso = {
+    'US DOLLAR': 'USD',
+    'SW KRONER': 'SEK',
+    'NOR KRONER': 'NOK',
+    'DAN KRONER': 'DKK',
+    'IND RUPEE': 'INR',
+    'HONGKONG DOLLAR': 'HKD',
+    'SINGAPORE DOLLAR': 'SGD',
+    'SAUDI RIYAL': 'SAR',
+    'CHINESE YUAN': 'CNY',
+    'JPY (100)': 'JPY',
+    'S FRANC': 'CHF',
+    'CAN \$': 'CAD',
+    'STG POUND': 'GBP',
+    'EURO': 'EUR',
+    'SA RAND': 'ZAR',
+    'AE DIRHAM': 'AED',
+    'AUSTRALIAN \$': 'AUD',
+  };
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      // wpDataTables requires POST with DataTables parameters
+      final uri = Uri.https(
+        'www.centralbank.go.ke',
+        '/wp-admin/admin-ajax.php',
+        {'action': 'get_wdtable', 'table_id': '193'},
+      );
+      final response = await http.post(
+        uri,
+        body: {
+          'draw': '1',
+          'columns[0][data]': '0',
+          'columns[0][searchable]': 'true',
+          'columns[0][orderable]': 'true',
+          'columns[1][data]': '1',
+          'columns[1][searchable]': 'true',
+          'columns[1][orderable]': 'true',
+          'columns[2][data]': '2',
+          'columns[2][searchable]': 'true',
+          'columns[2][orderable]': 'true',
+          'order[0][column]': '0',
+          'order[0][dir]': 'desc',
+          'start': '0',
+          'length': '100',
+          'search[value]': '',
+        },
+      );
+
+      if (response.statusCode != 200) {
+        print('[CBK] Response status: ${response.statusCode}');
+        return null;
+      }
+
+      final jsonData = jsonDecode(response.body);
+      final data = jsonData['data'];
+      if (data is! List) {
+        print('[CBK] No data array in response');
+        return null;
+      }
+
+      final rawRates = <String, double>{};
+      String? latestDate;
+
+      for (final row in data) {
+        if (row is! List || row.length < 3) continue;
+
+        final date = row[0] as String?;
+        final name = row[1] as String?;
+        final rateStr = row[2] as String?;
+        if (date == null || name == null || rateStr == null) continue;
+
+        // Only process the most recent date
+        if (latestDate == null) {
+          latestDate = date;
+        } else if (date != latestDate) {
+          break;
+        }
+
+        // Skip East African cross rates
+        if (name.startsWith('KES /')) continue;
+
+        final isoCode = _nameToIso[name];
+        if (isoCode == null) {
+          print('[CBK] Unknown currency name: $name');
+          continue;
+        }
+
+        final rate = double.tryParse(rateStr);
+        if (rate == null || rate == 0) continue;
+
+        // JPY rate is per 100 yen
+        if (name == 'JPY (100)') {
+          rawRates[isoCode] = rate / 100.0;
+        } else {
+          rawRates[isoCode] = rate;
+        }
+      }
+
+      print('[CBK] Parsed ${rawRates.length} raw rates for date $latestDate');
+      if (rawRates.isEmpty) return null;
+
+      rawRates['KES'] = 1.0;
+      final normalized = _normalizeToEurBase(rawRates);
+      print('[CBK] Normalized rates count: ${normalized.length}');
+      return normalized;
+    } catch (e, st) {
+      print('[CBK] ERROR: $e');
+      print('[CBK] Stack: $st');
+      return null;
+    }
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AED', 'AUD', 'CAD', 'CHF', 'CNY', 'DKK', 'EUR', 'GBP', 'HKD', 'INR',
+    'JPY', 'KES', 'NOK', 'SAR', 'SEK', 'SGD', 'USD', 'ZAR',
+  ];
+}
+class CbpmrProvider implements CurrencyProvider {
+  @override
+  String get id => 'cbpmr';
+
+  @override
+  String get name => 'Central Bank of the Republic of Transnistria';
+
+  @override
+  String get initials => 'CBPMR';
+
+  static final _linePattern = RegExp(
+    r'([A-Z]{3}),(\d+),([0-9.]+),\d+$',
+    multiLine: true,
+  );
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final now = DateTime.now();
+      // Try today and the previous 6 days (weekends/holidays have no data).
+      for (var i = 0; i < 7; i++) {
+        final date = now.subtract(Duration(days: i));
+        final dateStr =
+            '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+
+        print('[CBPMR] Trying $dateStr');
+        final response = await http.get(
+          Uri.https(
+            'www.cbpmr.net',
+            '/csv.php',
+            {
+              'vid': 'val',
+              'date': dateStr,
+              'lang': 'en',
+            },
+          ),
+        ).timeout(const Duration(seconds: 15));
+
+        if (response.statusCode != 200 || response.body.trim().isEmpty) {
+          print('[CBPMR] No data for $dateStr (status=${response.statusCode}, len=${response.body.length})');
+          continue;
+        }
+
+        final result = parseCbpmrCsv(response.body);
+        if (result != null) {
+          print('[CBPMR] Parsed ${result.length} rates from $dateStr');
+          return result;
+        }
+      }
+      print('[CBPMR] No valid CSV found in the last 7 days');
+    } on TimeoutException catch (e) {
+      print('[CBPMR] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[CBPMR] ERROR: $e');
+      print('[CBPMR] Stack: $st');
+    }
+    return null;
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseCbpmrCsv(String csv) {
+    final rawRates = <String, double>{};
+
+    for (final match in _linePattern.allMatches(csv)) {
+      final currency = match.group(1)!;
+      final units = int.parse(match.group(2)!);
+      final rate = double.parse(match.group(3)!);
+
+      if (units == 0) continue;
+      rawRates[currency] = rate / units;
+    }
+
+    print('[CBPMR] Parsed ${rawRates.length} raw rates');
+    if (!rawRates.containsKey('EUR')) {
+      print('[CBPMR] ERROR: Missing EUR rate');
+      return null;
+    }
+
+    rawRates['PRB'] = 1.0;
+    return _normalizeToEurBase(rawRates);
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AED', 'AMD', 'AUD', 'AZN', 'BYN', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK',
+    'EUR', 'GBP', 'HUF', 'ILS', 'INR', 'JPY', 'KGS', 'KZT', 'MDL', 'NOK',
+    'NZD', 'PLN', 'PRB', 'RON', 'RSD', 'RUB', 'SEK', 'TJS', 'TRY', 'UAH',
+    'USD',
+  ];
+}
+class CbsProvider implements CurrencyProvider {
+  @override
+  String get id => 'cbs';
+
+  @override
+  String get name => 'Central Bank of Seychelles';
+
+  @override
+  String get initials => 'CBS';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final client = _createPermissiveClient();
+      final response = await client.get(
+        Uri.https(
+          'www.cbs.sc',
+          '/Controller/MarketinfoController.jsp',
+          {'type': 'daily rates'},
+        ),
+      );
+
+      if (response.statusCode != 200) {
+        print('[CBS] Response status: ${response.statusCode}');
+        return null;
+      }
+
+      final jsonData = jsonDecode(response.body);
+      final drafts = jsonData['dailybankdrafts'];
+      if (drafts is! List || drafts.isEmpty) {
+        print('[CBS] No dailybankdrafts data');
+        return null;
+      }
+
+      final item = drafts[0];
+      if (item is! Map) {
+        print('[CBS] Invalid draft item');
+        return null;
+      }
+
+      final rawRates = <String, double>{};
+
+      final usdMid = double.tryParse(item['usdmid']?.toString() ?? '');
+      final gbpMid = double.tryParse(item['gbpmid']?.toString() ?? '');
+      final eurMid = double.tryParse(item['eurmid']?.toString() ?? '');
+
+      if (usdMid != null && usdMid > 0) rawRates['USD'] = usdMid;
+      if (gbpMid != null && gbpMid > 0) rawRates['GBP'] = gbpMid;
+      if (eurMid != null && eurMid > 0) rawRates['EUR'] = eurMid;
+
+      print('[CBS] Parsed ${rawRates.length} raw rates');
+      if (rawRates.isEmpty) return null;
+
+      rawRates['SCR'] = 1.0;
+      final normalized = _normalizeToEurBase(rawRates);
+      print('[CBS] Normalized rates count: ${normalized.length}');
+      return normalized;
+    } catch (e, st) {
+      print('[CBS] ERROR: $e');
+      print('[CBS] Stack: $st');
+      return null;
+    }
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'EUR', 'GBP', 'SCR', 'USD',
+  ];
+}
+
+class CbvsProvider implements CurrencyProvider {
+  @override
+  String get id => 'cbvs';
+
+  @override
+  String get name => 'Centrale Bank van Suriname';
+
+  @override
+  String get initials => 'CBVS';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final now = DateTime.now();
+      // Try today and the previous 6 days.
+      for (var i = 0; i < 7; i++) {
+        final date = now.subtract(Duration(days: i));
+        final yyyy = date.year.toString();
+        final yy = (date.year % 100).toString().padLeft(2, '0');
+        final mm = date.month.toString().padLeft(2, '0');
+        final dd = date.day.toString().padLeft(2, '0');
+        final pdfId = 'DO$yy$mm${dd}E';
+        final url =
+            'https://www.cbvs.sr/images/content/publicaties/Wisselkoersen/$yyyy/$pdfId%2010.00%20uur.pdf';
+
+        print('[CBVS] Trying $url');
+        final response = await http
+            .get(Uri.parse(url))
+            .timeout(const Duration(seconds: 15));
+
+        if (response.statusCode == 200 &&
+            response.bodyBytes.length > 4 &&
+            String.fromCharCodes(response.bodyBytes.sublist(0, 4)) == '%PDF') {
+          print('[CBVS] Got PDF for ${date.toIso8601String().split('T').first}');
+          final text = _extractPdfText(response.bodyBytes);
+          final result = parseCbvsPdfText(text);
+          print('[CBVS] Parsed result: ${result != null ? '${result.length} rates' : 'null'}');
+          return result;
+        }
+      }
+      print('[CBVS] No PDF found in the last 7 days');
+    } on TimeoutException catch (e) {
+      print('[CBVS] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[CBVS] ERROR: $e');
+      print('[CBVS] Stack: $st');
+    }
+    return null;
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseCbvsPdfText(String text) {
+    final rawRates = <String, double>{};
+
+    // Matches:
+    //   (USD)37.222 37.700
+    //   (GYD PER 100 )17.687 18.033
+    final regex = RegExp(
+      r'\\?\(([A-Z]{3})(?:\s+PER\s+100\s*)?(?:\\?\)|\\)?\s*([0-9.,]+)\s+([0-9.,]+)',
+      caseSensitive: false,
+    );
+
+    for (final match in regex.allMatches(text)) {
+      final code = match.group(1)!.toUpperCase();
+      final buyingStr = match.group(2)!;
+      final sellingStr = match.group(3)!;
+
+      // Numbers use dot as thousands separator and comma as decimal
+      // e.g. "37.222" → 37.222, "37,700" → 37.7
+      final buying = double.tryParse(
+        buyingStr.replaceAll('.', '').replaceAll(',', '.'),
+      );
+      final selling = double.tryParse(
+        sellingStr.replaceAll('.', '').replaceAll(',', '.'),
+      );
+      if (buying == null || selling == null || buying == 0) continue;
+
+      var mid = (buying + selling) / 2.0;
+
+      // Some rates are quoted per 100 units (e.g. GYD PER 100).
+      if (match.group(0)!.toUpperCase().contains('PER 100')) {
+        mid /= 100.0;
+      }
+
+      rawRates[code] = mid;
+    }
+
+    if (rawRates.isEmpty || !rawRates.containsKey('EUR')) {
+      return null;
+    }
+
+    rawRates['SRD'] = 1.0;
+    return _normalizeToEurBase(rawRates);
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AWG', 'BBD', 'BRL', 'CNY', 'EUR', 'GBP', 'GYD', 'SRD', 'TTD', 'USD',
+    'XCD', 'XCG',
+  ];
+}
+
+class CentralBankOfIcelandProvider implements CurrencyProvider {
+  @override
+  String get id => 'central_bank_of_iceland';
+
+  @override
+  String get name => 'Central Bank of Iceland';
+
+  @override
+  String get initials => 'CBI';
+
+  static const _nameToIso = {
+    'Bandaríkjadalur': 'USD',
+    'Dönsk króna': 'DKK',
+    'Evra': 'EUR',
+    'Japanskt jen': 'JPY',
+    'Kanadadalur': 'CAD',
+    'Norsk króna': 'NOK',
+    'Sérstök dráttarréttindi- SDR': 'XDR',
+    'Sterlingspund': 'GBP',
+    'Svissneskur franki': 'CHF',
+    'Sænsk króna': 'SEK',
+  };
+
+  DateTime? _parseDate(String dateStr) {
+    // Format: "M/d/yyyy h:mm:ss AM" or "MM/dd/yyyy hh:mm:ss AM"
+    final parts = dateStr.split(' ');
+    if (parts.isEmpty) return null;
+    final dateParts = parts[0].split('/');
+    if (dateParts.length != 3) return null;
+    final month = int.tryParse(dateParts[0]);
+    final day = int.tryParse(dateParts[1]);
+    final year = int.tryParse(dateParts[2]);
+    if (month == null || day == null || year == null) return null;
+    return DateTime(year, month, day);
+  }
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    print('[CBI] Starting fetchRates()');
+    try {
+      final response = await http.get(
+        Uri.https(
+          'sedlabanki.is',
+          '/xmltimeseries/Default.aspx',
+          {
+            'DagsFra': 'LATEST',
+            'GroupID': '9',
+            'Type': 'xml',
+          },
+        ),
+      ).timeout(const Duration(seconds: 15));
+
+      print('[CBI] Response status: ${response.statusCode}, body len: ${response.body.length}');
+
+      if (response.statusCode == 200) {
+        // The server returns UTF-8 bytes but doesn't set the charset header,
+        // so response.body decodes incorrectly. Decode bytes as UTF-8 explicitly.
+        final body = utf8.decode(response.bodyBytes);
+        final document = XmlDocument.parse(body);
+        final rawRates = <String, double>{};
+        final cutoff = DateTime.now().subtract(const Duration(days: 90));
+
+        for (final timeSeries in document.findAllElements('TimeSeries')) {
+          final description = timeSeries.findElements('Description').firstOrNull?.innerText;
+          if (description == null || !description.contains('miðgengi')) continue;
+
+          final name = timeSeries.findElements('Name').firstOrNull?.innerText;
+          if (name == null) continue;
+
+          final isoCode = _nameToIso[name];
+          if (isoCode == null) continue;
+
+          final entry = timeSeries.findElements('TimeSeriesData').firstOrNull
+              ?.findElements('Entry').firstOrNull;
+          if (entry == null) continue;
+
+          final dateStr = entry.findElements('Date').firstOrNull?.innerText;
+          final valueStr = entry.findElements('Value').firstOrNull?.innerText;
+
+          if (dateStr == null || valueStr == null) continue;
+
+          final date = _parseDate(dateStr);
+          if (date == null || date.isBefore(cutoff)) continue;
+
+          final value = double.tryParse(valueStr);
+          if (value == null || value == 0) continue;
+
+          // Rate is ISK per unit of foreign currency
+          rawRates[isoCode] = value;
+        }
+
+        print('[CBI] Parsed ${rawRates.length} raw rates');
+        if (rawRates.isEmpty) return null;
+
+        rawRates['ISK'] = 1.0;
+
+        final normalized = _normalizeToEurBase(rawRates);
+        print('[CBI] Normalized rates count: ${normalized.length}');
+        return normalized;
+      }
+      print('[CBI] ERROR: statusCode != 200');
+    } on TimeoutException catch (e) {
+      print('[CBI] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[CBI] ERROR: $e');
+      print('[CBI] Stack: $st');
+    }
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'CAD', 'CHF', 'DKK', 'EUR', 'GBP', 'ISK', 'JPY', 'NOK', 'SEK', 'USD',
+    'XDR',
+  ];
+}
+class EccbProvider implements CurrencyProvider {
+  @override
+  String get id => 'eccb';
+
+  @override
+  String get name => 'Eastern Caribbean Central Bank';
+
+  @override
+  String get initials => 'ECCB';
+
+  static final _blockPattern = RegExp(
+    r'<div class="exchange-rates-data[^"]*">(.*?)(?=<div class="exchange-rates-data[^"]*">|\s*$)',
+    dotAll: true,
+    caseSensitive: false,
+  );
+
+  static final _itemPattern = RegExp(
+    r'<span class="fi fis fi-[a-z]{2}" title="([^"]*)">.*?</span>.*?<div class="value">\s*([0-9.]+)\s*</div>',
+    dotAll: true,
+    caseSensitive: false,
+  );
+
+  static const _countryToCurrency = {
+    'Australia': 'AUD',
+    'Canada': 'CAD',
+    'Europe': 'EUR',
+    'Denmark': 'DKK',
+    'Japan': 'JPY',
+    'New Zealand': 'NZD',
+    'Norway': 'NOK',
+    'Sweden': 'SEK',
+    'Switzerland': 'CHF',
+    'United Kingdom': 'GBP',
+    'China': 'CNY',
+    'United States': 'USD',
+    'Kuwait': 'KWD',
+    'South Korea': 'KRW',
+    'United Arab Emirates': 'AED',
+    'Barbados': 'BBD',
+    'Belize': 'BZD',
+    'Guyana': 'GYD',
+    'Jamaica': 'JMD',
+    'Trinidad and Tobago': 'TTD',
+  };
+
+  static const _months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
+  ];
+
+  String? _extractCookie(String setCookieValue, String cookieName) {
+    final pattern = RegExp('$cookieName=([^;]+)');
+    final match = pattern.firstMatch(setCookieValue);
+    return match?.group(1);
+  }
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final now = DateTime.now();
+      final monthYear = '${_months[now.month - 1]}-${now.year}';
+
+      // Step 1: GET the page to establish session and extract CSRF token
+      final getResponse = await http.get(
+        Uri.https('www.eccb-centralbank.org', '/exchange-rates'),
+        headers: {
+          'User-Agent':
+              'Mozilla/5.0 (X11; Linux x86_64; rv:150.0) Gecko/20100101 Firefox/150.0',
+          'Accept': 'text/html',
+        },
+      ).timeout(const Duration(seconds: 15));
+
+      print('[ECCB] GET status: ${getResponse.statusCode}');
+      if (getResponse.statusCode != 200) {
+        print('[ECCB] ERROR: GET failed: ${getResponse.statusCode}');
+        return null;
+      }
+
+      final htmlBody = getResponse.body;
+
+      // Extract CSRF token from meta tag
+      final csrfMatch = RegExp(
+        r'<meta name="csrf-token" content="([^"]+)">',
+        caseSensitive: false,
+      ).firstMatch(htmlBody);
+      if (csrfMatch == null) {
+        print('[ECCB] ERROR: CSRF token not found in HTML');
+        return null;
+      }
+      final csrfToken = csrfMatch.group(1)!;
+
+      // Extract cookies from Set-Cookie headers
+      final setCookieHeaders = getResponse.headers['set-cookie'];
+      if (setCookieHeaders == null) {
+        print('[ECCB] ERROR: No Set-Cookie header');
+        return null;
+      }
+      final xsrfToken = _extractCookie(setCookieHeaders, 'XSRF-TOKEN');
+      final session = _extractCookie(
+        setCookieHeaders,
+        'eastern_caribbean_central_bank_session',
+      );
+      if (xsrfToken == null || session == null) {
+        print('[ECCB] ERROR: Missing required cookies');
+        return null;
+      }
+      final cookieHeader =
+          'XSRF-TOKEN=$xsrfToken; eastern_caribbean_central_bank_session=$session';
+
+      // Step 2: POST with CSRF token and cookies
+      final postResponse = await http.post(
+        Uri.https('www.eccb-centralbank.org', '/exchange-rates'),
+        headers: {
+          'Content-Type':
+              'application/x-www-form-urlencoded; charset=UTF-8',
+          'X-Requested-With': 'XMLHttpRequest',
+          'Accept': 'application/json, text/javascript, */*; q=0.01',
+          'X-CSRF-TOKEN': csrfToken,
+          'Origin': 'https://www.eccb-centralbank.org',
+          'Referer': 'https://www.eccb-centralbank.org/exchange-rates',
+          'User-Agent':
+              'Mozilla/5.0 (X11; Linux x86_64; rv:150.0) Gecko/20100101 Firefox/150.0',
+          'Cookie': cookieHeader,
+        },
+        body: 'date=$monthYear',
+      ).timeout(const Duration(seconds: 20));
+
+      print('[ECCB] POST status: ${postResponse.statusCode}');
+      if (postResponse.statusCode != 200) {
+        print('[ECCB] ERROR: POST failed with ${postResponse.statusCode}');
+        return null;
+      }
+
+      final jsonData = jsonDecode(postResponse.body);
+      final htmlContent = jsonData['html'] as String?;
+
+      if (htmlContent == null || htmlContent.isEmpty) {
+        print('[ECCB] ERROR: Missing html field in response');
+        return null;
+      }
+
+      // Parse blocks in order; use the first one that contains EUR
+      for (final blockMatch in _blockPattern.allMatches(htmlContent)) {
+        final blockHtml = blockMatch.group(1)!;
+        final rawRates = <String, double>{};
+
+        for (final match in _itemPattern.allMatches(blockHtml)) {
+          final countryName = match.group(1)!.trim();
+          final valueStr = match.group(2)!.trim();
+          final value = double.tryParse(valueStr);
+
+          if (value == null) continue;
+
+          final currency = _countryToCurrency[countryName];
+          if (currency == null) {
+            print('[ECCB] WARNING: Unknown country "$countryName"');
+            continue;
+          }
+
+          rawRates[currency] = value;
+        }
+
+        if (rawRates.containsKey('EUR')) {
+          print('[ECCB] Parsed ${rawRates.length} raw rates');
+          rawRates['XCD'] = 1.0;
+          final normalized = _normalizeToEurBase(rawRates);
+          print('[ECCB] Normalized rates count: ${normalized.length}');
+          return normalized;
+        }
+      }
+
+      print('[ECCB] ERROR: No valid rates block found with EUR');
+    } on TimeoutException catch (e) {
+      print('[ECCB] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[ECCB] ERROR: $e');
+      print('[ECCB] Stack: $st');
+    }
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AED', 'AUD', 'BBD', 'BZD', 'CAD', 'CHF', 'CNY', 'DKK', 'EUR',
+    'GBP', 'GYD', 'JMD', 'JPY', 'KRW', 'KWD', 'NOK', 'NZD', 'SEK',
+    'TTD', 'USD', 'XCD',
+  ];
+}
+class EestiPankProvider implements CurrencyProvider {
+  @override
+  String get id => 'eesti_pank';
+
+  @override
+  String get name => 'Eesti Pank';
+
+  @override
+  String get initials => 'EP';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    print('[EP] Starting fetchRates()');
+    try {
+      final response = await http.get(
+        Uri.https('haldus.eestipank.ee', '/en/export/currency_rates'),
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+          'Accept': 'text/csv,text/plain,*/*',
+        },
+      ).timeout(const Duration(seconds: 15));
+
+      print('[EP] Response status: ${response.statusCode}, body len: ${response.body.length}');
+
+      if (response.statusCode == 200) {
+        final rawRates = <String, double>{};
+        final lines = const LineSplitter().convert(response.body);
+
+        for (final line in lines) {
+          final trimmed = line.trim();
+          if (trimmed.isEmpty) continue;
+          // Skip header lines
+          if (trimmed.startsWith('"Euro related') ||
+              trimmed.startsWith('"ECB rates at') ||
+              trimmed.startsWith('"Currency Code"')) {
+            continue;
+          }
+
+          final parts = trimmed.split(',');
+          if (parts.length < 2) continue;
+
+          final isoCode = parts[0].trim().replaceAll('"', '').toUpperCase();
+          final rateStr = parts[1].trim().replaceAll('"', '');
+
+          if (isoCode.isEmpty || rateStr.isEmpty) continue;
+
+          final rate = double.tryParse(rateStr);
+          if (rate == null || rate == 0) continue;
+
+          rawRates[isoCode] = rate;
+        }
+
+        print('[EP] Parsed ${rawRates.length} raw rates');
+        if (rawRates.isEmpty) return null;
+
+        rawRates['EUR'] = 1.0;
+
+        print('[EP] Returning ${rawRates.length} rates (EUR-based)');
+        return rawRates;
+      }
+      print('[EP] ERROR: statusCode != 200');
+    } on TimeoutException catch (e) {
+      print('[EP] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[EP] ERROR: $e');
+      print('[EP] Stack: $st');
+    }
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AUD', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'EUR', 'GBP', 'HKD',
+    'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JPY', 'KRW', 'MXN', 'MYR', 'NOK',
+    'NZD', 'PHP', 'PLN', 'RON', 'SEK', 'SGD', 'THB', 'TRY', 'USD', 'ZAR',
+  ];
+}
+class FrbProvider implements CurrencyProvider {
+  @override
+  String get id => 'frb';
+
+  @override
+  String get name => 'Federal Reserve Board';
+
+  @override
+  String get initials => 'FRB';
+
+  static const String _cbNamespace =
+      'http://www.cbwiki.net/wiki/index.php/Specification_1.1';
+
+  static final _usdPerPattern = RegExp(r'\(USD per ([A-Z]{3})\)');
+
+  static const _coverageToIso = {
+    'South Africa Rand': 'ZAR',
+    'Brazil Real': 'BRL',
+    'Canada Dollar': 'CAD',
+    'China, P.R. Yuan': 'CNY',
+    'Denmark Krone': 'DKK',
+    'Hong Kong Dollar': 'HKD',
+    'India Rupee': 'INR',
+    'Japan Yen': 'JPY',
+    'Malaysia Ringgit': 'MYR',
+    'Mexico Peso': 'MXN',
+    'Norway Krone': 'NOK',
+    'Singapore Dollar': 'SGD',
+    'South Korea Won': 'KRW',
+    'Sri Lanka Rupee': 'LKR',
+    'Sweden Krona': 'SEK',
+    'Switzerland Franc': 'CHF',
+    'Taiwan Dollar': 'TWD',
+    'Thailand Baht': 'THB',
+    'Venezuela Bolivar': 'VES',
+  };
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    print('[FRB] Starting fetchRates()');
+    try {
+      final response = await http.get(
+        Uri.https('www.federalreserve.gov', '/feeds/data/H10_H10.XML'),
+      ).timeout(const Duration(seconds: 15));
+
+      print('[FRB] Response status: ${response.statusCode}, body len: ${response.body.length}');
+
+      if (response.statusCode == 200) {
+        final document = XmlDocument.parse(response.body);
+
+        final rawRates = <String, double>{};
+        final latestDates = <String, DateTime>{};
+
+        for (final item in document.findAllElements('item')) {
+          final stats = item
+              .findElements('statistics', namespace: _cbNamespace)
+              .firstOrNull;
+          if (stats == null) continue;
+
+          final otherStat = stats
+              .findElements('otherStatistic', namespace: _cbNamespace)
+              .firstOrNull;
+          if (otherStat == null) continue;
+
+          // Only process daily (business) data
+          final obsPeriod = otherStat
+              .findElements('observationPeriod', namespace: _cbNamespace)
+              .firstOrNull;
+          if (obsPeriod == null) continue;
+          final frequency = obsPeriod.getAttribute('frequency');
+          if (frequency != 'business') continue;
+
+          // Parse observation date
+          final dateStr = obsPeriod.innerText;
+          final date = DateTime.tryParse(dateStr);
+          if (date == null) continue;
+
+          // Parse value
+          final valueElem = otherStat
+              .findElements('value', namespace: _cbNamespace)
+              .firstOrNull;
+          if (valueElem == null) continue;
+          final valueStr = valueElem.innerText;
+          if (valueStr == 'ND') continue;
+          final value = double.tryParse(valueStr);
+          if (value == null || value == 0) continue;
+
+          // Parse coverage to identify currency
+          final coverage = otherStat
+              .findElements('coverage', namespace: _cbNamespace)
+              .firstOrNull
+              ?.innerText;
+          if (coverage == null) continue;
+
+          // Skip dollar indices
+          if (coverage.contains('Index') || coverage.contains('index')) continue;
+
+          // Extract ISO code
+          String? isoCode;
+          final usdPerMatch = _usdPerPattern.firstMatch(coverage);
+          if (usdPerMatch != null) {
+            isoCode = usdPerMatch.group(1);
+          } else {
+            isoCode = _coverageToIso[coverage];
+          }
+          if (isoCode == null) continue;
+
+          // Keep only the latest rate for each currency
+          final existingDate = latestDates[isoCode];
+          if (existingDate == null || date.isAfter(existingDate)) {
+            latestDates[isoCode] = date;
+
+            // Coverage like "(USD per AUD)" means value is USD per unit of foreign
+            // Other coverages mean value is foreign per USD
+            if (usdPerMatch != null) {
+              rawRates[isoCode] = value;
+            } else {
+              rawRates[isoCode] = 1.0 / value;
+            }
+          }
+        }
+
+        print('[FRB] Parsed ${rawRates.length} raw rates');
+        if (rawRates.isEmpty) return null;
+
+        rawRates['USD'] = 1.0;
+
+        final normalized = _normalizeToEurBase(rawRates);
+        print('[FRB] Normalized rates count: ${normalized.length}');
+        return normalized;
+      }
+      print('[FRB] ERROR: statusCode != 200');
+    } on TimeoutException catch (e) {
+      print('[FRB] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[FRB] ERROR: $e');
+      print('[FRB] Stack: $st');
+    }
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AUD', 'BRL', 'CAD', 'CHF', 'CNY', 'DKK', 'EUR', 'GBP', 'HKD', 'INR',
+    'JPY', 'KRW', 'LKR', 'MXN', 'MYR', 'NOK', 'NZD', 'SEK', 'SGD', 'THB',
+    'TWD', 'USD', 'VES', 'ZAR',
+  ];
+}
+class MefCambodiaProvider implements CurrencyProvider {
+  @override
+  String get id => 'mef_cambodia';
+
+  @override
+  String get name => 'Ministry of Economy and Finance (Cambodia)';
+
+  @override
+  String get initials => 'MEF';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    print('[MEF] Starting fetchRates()');
+    try {
+      final client = _createPermissiveClient();
+      final response = await client.get(
+        Uri.https('data.mef.gov.kh', '/api/v1/realtime-api/exchange-rate'),
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+          'Accept': 'application/json',
+        },
+      ).timeout(const Duration(seconds: 15));
+      client.close();
+
+      print('[MEF] Response status: ${response.statusCode}, body len: ${response.body.length}');
+
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        final dataList = jsonData['data'];
+        if (dataList is! List) {
+          print('[MEF] ERROR: data is not a List');
+          return null;
+        }
+
+        final rawRates = <String, double>{};
+
+        for (final item in dataList) {
+          if (item is! Map) continue;
+
+          var isoCode = (item['currency_id'] as String?)?.trim().toUpperCase();
+          final unit = item['unit'];
+          final average = item['average'];
+
+          if (isoCode == null || isoCode.isEmpty) continue;
+          if (unit == null || average == null) continue;
+
+          final unitVal = (unit is num) ? unit.toDouble() : double.tryParse(unit.toString());
+          final avgVal = (average is num) ? average.toDouble() : double.tryParse(average.toString());
+
+          if (unitVal == null || unitVal == 0 || avgVal == null || avgVal == 0) continue;
+
+          // Map SDR to standard XDR
+          if (isoCode == 'SDR') isoCode = 'XDR';
+
+          // Rate is KHR per <unit> of foreign currency
+          rawRates[isoCode] = avgVal / unitVal;
+        }
+
+        print('[MEF] Parsed ${rawRates.length} raw rates');
+        if (rawRates.isEmpty) return null;
+
+        rawRates['KHR'] = 1.0;
+
+        final normalized = _normalizeToEurBase(rawRates);
+        print('[MEF] Normalized rates count: ${normalized.length}');
+        return normalized;
+      }
+      print('[MEF] ERROR: statusCode != 200');
+    } on TimeoutException catch (e) {
+      print('[MEF] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[MEF] ERROR: $e');
+      print('[MEF] Stack: $st');
+    }
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AED', 'AUD', 'CAD', 'CHF', 'CNH', 'CNY', 'DKK', 'EUR', 'GBP', 'HKD',
+    'IDR', 'INR', 'JPY', 'KHR', 'KRW', 'LAK', 'MMK', 'MYR', 'NGN', 'NZD',
+    'PHP', 'SAR', 'SEK', 'SGD', 'THB', 'TWD', 'USD', 'VND', 'XDR', 'ZAR',
+  ];
+}
+class NbeProvider implements CurrencyProvider {
+  @override
+  String get id => 'nbe';
+
+  @override
+  String get name => 'National Bank of Ethiopia';
+
+  @override
+  String get initials => 'NBE';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final now = DateTime.now().toUtc();
+      for (int i = 0; i < 7; i++) {
+        final date = now.subtract(Duration(days: i));
+        final dateStr =
+            '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+
+        final response = await http.get(
+          Uri.https(
+            'api.nbe.gov.et',
+            '/api/filter-exchange-rates',
+            {'date': dateStr},
+          ),
+        ).timeout(const Duration(seconds: 30));
+
+        if (response.statusCode != 200) {
+          print('[NBE] Date $dateStr: status=${response.statusCode}');
+          continue;
+        }
+
+        final jsonData = jsonDecode(response.body);
+        if (jsonData['success'] != true) {
+          print('[NBE] Date $dateStr: success=false');
+          continue;
+        }
+
+        final data = jsonData['data'];
+        if (data is! List) {
+          print('[NBE] Date $dateStr: no data array');
+          continue;
+        }
+
+        final rawRates = <String, double>{};
+
+        for (final item in data) {
+          if (item is! Map) continue;
+
+          final currency = item['currency'];
+          if (currency is! Map) continue;
+
+          final isoCode = currency['code'] as String?;
+          final avgStr = item['weighted_average'] as String?;
+          if (isoCode == null || avgStr == null) continue;
+
+          final rate = double.tryParse(avgStr);
+          if (rate == null || rate == 0) continue;
+
+          rawRates[isoCode] = rate;
+        }
+
+        print('[NBE] Parsed ${rawRates.length} raw rates for $dateStr');
+        if (rawRates.isNotEmpty) {
+          rawRates['ETB'] = 1.0;
+          final normalized = _normalizeToEurBase(rawRates);
+          print('[NBE] Normalized rates count: ${normalized.length}');
+          return normalized;
+        }
+      }
+      print('[NBE] ERROR: No rates found in last 7 days');
+    } catch (e, st) {
+      print('[NBE] ERROR: $e');
+      print('[NBE] Stack: $st');
+    }
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AED', 'AUD', 'CAD', 'CHF', 'CNY', 'DKK', 'DJF', 'ETB', 'EUR', 'GBP',
+    'INR', 'JPY', 'KES', 'KWD', 'NOK', 'SAR', 'SEK', 'USD', 'XDR', 'ZAR',
+  ];
+}
+class NbkrProvider implements CurrencyProvider {
+  @override
+  String get id => 'nbkr';
+
+  @override
+  String get name => 'National Bank of the Kyrgyz Republic';
+
+  @override
+  String get initials => 'NBKR';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    print('[NBKR] Starting fetchRates()');
+    try {
+      final response = await http.get(
+        Uri.https('nbkr.kg', '/XML/daily.xml'),
+      ).timeout(const Duration(seconds: 15));
+
+      print('[NBKR] Response status: ${response.statusCode}');
+
+      if (response.statusCode == 200) {
+        final rawRates = <String, double>{};
+        final document = XmlDocument.parse(response.body);
+
+        for (final currencyElem in document.findAllElements('Currency')) {
+          final code = currencyElem.getAttribute('ISOCode');
+          final valueStr = currencyElem.getElement('Value')?.innerText;
+          if (code == null || valueStr == null || valueStr.isEmpty) continue;
+
+          // NBKR uses comma as decimal separator
+          final normalizedValueStr = valueStr.replaceAll(',', '.');
+          final value = double.tryParse(normalizedValueStr);
+          if (value == null || value == 0) continue;
+
+          rawRates[code] = value;
+        }
+
+        print('[NBKR] Parsed ${rawRates.length} raw rates');
+        if (rawRates.isEmpty) {
+          print('[NBKR] ERROR: rawRates is empty');
+          return null;
+        }
+
+        // KGS itself
+        rawRates['KGS'] = 1.0;
+
+        final normalized = _normalizeToEurBase(rawRates);
+        print('[NBKR] Normalized rates count: ${normalized.length}');
+        print('[NBKR] Normalized EUR: ${normalized['EUR']}');
+        print('[NBKR] Normalized USD: ${normalized['USD']}');
+        return normalized;
+      }
+      print('[NBKR] ERROR: statusCode != 200');
+    } on TimeoutException catch (e) {
+      print('[NBKR] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[NBKR] ERROR: $e');
+      print('[NBKR] Stack: $st');
+    }
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'CNY', 'EUR', 'KGS', 'KZT', 'RUB', 'USD',
+  ];
+}
+class NbtProvider implements CurrencyProvider {
+  @override
+  String get id => 'nbt';
+
+  @override
+  String get name => 'National Bank of Tajikistan';
+
+  @override
+  String get initials => 'NBT';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    print('[NBT] Starting fetchRates()');
+    try {
+      final now = DateTime.now();
+      final dateStr = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+
+      final response = await http.get(
+        Uri.https(
+          'nbt.tj',
+          '/en/kurs/export_xml.php',
+          {
+            'date': dateStr,
+            'export': 'xmlout',
+          },
+        ),
+      ).timeout(const Duration(seconds: 15));
+
+      print('[NBT] Response status: ${response.statusCode}, body len: ${response.body.length}');
+
+      if (response.statusCode == 200) {
+        final rawRates = <String, double>{};
+        final document = XmlDocument.parse(response.body);
+
+        for (final valute in document.findAllElements('Valute')) {
+          final charCode = valute.findElements('CharCode').firstOrNull?.innerText;
+          final nominalStr = valute.findElements('Nominal').firstOrNull?.innerText;
+          final valueStr = valute.findElements('Value').firstOrNull?.innerText;
+
+          if (charCode == null || valueStr == null) continue;
+
+          final nominal = int.tryParse(nominalStr ?? '1') ?? 1;
+          final value = double.tryParse(valueStr);
+          if (nominal == 0 || value == null || value == 0) continue;
+
+          // Rate is TJS per <nominal> units of foreign currency
+          rawRates[charCode] = value / nominal;
+        }
+
+        print('[NBT] Parsed ${rawRates.length} raw rates');
+        if (rawRates.isEmpty) return null;
+
+        rawRates['TJS'] = 1.0;
+
+        final normalized = _normalizeToEurBase(rawRates);
+        print('[NBT] Normalized rates count: ${normalized.length}');
+        return normalized;
+      }
+      print('[NBT] ERROR: statusCode != 200');
+    } on TimeoutException catch (e) {
+      print('[NBT] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[NBT] ERROR: $e');
+      print('[NBT] Stack: $st');
+    }
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AED', 'AFN', 'AMD', 'AUD', 'AZN', 'BYN', 'CAD', 'CHF', 'CNY', 'DKK',
+    'EUR', 'GBP', 'GEL', 'INR', 'IRR', 'ISK', 'JPY', 'KGS', 'KRW', 'KWD',
+    'KZT', 'MDL', 'MYR', 'NOK', 'PKR', 'PLN', 'SAR', 'SEK', 'SGD', 'THB',
+    'TJS', 'TMT', 'TRY', 'UAH', 'USD',
+  ];
+}
+class QcbProvider implements CurrencyProvider {
+  @override
+  String get id => 'qcb';
+
+  @override
+  String get name => 'Qatar Central Bank';
+
+  @override
+  String get initials => 'QCB';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final client = _createPermissiveClient();
+      final response = await client.get(
+        Uri.https(
+          'www.qcb.gov.qa',
+          "/_api/web/lists/getbytitle('ExchangeRates')/items",
+          {
+            r'$top': '9',
+            r'$orderby': 'ID desc',
+          },
+        ),
+        headers: {'Accept': 'application/json;odata=verbose'},
+      );
+
+      if (response.statusCode != 200) {
+        print('[QCB] Response status: ${response.statusCode}');
+        return null;
+      }
+
+      final jsonData = jsonDecode(response.body);
+      final results = jsonData['d']?['results'];
+      if (results is! List) {
+        print('[QCB] No results in response');
+        return null;
+      }
+
+      final rawRates = <String, double>{};
+
+      for (final item in results) {
+        if (item is! Map) continue;
+
+        var isoCode = item['CURR_CODE'] as String?;
+        final rateVal = item['RATE_AMOUT'];
+        if (isoCode == null || rateVal == null) continue;
+
+        final rate = (rateVal is num)
+            ? rateVal.toDouble()
+            : double.tryParse(rateVal.toString());
+        if (rate == null || rate == 0) continue;
+
+        // Map offshore yuan to standard CNY
+        if (isoCode == 'CNH') isoCode = 'CNY';
+
+        rawRates[isoCode] = rate;
+      }
+
+      print('[QCB] Parsed ${rawRates.length} raw rates');
+      if (rawRates.isEmpty) return null;
+
+      rawRates['QAR'] = 1.0;
+      final normalized = _normalizeToEurBase(rawRates);
+      print('[QCB] Normalized rates count: ${normalized.length}');
+      return normalized;
+    } catch (e, st) {
+      print('[QCB] ERROR: $e');
+      print('[QCB] Stack: $st');
+      return null;
+    }
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AUD', 'CAD', 'CHF', 'CNY', 'EUR', 'GBP', 'HKD', 'JPY', 'QAR', 'USD',
+  ];
+}
+class RbvProvider implements CurrencyProvider {
+  @override
+  String get id => 'rbv';
+
+  @override
+  String get name => 'Reserve Bank of Vanuatu';
+
+  @override
+  String get initials => 'RBV';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final client = _createPermissiveClient();
+      final response = await client.get(
+        Uri.parse(
+          'https://www.rbv.gov.vu/index.php/en/exchange-rates/list/1?format=json&start=0&',
+        ),
+      );
+      client.close();
+
+      if (response.statusCode != 200) {
+        print('[RBV] HTTP ${response.statusCode}');
+        return null;
+      }
+
+      final body = jsonDecode(response.body);
+      if (body is! List || body.isEmpty || body[0] is! List) {
+        print('[RBV] Unexpected JSON structure');
+        return null;
+      }
+
+      final entries = body[0] as List;
+      if (entries.isEmpty || entries[0] is! Map) {
+        print('[RBV] No entries found');
+        return null;
+      }
+
+      final latest = entries[0] as Map<String, dynamic>;
+      final rawRates = <String, double>{};
+
+      final fieldMap = {
+        'USD': 'exchange_rates___usd',
+        'JPY': 'exchange_rates___jpy',
+        'NZD': 'exchange_rates___nzd',
+        'GBP': 'exchange_rates___GBP',
+        'AUD': 'exchange_rates___aud',
+        'EUR': 'exchange_rates___eur',
+      };
+
+      for (final entry in fieldMap.entries) {
+        final value = latest[entry.value];
+        if (value != null) {
+          final rate = double.tryParse(value.toString());
+          if (rate != null && rate != 0) {
+            // Rates are "VUV per unit of foreign currency", invert to get
+            // "foreign currency per 1 VUV"
+            rawRates[entry.key] = 1.0 / rate;
+          }
+        }
+      }
+
+      print('[RBV] Parsed ${rawRates.length} raw rates');
+      if (rawRates.isNotEmpty) {
+        rawRates['VUV'] = 1.0;
+        final normalized = _normalizeToEurBase(rawRates);
+        print('[RBV] Normalized rates count: ${normalized.length}');
+        return normalized;
+      }
+    } catch (e, st) {
+      print('[RBV] ERROR: $e');
+      print('[RBV] Stack: $st');
+    }
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AUD', 'EUR', 'GBP', 'JPY', 'NZD', 'USD', 'VUV',
+  ];
+}
+class RbzProvider implements CurrencyProvider {
+  @override
+  String get id => 'rbz';
+
+  @override
+  String get name => 'Reserve Bank of Zimbabwe';
+
+  @override
+  String get initials => 'RBZ';
+
+  static final _monthNames = [
+    '', 'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
+  ];
+
+  String _pdfUrl(DateTime date) {
+    final month = _monthNames[date.month];
+    return 'https://www.rbz.co.zw/documents/Exchange_Rates/'
+        '${date.year}/$month/RATES_${date.day}_${month.toUpperCase()}_${date.year}.pdf';
+  }
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final now = DateTime.now().toUtc();
+      // Try current date and up to 7 days back (skip weekends)
+      for (int i = 0; i < 10; i++) {
+        final date = now.subtract(Duration(days: i));
+        final url = _pdfUrl(date);
+        print('[RBZ] Trying $url');
+
+        final response = await http.get(Uri.parse(url));
+        if (response.statusCode != 200) {
+          print('[RBZ] HTTP ${response.statusCode} for $url');
+          continue;
+        }
+
+        final text = _extractPdfText(response.bodyBytes);
+        if (text.isEmpty) {
+          print('[RBZ] Empty text from PDF');
+          continue;
+        }
+
+        final rates = parseRbzPdf(text);
+        if (rates != null && rates.isNotEmpty) {
+          print('[RBZ] Parsed ${rates.length} rates from ${date.toIso8601String()}');
+          return rates;
+        }
+      }
+    } catch (e, st) {
+      print('[RBZ] ERROR: $e');
+      print('[RBZ] Stack: $st');
+    }
+    return null;
+  }
+
+  /// Parses the flat text extracted from an RBZ PDF and returns
+  /// EUR-normalized exchange rates.
+  @visibleForTesting
+  Map<String, double>? parseRbzPdf(String text) {
+    final words = text.split(RegExp(r'\s+')).where((w) => w.isNotEmpty).toList();
+
+    // Find "INTERBANK RATE" to locate the start of data
+    var startIdx = 0;
+    for (var i = 0; i < words.length - 1; i++) {
+      if (words[i] == 'INTERBANK' && words[i + 1] == 'RATE') {
+        startIdx = i + 2;
+        break;
+      }
+    }
+    if (startIdx == 0) {
+      print('[RBZ] Could not find INTERBANK RATE header');
+      return null;
+    }
+
+    // Known date words to stop parsing
+    final dateWords = {
+      'Monday', 'Tuesday', 'Wednesday', 'Thursday',
+      'Friday', 'Saturday', 'Sunday',
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December',
+    };
+
+    final rows = <String, List<double>>{};
+    String? currentCurrency;
+    final currentValues = <String>[];
+
+    bool _looksLikeCurrency(String w) {
+      if (w.length > 10) return false;
+      if (dateWords.contains(w)) return false;
+      // Currency codes: uppercase letters, possibly with /
+      return RegExp(r'^[A-Z][A-Z/]+$').hasMatch(w);
+    }
+
+    bool _isNumeric(String w) {
+      return RegExp(r'^[0-9.,]+$').hasMatch(w);
+    }
+
+    for (var i = startIdx; i < words.length; i++) {
+      final w = words[i];
+      if (dateWords.contains(w)) break;
+
+      if (_looksLikeCurrency(w)) {
+        if (currentCurrency != null && currentValues.length >= 3) {
+          final nums = currentValues
+              .where((v) => v != '*')
+              .map((v) => double.tryParse(v.replaceAll(',', '')))
+              .whereType<double>()
+              .toList();
+          if (nums.length >= 3) {
+            rows[currentCurrency] = nums;
+          }
+        }
+        currentCurrency = w;
+        currentValues.clear();
+      } else if (_isNumeric(w) || w == '*') {
+        currentValues.add(w);
+      }
+    }
+
+    // Save last row
+    if (currentCurrency != null && currentValues.length >= 3) {
+      final nums = currentValues
+          .where((v) => v != '*')
+          .map((v) => double.tryParse(v.replaceAll(',', '')))
+          .whereType<double>()
+          .toList();
+      if (nums.length >= 3) {
+        rows[currentCurrency] = nums;
+      }
+    }
+
+    if (rows.isEmpty || !rows.containsKey('USD')) {
+      print('[RBZ] No data rows or missing USD');
+      return null;
+    }
+
+    // USD row: indices are 1 1 1.0000, ZWG rates are the 4th-6th values
+    final usdValues = rows['USD']!;
+    final usdZwgRate = usdValues.length >= 6 ? usdValues[5] : usdValues.last;
+    if (usdZwgRate == 0) {
+      print('[RBZ] USD ZWG rate is zero');
+      return null;
+    }
+
+    final rawRates = <String, double>{};
+
+    for (final entry in rows.entries) {
+      var currency = entry.key;
+      final values = entry.value;
+
+      // Skip defunct/unnecessary currencies
+      if (currency == 'XAU' || currency == 'SDR' || currency == 'CYP') continue;
+
+      // Normalise combined currency labels
+      if (currency == 'ZMW/ZMK') currency = 'ZMW';
+      if (currency == 'MZN/MET') currency = 'MZN';
+
+      // Need both index mid (values[2]) and rate mid (values[5])
+      if (values.length < 6) continue;
+
+      final indexMid = values[2];
+      final rateMid = values[5];
+      if (indexMid == 0 || rateMid == 0) continue;
+
+      double zwgPerForeign;
+      if (currency == 'USD') {
+        zwgPerForeign = usdZwgRate;
+      } else {
+        // The RBZ tables mix two conventions:
+        //   A) index = USD per foreign, rate = ZWG per foreign
+        //      => rate ≈ index * usdZwgRate
+        //   B) index = foreign per USD, rate = foreign per ZWG
+        //      => rate ≈ index / usdZwgRate
+        final matchA = (rateMid - (indexMid * usdZwgRate)).abs();
+        final matchB = (rateMid - (indexMid / usdZwgRate)).abs();
+        if (matchA < matchB) {
+          // Convention A: rate is already ZWG per foreign unit
+          zwgPerForeign = rateMid;
+        } else {
+          // Convention B: rate is foreign per ZWG, invert it
+          zwgPerForeign = 1.0 / rateMid;
+        }
+      }
+
+      if (zwgPerForeign > 0) {
+        // Store as foreign per ZWG (i.e. 1 ZWG = X foreign)
+        rawRates[currency] = 1.0 / zwgPerForeign;
+      }
+    }
+
+    print('[RBZ] Raw rates count: ${rawRates.length}');
+    if (rawRates.isNotEmpty) {
+      rawRates['ZWG'] = 1.0;
+      final normalized = _normalizeToEurBase(rawRates);
+      print('[RBZ] Normalized rates count: ${normalized.length}');
+      return normalized;
+    }
+
+    return null;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AFN', 'ARS', 'AUD', 'BWP', 'BRL', 'CAD', 'CHF', 'CNY',
+    'DKK', 'EGP', 'ETB', 'EUR', 'GBP', 'HKD', 'INR', 'JPY',
+    'KES', 'LSL', 'MWK', 'MUR', 'MYR', 'MZN', 'NOK', 'NZD',
+    'RUB', 'SEK', 'SZL', 'THB', 'TZS', 'USD', 'XAF', 'ZAR',
+    'ZMW', 'ZWG',
+  ];
+}
+class SamaProvider implements CurrencyProvider {
+  @override
+  String get id => 'sama';
+
+  @override
+  String get name => 'Saudi Arabian Monetary Authority';
+
+  @override
+  String get initials => 'SAMA';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      for (var i = 0; i < 7; i++) {
+        final date = DateTime.now().subtract(Duration(days: i));
+        final dateStr =
+            '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
+
+        final response = await http.get(
+          Uri.https(
+            'www.sama.gov.sa',
+            '/ar-sa/_LAYOUTS/15/SAMA.Portal/PortalHandler.ashx',
+            {
+              'op': 'filterCurrenciesWithCount',
+              'isArabic': 'false',
+              'code': '',
+              'date': dateStr,
+              'limit': '100',
+            },
+          ),
+        ).timeout(const Duration(seconds: 15));
+
+        if (response.statusCode != 200) {
+          print('[SAMA] HTTP ${response.statusCode} for $dateStr');
+          continue;
+        }
+
+        final result = parseSamaJson(response.body);
+        if (result != null) {
+          print('[SAMA] Found valid data for $dateStr');
+          return result;
+        }
+      }
+      print('[SAMA] ERROR: No valid data found in the last 7 days');
+    } catch (e, st) {
+      print('[SAMA] ERROR: $e');
+      print('[SAMA] Stack: $st');
+    }
+    return null;
+  }
+
+  /// Parses the SAMA JSON response and returns EUR-normalized rates.
+  @visibleForTesting
+  Map<String, double>? parseSamaJson(String jsonText) {
+    final jsonData = jsonDecode(jsonText);
+    final data = jsonData['data'];
+    if (data is! List) {
+      print('[SAMA] No data in response');
+      return null;
+    }
+
+    final rawRates = <String, double>{};
+
+    for (final item in data) {
+      if (item is! Map) continue;
+
+      var currencyCode = item['CurrencyCode'] as String?;
+      final rateVal = item['CurrencyRate'];
+      if (currencyCode == null || rateVal == null) continue;
+
+      // Strip trailing '=' if present
+      if (currencyCode.endsWith('=')) {
+        currencyCode = currencyCode.substring(0, currencyCode.length - 1);
+      }
+
+      final rate = (rateVal is num)
+          ? rateVal.toDouble()
+          : double.tryParse(rateVal.toString());
+      if (rate == null || rate <= 0) continue;
+
+      // Skip defunct / non-currency entries
+      if (currencyCode == 'CYP' ||
+          currencyCode == 'MTL' ||
+          currencyCode == 'SKK' ||
+          currencyCode == 'SDR') continue;
+
+      rawRates[currencyCode] = rate;
+    }
+
+    print('[SAMA] Parsed ${rawRates.length} raw rates');
+    if (rawRates.isEmpty) return null;
+
+    rawRates['SAR'] = 1.0;
+    final normalized = _normalizeToEurBase(rawRates);
+    print('[SAMA] Normalized rates count: ${normalized.length}');
+    return normalized;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AED', 'AFN', 'ALL', 'AUD', 'BAM', 'BDT', 'BGN', 'BHD', 'BND', 'BRL',
+    'CAD', 'CHF', 'CNY', 'CUP', 'CZK', 'DKK', 'DZD', 'EGP', 'ETB', 'EUR',
+    'GBP', 'HKD', 'HUF', 'IDR', 'INR', 'ISK', 'JOD', 'JPY', 'KES', 'KRW',
+    'KWD', 'LBP', 'LKR', 'LYD', 'MAD', 'MGA', 'MMK', 'MUR', 'MXN', 'MYR',
+    'NGN', 'NOK', 'NZD', 'OMR', 'PHP', 'PKR', 'PLN', 'QAR', 'RON', 'RUB',
+    'SEK', 'SGD', 'SAR', 'THB', 'TJS', 'TND', 'TRY', 'TWD', 'TZS', 'UGX',
+    'USD', 'VND', 'XAF', 'XOF', 'YER', 'ZAR',
+  ];
+}
 final List<CurrencyProvider> currencyProviders = [
   InforEuroProvider(),
   EcbProvider(),
-  NorgesBankProvider(),
-  BankRossiiProvider(),
-  BankOfCanadaProvider(),
-  BcbProvider(),
-  RiksbankProvider(),
-  NbpProvider(),
-  DanmarksNationalbankProvider(),
-  BnrProvider(),
-  BancaDItaliaProvider(),
-  RbaProvider(),
-  MasProvider(),
-  BnmProvider(),
-  CnbProvider(),
-  MnbProvider(),
-  TcmbProvider(),
-  BccProvider(),
-  BoiProvider(),
-  NbrkProvider(),
-  CbuProvider(),
-  NbuProvider(),
-  CbaProvider(),
-  NbgProvider(),
-  CbbhProvider(),
-  CbcTaiwanProvider(),
-  CbbProvider(),
-  NbrmProvider(),
-  HkmaProvider(),
-  NbsProvider(),
-  CbmProvider(),
-  NrbProvider(),
-  HnbProvider(),
-  BcrpProvider(),
-  BiIndonesiaProvider(),
-  CbcgProvider(),
-  BpstatProvider(),
-  CbnProvider(),
-  BankOfFinlandProvider(),
+  // Alphabetically by country
+  BcraProvider(),                    // Argentina
+  BoaProvider(),                     // Albania
+  CbaProvider(),                     // Armenia
+  RbaProvider(),                     // Australia
+  CbarProvider(),                    // Azerbaijan
+  BangladeshBankProvider(),          // Bangladesh
+  CbbBarbadosProvider(),             // Barbados
+  CbbProvider(),                     // Bahrain
+  BermudaCustomsProvider(),          // Bermuda
+  BcbProvider(),                     // Bolivia
+  BcchProvider(),                    // Chile
+  CbbhProvider(),                    // Bosnia and Herzegovina
+  BnbProvider(),                     // Bulgaria
+  BrbProvider(),                     // Burundi
+  BankOfCanadaProvider(),            // Canada
+  BcvProvider(),                     // Cape Verde
+  MefCambodiaProvider(),             // Cambodia
+  HnbProvider(),                     // Croatia
+  BccCongoProvider(),                // Congo
+  BccProvider(),                     // Cuba
+  CnbProvider(),                     // Czech Republic
+  DanmarksNationalbankProvider(),    // Denmark
+  EccbProvider(),                    // Eastern Caribbean
+  EestiPankProvider(),               // Estonia
+  NbeProvider(),                     // Ethiopia
+  BankOfFinlandProvider(),           // Finland
+  NbgProvider(),                     // Georgia
+  BogProvider(),                     // Guyana
+  HkmaProvider(),                    // Hong Kong
+  MnbProvider(),                     // Hungary
+  CentralBankOfIcelandProvider(),    // Iceland
+  BiIndonesiaProvider(),             // Indonesia
+  BoiProvider(),                     // Israel
+  BancaDItaliaProvider(),            // Italy
+  BojProvider(),                     // Japan
+  NbrkProvider(),                    // Kazakhstan
+  CbkProvider(),                     // Kenya
+  BokProvider(),                     // Korea
+  NbkrProvider(),                    // Kyrgyz Republic
+  BankOfLatviaProvider(),            // Latvia
+  BankOfLithuaniaProvider(),         // Lithuania
+  BankNegaraMalaysiaProvider(),      // Malaysia
+  BnmProvider(),                     // Moldova
+  CbcgProvider(),                    // Montenegro
+  BomProvider(),                     // Mongolia
+  CbmProvider(),                     // Myanmar
+  NrbProvider(),                     // Nepal
+  BcnProvider(),                     // Nicaragua
+  CbnProvider(),                     // Nigeria
+  NbrmProvider(),                    // North Macedonia
+  KktcmbProvider(),                  // Northern Cyprus
+  NorgesBankProvider(),              // Norway
+  SbpProvider(),                     // Pakistan
+  BspProvider(),                     // Papua New Guinea
+  BcpProvider(),                     // Paraguay
+  BankOfAlgeriaProvider(),           // Algeria
+  BcrpProvider(),                    // Peru
+  BangkoSentralProvider(),           // Philippines
+  NbpProvider(),                     // Poland
+  BpstatProvider(),                  // Portugal
+  QcbProvider(),                     // Qatar
+  BnrProvider(),                     // Romania
+  BankRossiiProvider(),              // Russia
+  SamaProvider(),                    // Saudi Arabia
+  CbsProvider(),                     // Seychelles
+  CbsiProvider(),                    // Solomon Islands
+  CbvsProvider(),                    // Suriname
+  BslProvider(),                     // Sierra Leone
+  MasProvider(),                     // Singapore
+  NbsProvider(),                     // Slovakia
+  BsiProvider(),                     // Slovenia
+  RiksbankProvider(),                // Sweden
+  CbcTaiwanProvider(),               // Taiwan
+  NbtProvider(),                     // Tajikistan
+  BotProvider(),                     // Thailand
+  CbpmrProvider(),                   // Transnistria
+  CbttProvider(),                    // Trinidad and Tobago
+  TcmbProvider(),                    // Türkiye
+  NbuProvider(),                     // Ukraine
+  BcuProvider(),                     // Uruguay
+  NrbtProvider(),                    // Tonga
+  RbfProvider(),                     // Fiji
+  RbnzProvider(),                    // New Zealand
+  FrbProvider(),                     // USA
+  CbuProvider(),                     // Uzbekistan
+  RbvProvider(),                     // Vanuatu
+  BcvVenezuelaProvider(),            // Venezuela
+  BceaoProvider(),                   // West African States
+  BozProvider(),                     // Zambia
+  RbzProvider(),                     // Zimbabwe
 ];
+
+class BozProvider implements CurrencyProvider {
+  @override
+  String get id => 'boz';
+
+  @override
+  String get name => 'Bank of Zambia';
+
+  @override
+  String get initials => 'BoZ';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+          'https://www.boz.zm/jsonapi/node/exchange_rates?sort=-field_average_exchange_rate_date&page[limit]=1&include=field_average_exchange_rates',
+        ),
+        headers: {'Accept': 'application/vnd.api+json'},
+      ).timeout(const Duration(seconds: 15));
+
+      if (response.statusCode != 200) return null;
+
+      final rawRates = parseBozJson(response.body);
+      if (rawRates == null || rawRates.isEmpty) return null;
+
+      rawRates['ZMW'] = 1.0;
+      return _normalizeToEurBase(rawRates);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseBozJson(String jsonText) {
+    final decoded = jsonDecode(jsonText) as Map<String, dynamic>;
+    final data = decoded['data'] as List<dynamic>?;
+    final included = decoded['included'] as List<dynamic>?;
+    if (data == null || data.isEmpty || included == null) return null;
+
+    final node = data[0] as Map<String, dynamic>;
+    final relationships = node['relationships'] as Map<String, dynamic>?;
+    final fieldRates = relationships?['field_average_exchange_rates']
+        as Map<String, dynamic>?;
+    final rateRefs = fieldRates?['data'] as List<dynamic>?;
+    if (rateRefs == null || rateRefs.isEmpty) return null;
+
+    final rateIds = rateRefs
+        .map((r) => (r as Map<String, dynamic>)['id'] as String?)
+        .whereType<String>()
+        .toSet();
+
+    final rawRates = <String, double>{};
+    for (final item in included) {
+      final itemMap = item as Map<String, dynamic>;
+      if (!rateIds.contains(itemMap['id'])) continue;
+
+      final attrs = itemMap['attributes'] as Map<String, dynamic>?;
+      if (attrs == null) continue;
+
+      final currency = attrs['currency'] as String?;
+      final buyingStr = attrs['buying'] as String?;
+      final sellingStr = attrs['selling'] as String?;
+      if (currency == null || buyingStr == null || sellingStr == null) {
+        continue;
+      }
+
+      final buying = double.tryParse(buyingStr);
+      final selling = double.tryParse(sellingStr);
+      if (buying == null || selling == null || buying == 0 || selling == 0) {
+        continue;
+      }
+
+      rawRates[currency] = (buying + selling) / 2.0;
+    }
+
+    if (rawRates.isEmpty || !rawRates.containsKey('EUR')) return null;
+    return rawRates;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'EUR', 'GBP', 'USD', 'ZAR', 'ZMW',
+  ];
+}
+
+class KktcmbProvider implements CurrencyProvider {
+  @override
+  String get id => 'kktcmb';
+
+  @override
+  String get name => 'Central Bank of the Turkish Republic of Northern Cyprus';
+
+  @override
+  String get initials => 'KKTCMB';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final response = await http.get(
+        Uri.parse('https://mb.gov.ct.tr/kur/gunluk.xml'),
+      ).timeout(const Duration(seconds: 15));
+
+      if (response.statusCode != 200) return null;
+
+      return parseKktcmbXml(response.body);
+    } on TimeoutException catch (_) {
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseKktcmbXml(String xml) {
+    final rawRates = <String, double>{};
+
+    try {
+      final document = XmlDocument.parse(xml);
+
+      for (final resmiKur in document.findAllElements('Resmi_Kur')) {
+        final sembol = resmiKur.findElements('Sembol').firstOrNull?.innerText;
+        final birimStr = resmiKur.findElements('Birim').firstOrNull?.innerText;
+        final dovizAlis = resmiKur.findElements('Doviz_Alis').firstOrNull?.innerText;
+
+        if (sembol == null || dovizAlis == null) continue;
+
+        final birim = int.tryParse(birimStr ?? '1') ?? 1;
+        if (birim == 0) continue;
+
+        final rate = double.tryParse(dovizAlis);
+        if (rate == null || rate == 0) continue;
+
+        rawRates[sembol] = rate / birim;
+      }
+    } catch (_) {
+      return null;
+    }
+
+    if (rawRates.isEmpty || !rawRates.containsKey('EUR')) return null;
+
+    rawRates['TRY'] = 1.0;
+    return _normalizeToEurBase(rawRates);
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AUD', 'CAD', 'CHF', 'DKK', 'EUR', 'GBP', 'JPY', 'KWD', 'NOK', 'SAR',
+    'SEK', 'TRY', 'USD',
+  ];
+}
+
+class BangkoSentralProvider implements CurrencyProvider {
+  @override
+  String get id => 'bangko_sentral';
+
+  @override
+  String get name => 'Bangko Sentral ng Pilipinas';
+
+  @override
+  String get initials => 'BSP';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+          "https://www.bsp.gov.ph/_api/web/lists/getByTitle('Exchange%20Rate')/items?\$select=*&\$filter=Group%20eq%20'1'&\$orderby=Ordering%20asc",
+        ),
+      ).timeout(const Duration(seconds: 15));
+
+      if (response.statusCode != 200) return null;
+
+      return parseBangkoSentralXml(response.body);
+    } on TimeoutException catch (_) {
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseBangkoSentralXml(String xmlText) {
+    final exchangeRates = <String, double>{};
+
+    try {
+      final document = XmlDocument.parse(xmlText);
+
+      for (final entry in document.findAllElements('entry')) {
+        final symbol = entry.findAllElements('d:Symbol').firstOrNull?.innerText;
+        final eurEquivalent = entry.findAllElements('d:EURequivalent').firstOrNull?.innerText;
+
+        if (symbol == null || eurEquivalent == null) continue;
+        if (eurEquivalent == 'N/A') continue;
+
+        final rate = double.tryParse(eurEquivalent);
+        if (rate == null || rate == 0) continue;
+
+        exchangeRates[symbol] = rate;
+      }
+    } catch (_) {
+      return null;
+    }
+
+    if (exchangeRates.isEmpty || !exchangeRates.containsKey('EUR')) return null;
+
+    exchangeRates['EUR'] = 1.0;
+    exchangeRates['PHP'] = 1.0;
+    return exchangeRates;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AED', 'ARS', 'AUD', 'BHD', 'BND', 'BRL', 'CAD', 'CHF', 'CNY', 'DKK',
+    'EUR', 'GBP', 'HKD', 'IDR', 'INR', 'JPY', 'KRW', 'KWD', 'MXN', 'MYR',
+    'NOK', 'NZD', 'PKR', 'PHP', 'SAR', 'SEK', 'SGD', 'SYP', 'THB', 'TWD',
+    'USD', 'VES', 'ZAR',
+  ];
+}
+
+class BcchProvider implements CurrencyProvider {
+  @override
+  String get id => 'bcch';
+
+  @override
+  String get name => 'Bank of Chile';
+
+  @override
+  String get initials => 'BCCh';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      // The daily indicators page contains a link to the exchange-rates list.
+      final indicatorsResponse = await http
+          .get(Uri.parse(
+              'https://si3.bcentral.cl/Indicadoressiete/secure/Indicadoresdiarios.aspx?Idioma=en-US'))
+          .timeout(const Duration(seconds: 15));
+
+      if (indicatorsResponse.statusCode != 200) return null;
+
+      // Extract the first ListaSerie.aspx link (Foreign currencies-dollar parity)
+      final listaMatch = RegExp(
+        r'href="(ListaSerie\.aspx\?param=[^"]+)"',
+        caseSensitive: false,
+      ).firstMatch(indicatorsResponse.body);
+
+      if (listaMatch == null) return null;
+
+      final listaUrl =
+          'https://si3.bcentral.cl/Indicadoressiete/secure/${listaMatch.group(1)!}';
+      final response = await http
+          .get(Uri.parse(listaUrl))
+          .timeout(const Duration(seconds: 15));
+
+      if (response.statusCode != 200) return null;
+
+      final rawRates = parseBcchHtml(response.body);
+      if (rawRates == null || rawRates.isEmpty) return null;
+
+      rawRates['CLP'] = 1.0;
+      return _normalizeToEurBase(rawRates);
+    } on TimeoutException catch (_) {
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseBcchHtml(String html) {
+    final tableStart = html.indexOf('id="tbl_lista_series"');
+    if (tableStart == -1) return null;
+
+    final tableEnd = html.indexOf('</table>', tableStart);
+    if (tableEnd == -1) return null;
+
+    final tableHtml = html.substring(tableStart, tableEnd + 8);
+    final rawRates = <String, double>{};
+
+    final rowRegex = RegExp(
+      r'<td[^>]*>\s*([^<]+?)\s*</td>\s*<td[^>]*>\s*([0-9.,]+)\s*</td>\s*<td[^>]*>\s*<a[^>]*gcode=([A-Z]{3})_([A-Z]{3})',
+      caseSensitive: false,
+    );
+
+    for (final match in rowRegex.allMatches(tableHtml)) {
+      final rateStr = match.group(2)!.replaceAll(',', '');
+      final rate = double.tryParse(rateStr);
+      if (rate == null || rate == 0) continue;
+
+      final gcodePrefix = match.group(3)!.toUpperCase();
+      var isoCode = match.group(4)!.toUpperCase();
+
+      // Only process TCN (nominal exchange rate) rows
+      if (gcodePrefix != 'TCN') continue;
+
+      // Skip obsolete currencies
+      if (isoCode == 'VEB') continue;
+
+      // Map non-standard codes
+      const codeMap = <String, String>{
+        'BOL': 'BOB',
+        'DEG': 'XDR',
+        'BSP': 'BSD',
+        'RUR': 'RUB',
+      };
+      isoCode = codeMap[isoCode] ?? isoCode;
+
+      rawRates[isoCode] = rate;
+      // Panamanian Balboa is pegged 1:1 to USD
+      if (isoCode == 'PAB') {
+        rawRates['USD'] = rate;
+      }
+    }
+
+    if (rawRates.isEmpty) return null;
+    return rawRates;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AUD', 'BOB', 'BSD', 'CAD', 'CHF', 'CLP', 'CNY', 'COP',
+    'EUR', 'GBP', 'JPY', 'MXN', 'PAB', 'RUB', 'THB', 'USD',
+    'UYU', 'XDR',
+  ];
+}
+
+class BspProvider implements CurrencyProvider {
+  @override
+  String get id => 'bsp';
+
+  @override
+  String get name => 'Bank of Papua New Guinea';
+
+  @override
+  String get initials => 'BSP';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final response = await http
+          .get(Uri.parse(
+              'https://www.bsp.com.pg/international-services/foreign-exchange/exchange-rates/'))
+          .timeout(const Duration(seconds: 15));
+
+      if (response.statusCode != 200) return null;
+
+      final rawRates = parseBspHtml(response.body);
+      if (rawRates == null || rawRates.isEmpty) return null;
+
+      rawRates['PGK'] = 1.0;
+      return _normalizeToEurBase(rawRates);
+    } on TimeoutException catch (_) {
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  static String? _extractFirstJsonObject(String html, int startIdx) {
+    var braceDepth = 0;
+    var inString = false;
+    var escapeNext = false;
+    var jsonStart = -1;
+
+    for (var i = startIdx; i < html.length; i++) {
+      final ch = html[i];
+      if (escapeNext) {
+        escapeNext = false;
+        continue;
+      }
+      if (ch == '\\') {
+        escapeNext = true;
+        continue;
+      }
+      if (ch == '"') {
+        inString = !inString;
+        continue;
+      }
+      if (inString) continue;
+
+      if (ch == '{') {
+        if (braceDepth == 0) {
+          jsonStart = i;
+        }
+        braceDepth++;
+      } else if (ch == '}') {
+        braceDepth--;
+        if (braceDepth == 0 && jsonStart != -1) {
+          return html.substring(jsonStart, i + 1);
+        }
+      }
+    }
+    return null;
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseBspHtml(String html) {
+    final startIdx = html.indexOf('CBSimpleExchangeRateCalculator');
+    if (startIdx == -1) return null;
+    final parenIdx = html.indexOf('(', startIdx);
+    if (parenIdx == -1) return null;
+
+    final jsonStr = _extractFirstJsonObject(html, parenIdx + 1);
+    if (jsonStr == null || !jsonStr.contains('"buy_tt"')) return null;
+
+    final rawRates = <String, double>{};
+
+    // Parse individual currency objects from the JSON-like structure
+    final entryRegex = RegExp(
+      r'"([A-Z]{3})":\s*\{[^}]*"buy_tt"\s*:\s*"([0-9.]*)"',
+      caseSensitive: false,
+    );
+
+    for (final match in entryRegex.allMatches(jsonStr)) {
+      final code = match.group(1)!.toUpperCase();
+      final buyTtStr = match.group(2)!;
+      final buyTt = double.tryParse(buyTtStr);
+      if (buyTt == null || buyTt == 0) continue;
+
+      // Invert: rate is foreign-per-PGK, we want PGK-per-foreign
+      rawRates[code] = 1.0 / buyTt;
+    }
+
+    if (rawRates.isEmpty) return null;
+    return rawRates;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AUD', 'CAD', 'CHF', 'CNY', 'EUR', 'FJD', 'GBP', 'HKD',
+    'INR', 'JPY', 'NZD', 'PGK', 'PHP', 'SBD', 'SGD', 'THB',
+    'TOP', 'USD', 'VUV', 'WST', 'ZAR',
+  ];
+}
+
+class CbsiProvider implements CurrencyProvider {
+  @override
+  String get id => 'cbsi';
+
+  @override
+  String get name => 'Central Bank of Solomon Islands';
+
+  @override
+  String get initials => 'CBSI';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final response = await http
+          .get(Uri.parse('https://www.cbsi.com.sb/statistics/exchange-rates/'))
+          .timeout(const Duration(seconds: 15));
+
+      if (response.statusCode != 200) return null;
+
+      final rawRates = parseCbsiHtml(response.body);
+      if (rawRates == null || rawRates.isEmpty) return null;
+
+      rawRates['SBD'] = 1.0;
+      return _normalizeToEurBase(rawRates);
+    } on TimeoutException catch (_) {
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseCbsiHtml(String html) {
+    final tableStart = html.indexOf('id="tablepress-2"');
+    if (tableStart == -1) return null;
+
+    final tableEnd = html.indexOf('</table>', tableStart);
+    if (tableEnd == -1) return null;
+
+    final tableHtml = html.substring(tableStart, tableEnd + 8);
+    final rawRates = <String, double>{};
+
+    final rowRegex = RegExp(
+      r'<td[^>]*>\s*(?:<img[^>]*>)?\s*([A-Z]{3})\s*</td>\s*<td[^>]*>\s*([0-9.]+)\s*</td>',
+      caseSensitive: false,
+    );
+
+    for (final match in rowRegex.allMatches(tableHtml)) {
+      final code = match.group(1)!.toUpperCase();
+      final rateStr = match.group(2)!;
+      final rate = double.tryParse(rateStr);
+      if (rate == null || rate == 0) continue;
+
+      // Skip SDR and Index rows
+      if (code == 'SDR' || code == 'Index') continue;
+
+      // Invert: rate is foreign-per-SBD, we want SBD-per-foreign
+      rawRates[code] = 1.0 / rate;
+    }
+
+    if (rawRates.isEmpty) return null;
+    return rawRates;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AUD', 'CNY', 'EUR', 'GBP', 'JPY', 'NZD', 'SBD', 'USD',
+  ];
+}
+
+class CbttProvider implements CurrencyProvider {
+  @override
+  String get id => 'cbtt';
+
+  @override
+  String get name => 'Central Bank of Trinidad and Tobago';
+
+  @override
+  String get initials => 'CBTT';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final body = <String, String>{};
+      body['draw'] = '1';
+
+      final columnNames = [
+        'Date',
+        'BBD Buying Rate', 'BBD Selling Rate',
+        'CAD Buying Rate', 'CAD Selling Rate',
+        'CHF Buying Rate', 'CHF Selling Rate',
+        'XCD Buying Rate', 'XCD Selling Rate',
+        'GBP Buying Rate', 'GBP Selling Rate',
+        'GYD Buying Rate', 'GYD Selling Rate',
+        'JMD Buying Rate', 'JMD Selling Rate',
+        'JPY Buying Rate', 'JPY Selling Rate',
+        'USD Buying Rate', 'USD Selling Rate',
+        'EUR Buying Rate', 'EUR Selling Rate',
+      ];
+
+      for (var i = 0; i < columnNames.length; i++) {
+        body['columns[$i][data]'] = '$i';
+        body['columns[$i][name]'] = columnNames[i];
+        body['columns[$i][searchable]'] = 'true';
+        body['columns[$i][orderable]'] = i == 0 ? 'true' : 'false';
+        body['columns[$i][search][value]'] = '';
+        body['columns[$i][search][regex]'] = 'false';
+      }
+
+      body['order[0][column]'] = '0';
+      body['order[0][dir]'] = 'desc';
+      body['start'] = '0';
+      body['length'] = '1';
+      body['search[value]'] = '';
+      body['search[regex]'] = 'false';
+      body['wdtNonce'] = '34d3e9a3ea';
+      body['sRangeSeparator'] = '|';
+
+      final response = await http.post(
+        Uri.parse(
+          'https://www.central-bank.org.tt/quo-backend/admin-ajax.php?action=get_wdtable&table_id=106',
+        ),
+        body: body,
+      ).timeout(const Duration(seconds: 20));
+
+      if (response.statusCode != 200) return null;
+
+      final rawRates = parseCbttJson(response.body);
+      if (rawRates == null || rawRates.isEmpty) return null;
+
+      rawRates['TTD'] = 1.0;
+      return _normalizeToEurBase(rawRates);
+    } on TimeoutException catch (_) {
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseCbttJson(String jsonText) {
+    final jsonData = jsonDecode(jsonText);
+    final data = jsonData['data'];
+    if (data is! List || data.isEmpty) return null;
+
+    final row = data.first;
+    if (row is! List || row.length < 21) return null;
+
+    final rawRates = <String, double>{};
+
+    // Buying rates are at odd indices
+    final currencyMap = <int, String>{
+      1: 'BBD',
+      3: 'CAD',
+      5: 'CHF',
+      7: 'XCD',
+      9: 'GBP',
+      11: 'GYD',
+      13: 'JMD',
+      15: 'JPY',
+      17: 'USD',
+      19: 'EUR',
+    };
+
+    for (final entry in currencyMap.entries) {
+      final valueStr = row[entry.key]?.toString();
+      if (valueStr == null || valueStr.isEmpty) continue;
+      final rate = double.tryParse(valueStr);
+      if (rate == null || rate == 0) continue;
+      rawRates[entry.value] = rate;
+    }
+
+    if (rawRates.isEmpty) return null;
+    return rawRates;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'BBD', 'CAD', 'CHF', 'EUR', 'GBP', 'GYD', 'JMD', 'JPY', 'TTD', 'USD',
+    'XCD',
+  ];
+}
+
+class NrbtProvider implements CurrencyProvider {
+  @override
+  String get id => 'nrbt';
+
+  @override
+  String get name => 'National Reserve Bank of Tonga';
+
+  @override
+  String get initials => 'NRBT';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final response = await http
+          .get(Uri.parse(
+              'https://www.reservebank.to/index.php/financial-system/financial-markets/exchange-rates'))
+          .timeout(const Duration(seconds: 15));
+
+      if (response.statusCode != 200) return null;
+
+      final rawRates = parseNrbtHtml(response.body);
+      if (rawRates == null || rawRates.isEmpty) return null;
+
+      rawRates['TOP'] = 1.0;
+      return _normalizeToEurBase(rawRates);
+    } on TimeoutException catch (_) {
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseNrbtHtml(String html) {
+    final tableStart = html.indexOf('class="table-custom-4c"');
+    if (tableStart == -1) return null;
+
+    final tableEnd = html.indexOf('</table>', tableStart);
+    if (tableEnd == -1) return null;
+
+    final tableHtml = html.substring(tableStart, tableEnd + 8);
+    final rawRates = <String, double>{};
+
+    final nameToCode = <String, String>{
+      'Australian Dollar': 'AUD',
+      'European Euro': 'EUR',
+      'Fijian Dollar': 'FJD',
+      'British Pound': 'GBP',
+      'Japanese Yen': 'JPY',
+      'New Zealand Dollar': 'NZD',
+      'United States Dollar': 'USD',
+      'Samoan Tala': 'WST',
+      'Switzerland Francs': 'CHF',
+      'Canada Dollar': 'CAD',
+      'Sweden Kronor': 'SEK',
+      'Singapore Dollar': 'SGD',
+    };
+
+    final rowRegex = RegExp(
+      r'<td[^>]*>([^<]+)</td>\s*<td[^>]*>([0-9.]+)</td>\s*<td[^>]*>([0-9.]+)</td>\s*<td[^>]*>([0-9.]+)</td>',
+      caseSensitive: false,
+    );
+
+    for (final match in rowRegex.allMatches(tableHtml)) {
+      final name = match.group(1)!.trim();
+      final midStr = match.group(3)!;
+      final mid = double.tryParse(midStr);
+      if (mid == null || mid == 0) continue;
+
+      final code = nameToCode[name];
+      if (code == null) continue;
+
+      // Invert: rate is foreign-per-TOP, we want TOP-per-foreign
+      rawRates[code] = 1.0 / mid;
+    }
+
+    if (rawRates.isEmpty) return null;
+    return rawRates;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AUD', 'CAD', 'CHF', 'EUR', 'FJD', 'GBP', 'JPY', 'NZD',
+    'SEK', 'SGD', 'TOP', 'USD', 'WST',
+  ];
+}
+
+class RbfProvider implements CurrencyProvider {
+  @override
+  String get id => 'rbf';
+
+  @override
+  String get name => 'Reserve Bank of Fiji';
+
+  @override
+  String get initials => 'RBF';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final response = await http
+          .get(Uri.parse('https://www.rbf.gov.fj/'))
+          .timeout(const Duration(seconds: 20));
+
+      if (response.statusCode != 200) return null;
+
+      final rawRates = parseRbfHtml(response.body);
+      if (rawRates == null || rawRates.isEmpty) return null;
+
+      rawRates['FJD'] = 1.0;
+      return _normalizeToEurBase(rawRates);
+    } on TimeoutException catch (_) {
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseRbfHtml(String html) {
+    final rawRates = <String, double>{};
+
+    final itemRegex = RegExp(
+      r'<div class="list_item lists_2 clearfix">.*?<h4>([^<]+)</h4>\s*<div class="desc">([0-9.]+)</div>',
+      caseSensitive: false,
+      dotAll: true,
+    );
+
+    for (final match in itemRegex.allMatches(html)) {
+      var code = match.group(1)!.trim().toUpperCase();
+      final rateStr = match.group(2)!;
+      final rate = double.tryParse(rateStr);
+      if (rate == null || rate == 0) continue;
+
+      // Map EURO to EUR
+      if (code == 'EURO') code = 'EUR';
+
+      // Invert: rate is foreign-per-FJD, we want FJD-per-foreign
+      rawRates[code] = 1.0 / rate;
+    }
+
+    if (rawRates.isEmpty) return null;
+    return rawRates;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AUD', 'EUR', 'FJD', 'GBP', 'JPY', 'NZD', 'USD',
+  ];
+}
+
+class RbnzProvider implements CurrencyProvider {
+  @override
+  String get id => 'rbnz';
+
+  @override
+  String get name => 'Reserve Bank of New Zealand';
+
+  @override
+  String get initials => 'RBNZ';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final response = await http
+          .get(Uri.parse(
+              'https://www.rbnz.govt.nz/statistics/series/exchange-and-interest-rates/exchange-rates-and-the-trade-weighted-index'))
+          .timeout(const Duration(seconds: 15));
+
+      if (response.statusCode != 200) return null;
+
+      return parseRbnzHtml(response.body);
+    } on TimeoutException catch (_) {
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseRbnzHtml(String html) {
+    final tableStart = html.indexOf('class="table--data"');
+    if (tableStart == -1) return null;
+
+    final tableEnd = html.indexOf('</table>', tableStart);
+    if (tableEnd == -1) return null;
+
+    final tableHtml = html.substring(tableStart, tableEnd + 8);
+    final rawRates = <String, double>{};
+
+    final nameToCode = <String, String>{
+      'United States dollar': 'USD',
+      'UK pound sterling': 'GBP',
+      'Australian dollar': 'AUD',
+      'Japanese yen': 'JPY',
+      'European euro': 'EUR',
+      'Chinese renminbi': 'CNY',
+    };
+
+    // Extract rows with currency names and rates
+    final rowRegex = RegExp(
+      r'<td>([^<]+)</td>\s*<td>[0-9.]+</td>\s*<td[^>]*class="table__cell--bold"[^>]*>([0-9.]+)</td>',
+      caseSensitive: false,
+    );
+
+    for (final match in rowRegex.allMatches(tableHtml)) {
+      final name = match.group(1)!.trim();
+      final rateStr = match.group(2)!;
+      final rate = double.tryParse(rateStr);
+      if (rate == null || rate == 0) continue;
+
+      final code = nameToCode[name];
+      if (code == null) continue;
+
+      // Invert: rate is foreign-per-NZD, we want NZD-per-foreign
+      rawRates[code] = 1.0 / rate;
+    }
+
+    if (rawRates.isEmpty || !rawRates.containsKey('EUR')) return null;
+
+    rawRates['NZD'] = 1.0;
+    return _normalizeToEurBase(rawRates);
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AUD', 'CNY', 'EUR', 'GBP', 'JPY', 'NZD', 'USD',
+  ];
+}
+
+class SbpProvider implements CurrencyProvider {
+  @override
+  String get id => 'sbp';
+
+  @override
+  String get name => 'State Bank of Pakistan';
+
+  @override
+  String get initials => 'SBP';
+
+  static const _monthAbbrs = [
+    '', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+  ];
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final now = DateTime.now();
+      for (var i = 0; i < 7; i++) {
+        final date = now.subtract(Duration(days: i));
+        final yyyy = date.year;
+        final mon = _monthAbbrs[date.month];
+        final dd = date.day.toString().padLeft(2, '0');
+        final yy = (date.year % 100).toString().padLeft(2, '0');
+        final url =
+            'https://www.sbp.org.pk/ecodata/rates/war/$yyyy/$mon/$dd-$mon-$yy.pdf';
+
+        print('[SBP] Trying $url');
+        final response = await http
+            .get(Uri.parse(url))
+            .timeout(const Duration(seconds: 15));
+
+        if (response.statusCode == 200 &&
+            response.bodyBytes.length > 4 &&
+            String.fromCharCodes(response.bodyBytes.sublist(0, 4)) == '%PDF') {
+          print('[SBP] Got PDF for ${date.toIso8601String().split('T').first}');
+          final text = _extractPdfText(response.bodyBytes);
+          final result = parseSbpPdfText(text);
+          print('[SBP] Parsed result: ${result != null ? '${result.length} rates' : 'null'}');
+          return result;
+        }
+      }
+      print('[SBP] No PDF found in the last 7 days');
+    } on TimeoutException catch (e) {
+      print('[SBP] ERROR: Timeout - $e');
+    } catch (e, st) {
+      print('[SBP] ERROR: $e');
+      print('[SBP] Stack: $st');
+    }
+    return null;
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseSbpPdfText(String text) {
+    final rawRates = <String, double>{};
+
+    // Match: CURRENCY buying selling
+    // e.g. "USD 278.5150 278.9401"
+    final lineRegex = RegExp(
+      r'([A-Z]{3})\s+([0-9.]+)\s+([0-9.]+)',
+      caseSensitive: false,
+    );
+
+    for (final match in lineRegex.allMatches(text)) {
+      final code = match.group(1)!.toUpperCase();
+      final buying = double.tryParse(match.group(2)!);
+      final selling = double.tryParse(match.group(3)!);
+      if (buying == null || selling == null || buying == 0) continue;
+
+      final mid = (buying + selling) / 2.0;
+      rawRates[code] = mid;
+    }
+
+    if (rawRates.isEmpty || !rawRates.containsKey('EUR')) {
+      return null;
+    }
+
+    rawRates['PKR'] = 1.0;
+    final normalized = _normalizeToEurBase(rawRates);
+    return normalized;
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AED', 'AUD', 'CAD', 'CHF', 'CNY', 'EUR', 'GBP', 'JPY',
+    'PKR', 'SAR', 'USD',
+  ];
+}
+
+class BankOfAlgeriaProvider implements CurrencyProvider {
+  @override
+  String get id => 'bank_of_algeria';
+
+  @override
+  String get name => 'Bank of Algeria';
+
+  @override
+  String get initials => 'BoA';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final response = await http.get(
+        Uri.parse('https://www.bank-of-algeria.dz/taux-de-change-journalier/'),
+      ).timeout(const Duration(seconds: 15));
+      if (response.statusCode != 200) return null;
+      return parseBankOfAlgeriaHtml(response.body);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseBankOfAlgeriaHtml(String html) {
+    // Extract the first table (most recent date, contains currency codes)
+    final firstTableEnd = html.indexOf('</tbody></table>');
+    if (firstTableEnd == -1) return null;
+
+    final tableStart = html.lastIndexOf('<table', firstTableEnd);
+    if (tableStart == -1) return null;
+
+    final tableHtml = html.substring(tableStart, firstTableEnd);
+
+    final rawRates = <String, double>{};
+    final regex = RegExp(
+      r'<td>([^<]+)</td>\s*<td>([0-9.]+)</td>',
+      caseSensitive: false,
+    );
+    for (final match in regex.allMatches(tableHtml)) {
+      var currency = match.group(1)!.trim().toUpperCase();
+      final rateStr = match.group(2)!.trim();
+      final rate = double.tryParse(rateStr);
+      if (rate == null || rate <= 0) continue;
+
+      // Map SDR (French abbreviation) to ISO XDR
+      if (currency == 'SDR') currency = 'XDR';
+
+      rawRates[currency] = rate;
+    }
+
+    if (!rawRates.containsKey('EUR')) return null;
+
+    // Rates are quoted as DZD per unit of foreign currency,
+    // so DZD is the implicit base currency (1 DZD = 1 DZD).
+    rawRates['DZD'] = 1.0;
+    return _normalizeToEurBase(rawRates);
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AED', 'CAD', 'CHF', 'CNY', 'DKK', 'DZD', 'EUR', 'GBP', 'JPY', 'KWD',
+    'LYD', 'MAD', 'MRU', 'NOK', 'SAR', 'SEK', 'TND', 'USD', 'XDR',
+  ];
+}
+
+class CbbBarbadosProvider implements CurrencyProvider {
+  @override
+  String get id => 'cbb_barbados';
+
+  @override
+  String get name => 'Central Bank of Barbados';
+
+  @override
+  String get initials => 'CBB';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    final client = http.Client();
+    try {
+      // Step 1: GET the page to establish a session and extract CSRF token
+      final pageResponse = await client
+          .get(Uri.parse('https://www.centralbank.org.bb/exchange-rates'))
+          .timeout(const Duration(seconds: 15));
+      if (pageResponse.statusCode != 200) return null;
+
+      final csrfToken = _extractCsrfToken(pageResponse.body);
+      if (csrfToken == null) return null;
+
+      // Step 2: POST to the API endpoint (cookies are handled by the Client)
+      final apiResponse = await client
+          .post(
+            Uri.parse('https://www.centralbank.org.bb/get_exchange_rates'),
+            headers: {
+              'X-CSRF-TOKEN': csrfToken,
+              'X-Requested-With': 'XMLHttpRequest',
+              'Referer': 'https://www.centralbank.org.bb/exchange-rates',
+            },
+            body: {
+              'dateDropDown': 'Y',
+              'IsHome': 'N',
+            },
+          )
+          .timeout(const Duration(seconds: 15));
+      if (apiResponse.statusCode != 200) return null;
+
+      return parseCbbBarbadosJson(apiResponse.body);
+    } catch (_) {
+      return null;
+    } finally {
+      client.close();
+    }
+  }
+
+  static String? _extractCsrfToken(String html) {
+    final match = RegExp(
+      r'name="csrf-token" content="([^"]+)"',
+      caseSensitive: false,
+    ).firstMatch(html);
+    return match?.group(1);
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseCbbBarbadosJson(String jsonText) {
+    try {
+      final jsonData = jsonDecode(jsonText) as Map<String, dynamic>;
+      final html = jsonData['html'] as String?;
+      if (html == null || html.isEmpty) return null;
+      return _parseCbbBarbadosHtml(html);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static Map<String, double>? _parseCbbBarbadosHtml(String html) {
+    // Find the Notes tab (cat_n) – it's the first active tab.
+    final notesMatch = RegExp(
+      r'id="cat_n"[^>]*>.*?<tbody>(.*?)</tbody>',
+      caseSensitive: false,
+      dotAll: true,
+    ).firstMatch(html);
+
+    if (notesMatch == null) return null;
+    final notesHtml = notesMatch.group(1)!;
+
+    final rawRates = <String, double>{};
+    final rowRegex = RegExp(
+      r'<tr><td>([^<]+)</td><td>([0-9.]+)</td><td>([0-9.]+)</td></tr>',
+      caseSensitive: false,
+    );
+
+    for (final match in rowRegex.allMatches(notesHtml)) {
+      final name = match.group(1)!.trim();
+      final buying = double.tryParse(match.group(2)!);
+      final selling = double.tryParse(match.group(3)!);
+      if (buying == null || selling == null || buying <= 0 || selling <= 0) {
+        continue;
+      }
+
+      final currency = _currencyNameToCode(name);
+      if (currency == null) continue;
+
+      rawRates[currency] = (buying + selling) / 2.0;
+    }
+
+    if (!rawRates.containsKey('EUR')) return null;
+
+    // Rates are quoted as BBD per unit of foreign currency.
+    rawRates['BBD'] = 1.0;
+    return _normalizeToEurBase(rawRates);
+  }
+
+  static String? _currencyNameToCode(String name) {
+    switch (name) {
+      case 'Belizean Dollar':
+        return 'BZD';
+      case 'East Caribbean Dollar':
+        return 'XCD';
+      case 'United States Dollar':
+        return 'USD';
+      case 'Canadian Dollar':
+        return 'CAD';
+      case 'Pound Sterling':
+        return 'GBP';
+      case 'Euro':
+        return 'EUR';
+      case 'Guyana Dollar':
+        return 'GYD';
+      default:
+        return null;
+    }
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'BBD', 'BZD', 'CAD', 'EUR', 'GBP', 'USD', 'XCD',
+  ];
+}
+
+class BangladeshBankProvider implements CurrencyProvider {
+  @override
+  String get id => 'bangladesh_bank';
+
+  @override
+  String get name => 'Bangladesh Bank';
+
+  @override
+  String get initials => 'BB';
+
+  @override
+  Future<Map<String, double>?> fetchRates() async {
+    try {
+      final response = await http.get(
+        Uri.parse('https://www.bb.org.bd/en/index.php/econdata/exchangerate'),
+      ).timeout(const Duration(seconds: 15));
+      if (response.statusCode != 200) return null;
+      return parseBangladeshBankHtml(response.body);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @visibleForTesting
+  static Map<String, double>? parseBangladeshBankHtml(String html) {
+    final rawRates = <String, double>{};
+
+    // Match rows with currency code followed by at least two numeric columns
+    // (Bid Rate, Ask Rate). Works for both the USD table (4 cols) and the
+    // Cross Rates table (3 cols).
+    final rowRegex = RegExp(
+      r'<tr>\s*<td>([A-Z]{3,4})</td>\s*<td>([0-9.]+)</td>\s*<td>([0-9.]+)</td>',
+      caseSensitive: false,
+    );
+
+    for (final match in rowRegex.allMatches(html)) {
+      var currency = match.group(1)!.trim().toUpperCase();
+      final bid = double.tryParse(match.group(2)!);
+      final ask = double.tryParse(match.group(3)!);
+      if (bid == null || ask == null || bid <= 0 || ask <= 0) continue;
+
+      // CNH (offshore yuan) maps to ISO CNY
+      if (currency == 'CNH') currency = 'CNY';
+
+      rawRates[currency] = (bid + ask) / 2.0;
+    }
+
+    if (!rawRates.containsKey('EUR')) return null;
+
+    // Rates are quoted as BDT per unit of foreign currency.
+    rawRates['BDT'] = 1.0;
+    return _normalizeToEurBase(rawRates);
+  }
+
+  @override
+  List<String> get supportedCurrencies => [
+    'AUD', 'BDT', 'CAD', 'CNY', 'EUR', 'GBP', 'INR', 'JPY', 'LKR', 'SEK',
+    'SGD', 'USD',
+  ];
+}
 
 CurrencyProvider getCurrencyProviderById(String id) {
   return currencyProviders.firstWhere(

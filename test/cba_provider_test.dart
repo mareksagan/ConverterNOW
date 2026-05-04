@@ -22,6 +22,6 @@ void main() {
       expect(rates.containsKey('AMD'), isTrue);
       expect(rates['USD'], greaterThan(0));
       expect(rates['AMD'], greaterThan(0));
-    });
+    }, timeout: const Timeout(Duration(seconds: 60)));
   });
 }

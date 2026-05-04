@@ -9,7 +9,7 @@ void main() {
         expect(rates, isNotNull, reason: '${provider.name} returned null');
         expect(rates, isNotEmpty, reason: '${provider.name} returned empty map');
         expect(rates!.containsKey('EUR'), isTrue, reason: '${provider.name} missing EUR');
-      }, timeout: const Timeout(Duration(seconds: 30)));
+      }, timeout: const Timeout(Duration(seconds: 60)));
     }
   });
 }

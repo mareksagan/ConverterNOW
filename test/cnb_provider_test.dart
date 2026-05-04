@@ -22,6 +22,6 @@ void main() {
       expect(rates.containsKey('CZK'), isTrue);
       expect(rates['USD'], greaterThan(0));
       expect(rates['CZK'], greaterThan(0));
-    });
+    }, timeout: const Timeout(Duration(seconds: 60)));
   });
 }
